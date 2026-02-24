@@ -58,3 +58,9 @@ public class HeuteLayout(Guid id, string name)
         m_sections = null;
     }
 }
+
+public sealed record HeuteLayoutSnapshot(
+    Guid Id,
+    string Name,
+    IEnumerable<HeuteLayoutSectionSnapshot> Sections
+);
