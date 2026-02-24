@@ -37,8 +37,10 @@ public class HeuteLayoutSection(Guid id, string name)
         return new HeuteLayoutSectionSnapshot(
             Id,
             Name,
-            Rect,
-            Size
+            new HeuteLayoutSectionProps(
+                Rect,
+                Size
+            )
         );
     }
 
@@ -48,8 +50,8 @@ public class HeuteLayoutSection(Guid id, string name)
 
         var section = new HeuteLayoutSection(snapshot.Id, snapshot.Name)
         {
-            m_rect = snapshot.Rect,
-            m_size = snapshot.Size
+            m_rect = snapshot.Props.Rect,
+            m_size = snapshot.Props.Size
         };
 
         return section;
@@ -59,6 +61,10 @@ public class HeuteLayoutSection(Guid id, string name)
 public sealed record HeuteLayoutSectionSnapshot(
     Guid Id,
     string Name,
+    HeuteLayoutSectionProps Props
+);
+
+public sealed record HeuteLayoutSectionProps(
     Rect? Rect,
     GridSize? Size
 );
