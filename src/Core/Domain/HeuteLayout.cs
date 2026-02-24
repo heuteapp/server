@@ -2,7 +2,6 @@ namespace HeuteApp.Core.Domain;
 
 public class HeuteLayout(Guid id, string name)
 {
-
     private HeuteLayoutSection[]? m_sections = null;
 
     private readonly Dictionary<Guid, HeuteLayoutSection> m_sectionDictionary = [];
@@ -56,6 +55,27 @@ public class HeuteLayout(Guid id, string name)
     {
         m_sectionDictionary.Add(section.Id, section);
         m_sections = null;
+    }
+
+    //
+
+    public HeuteLayoutSnapshot ToSnapshot()
+    {
+        return new HeuteLayoutSnapshot(
+            Id,
+            Name,
+            Sections.Select(section => section.ToSnapshot())
+        );
+    }
+
+    public static HeuteLayout FromSnapshot(HeuteLayoutSnapshot snapshot)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+
+        var layout = new HeuteLayout(snapshot.Id, snapshot.Name);
+        layout.AddSections(snapshot.Sections.Select(HeuteLayoutSection.FromSnapshot));
+
+        return layout;
     }
 }
 
