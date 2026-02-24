@@ -22,6 +22,16 @@ public class HeuteBoardCard(Guid id)
 
     //
 
+    public bool IsPlaced
+    {
+        get
+        {
+            return m_sectionId != null && m_position != null;
+        }
+    }
+
+    //
+
     internal void DoPlace(string sectionId, GridRect position)
     {
         ArgumentNullException.ThrowIfNull(sectionId);
