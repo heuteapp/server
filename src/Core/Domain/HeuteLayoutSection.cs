@@ -2,11 +2,11 @@ using HeuteApp.Core.Domain.ValueObjects;
 
 namespace HeuteApp.Core.Domain;
 
-public class HeuteLayoutSection(Guid id, string name)
+public class HeuteLayoutSection(Guid id, string name, HeuteLayoutSectionProps? props = null)
 {
-    private Rect? m_rect = null;
+    private Rect? m_rect = props?.Rect ?? null;
 
-    private GridSize? m_size = null;
+    private GridSize? m_size = props?.Size ?? null;
 
     //
     
