@@ -54,3 +54,10 @@ public class HeuteBoardCard(Guid id)
         m_title = title;
     }
 }
+
+public sealed record HeuteBoardCardSnapshot(
+    Guid Id,
+    string? SectionId,
+    GridRect? Position,
+    string? Title
+);
