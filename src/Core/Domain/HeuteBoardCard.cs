@@ -41,6 +41,12 @@ public class HeuteBoardCard(Guid id)
         m_position = position;
     }
 
+    internal void DoUnplace()
+    {
+        m_sectionId = null;
+        m_position = null;
+    }
+
     internal void DoSetTitle(string title)
     {
         ArgumentNullException.ThrowIfNull(title);
