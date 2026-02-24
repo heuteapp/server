@@ -27,16 +27,16 @@ public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
         m_layout = layout;
     }
 
-    public void AddCard(HeuteBoardCardSnapshot card)
+    public void AddCard(Guid id, HeuteBoardCardProps card)
     {
         ArgumentNullException.ThrowIfNull(card);
 
-        if (HasCard(card.Id))
+        if (HasCard(id))
         {
-            throw new InvalidOperationException($"Card with id {card.Id} already exists.");
+            throw new InvalidOperationException($"Card with id {id} already exists.");
         }
 
-        DoAddCard(card);
+        DoAddCard(new HeuteBoardCardSnapshot(id, card));
     }
 
     public bool HasCard(Guid cardId)
