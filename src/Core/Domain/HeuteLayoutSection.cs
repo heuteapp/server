@@ -32,7 +32,7 @@ public class HeuteLayoutSection(Guid id, string name)
 
     //
 
-    public HeuteLayoutSectionSnapshot ToSnapshot()
+    internal HeuteLayoutSectionSnapshot ToSnapshot()
     {
         return new HeuteLayoutSectionSnapshot(
             Id,
@@ -42,7 +42,7 @@ public class HeuteLayoutSection(Guid id, string name)
         );
     }
 
-    public static HeuteLayoutSection FromSnapshot(HeuteLayoutSectionSnapshot snapshot)
+    internal static HeuteLayoutSection FromSnapshot(HeuteLayoutSectionSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
 

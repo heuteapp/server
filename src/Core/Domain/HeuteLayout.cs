@@ -59,7 +59,7 @@ public class HeuteLayout(Guid id, string name)
 
     //
 
-    public HeuteLayoutSnapshot ToSnapshot()
+    internal HeuteLayoutSnapshot ToSnapshot()
     {
         return new HeuteLayoutSnapshot(
             Id,
@@ -68,7 +68,7 @@ public class HeuteLayout(Guid id, string name)
         );
     }
 
-    public static HeuteLayout FromSnapshot(HeuteLayoutSnapshot snapshot)
+    internal static HeuteLayout FromSnapshot(HeuteLayoutSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
 
