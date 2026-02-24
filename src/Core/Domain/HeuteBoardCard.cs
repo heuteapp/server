@@ -4,11 +4,14 @@ namespace HeuteApp.Core.Domain;
 
 public class HeuteBoardCard(Guid id)
 {
+    private string? m_sectionId = null;
     private GridRect? m_position = null;
 
     //
 
     public Guid Id => id;
+
+    public string? SectionId => m_sectionId;
 
     public GridRect? Position => m_position;
 }
