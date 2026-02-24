@@ -14,4 +14,12 @@ public class HeuteBoardCard(Guid id)
     public string? SectionId => m_sectionId;
 
     public GridRect? Position => m_position;
+
+    //
+
+    internal void DoPlace(string sectionId, GridRect position)
+    {
+        m_sectionId = sectionId;
+        m_position = position;
+    }
 }
