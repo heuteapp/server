@@ -31,6 +31,12 @@ public class HeuteLayout(string id)
         }
     }
 
+    public bool HasSection(string sectionId)
+    {
+        ArgumentNullException.ThrowIfNull(sectionId);
+        return m_sectionDictionary.ContainsKey(sectionId);
+    }
+
     //
 
     private void DoAddSection(HeuteLayoutSection section)
