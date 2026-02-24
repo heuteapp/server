@@ -19,6 +19,9 @@ public class HeuteBoardCard(Guid id)
 
     internal void DoPlace(string sectionId, GridRect position)
     {
+        ArgumentNullException.ThrowIfNull(sectionId);
+        ArgumentNullException.ThrowIfNull(position);
+
         m_sectionId = sectionId;
         m_position = position;
     }
