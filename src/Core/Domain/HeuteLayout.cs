@@ -1,6 +1,6 @@
 namespace HeuteApp.Core.Domain;
 
-public class HeuteLayout(string id)
+public class HeuteLayout(Guid id, string name)
 {
 
     private HeuteLayoutSection[]? m_sections = null;
@@ -9,7 +9,9 @@ public class HeuteLayout(string id)
 
     //
 
-    public string Id => id;
+    public Guid Id => id;
+
+    public string Name => name;
 
     public HeuteLayoutSection[] Sections => m_sections ??= [.. m_sectionDictionary.Values];
 
