@@ -53,6 +53,30 @@ public class HeuteBoardCard(Guid id)
 
         m_title = title;
     }
+
+    //
+
+    public HeuteBoardCardSnapshot ToSnapshot()
+    {
+        return new HeuteBoardCardSnapshot(
+            Id,
+            SectionId,
+            Position,
+            Title
+        );
+    }
+
+    public static HeuteBoardCard FromSnapshot(HeuteBoardCardSnapshot snapshot)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+
+        return new HeuteBoardCard(snapshot.Id)
+        {
+            m_position = snapshot.Position,
+            m_sectionId = snapshot.SectionId,
+            m_title = snapshot.Title
+        };
+    }
 }
 
 public sealed record HeuteBoardCardSnapshot(
