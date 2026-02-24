@@ -53,3 +53,14 @@ public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
         m_cards = null;
     }
 }
+
+public sealed record HeuteBoardSnapshot(
+    Guid Id,
+    Guid OwnerId,
+    HeuteLayoutSnapshot Layout,
+    HeuteBoardProps Props
+);
+
+public sealed record HeuteBoardProps(
+    IEnumerable<HeuteBoardCardSnapshot> Cards
+);
