@@ -64,7 +64,9 @@ public class HeuteLayout(Guid id, string name)
         return new HeuteLayoutSnapshot(
             Id,
             Name,
-            Sections.Select(section => section.ToSnapshot())
+            new HeuteLayoutProps(
+                Sections.Select(s => s.ToSnapshot())
+            )
         );
     }
 
@@ -73,7 +75,7 @@ public class HeuteLayout(Guid id, string name)
         ArgumentNullException.ThrowIfNull(snapshot);
 
         var layout = new HeuteLayout(snapshot.Id, snapshot.Name);
-        layout.AddSections(snapshot.Sections.Select(HeuteLayoutSection.FromSnapshot));
+        layout.AddSections(snapshot.Props.Sections.Select(HeuteLayoutSection.FromSnapshot));
 
         return layout;
     }
@@ -82,5 +84,9 @@ public class HeuteLayout(Guid id, string name)
 public sealed record HeuteLayoutSnapshot(
     Guid Id,
     string Name,
+    HeuteLayoutProps Props
+);
+
+public sealed record HeuteLayoutProps(
     IEnumerable<HeuteLayoutSectionSnapshot> Sections
 );
