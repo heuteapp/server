@@ -28,3 +28,9 @@ public class HeuteLayoutSection(string id)
         m_size = size;
     }
 }
+
+public sealed record HeuteLayoutSectionSnapshot(
+    string Id,
+    Rect? Rect,
+    GridSize? Size
+);
