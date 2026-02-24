@@ -18,9 +18,7 @@ public class HeuteLayout(string id)
     public void AddSection(HeuteLayoutSection section)
     {
         ArgumentNullException.ThrowIfNull(section);
-
-        m_sectionDictionary.Add(section.Id, section);
-        m_sections = null;
+        DoAddSection(section);
     }
 
     public void AddSections(IEnumerable<HeuteLayoutSection> sections)
@@ -29,7 +27,15 @@ public class HeuteLayout(string id)
 
         foreach (var section in sections)
         {
-            AddSection(section);
+            DoAddSection(section);
         }
+    }
+
+    //
+
+    private void DoAddSection(HeuteLayoutSection section)
+    {
+        m_sectionDictionary.Add(section.Id, section);
+        m_sections = null;
     }
 }
