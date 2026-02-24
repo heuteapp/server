@@ -27,6 +27,30 @@ public class HeuteLayoutSection(string id)
     {
         m_size = size;
     }
+
+    //
+
+    public HeuteLayoutSectionSnapshot ToSnapshot()
+    {
+        return new HeuteLayoutSectionSnapshot(
+            Id,
+            Rect,
+            Size
+        );
+    }
+
+    public static HeuteLayoutSection FromSnapshot(HeuteLayoutSectionSnapshot snapshot)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+
+        var section = new HeuteLayoutSection(snapshot.Id)
+        {
+            m_rect = snapshot.Rect,
+            m_size = snapshot.Size
+        };
+        
+        return section;
+    }
 }
 
 public sealed record HeuteLayoutSectionSnapshot(
