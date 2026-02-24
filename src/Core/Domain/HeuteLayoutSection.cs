@@ -2,7 +2,7 @@ using HeuteApp.Core.Domain.ValueObjects;
 
 namespace HeuteApp.Core.Domain;
 
-public class HeuteLayoutSection(string id)
+public class HeuteLayoutSection(Guid id, string name)
 {
     private Rect? m_rect = null;
 
@@ -10,7 +10,9 @@ public class HeuteLayoutSection(string id)
 
     //
     
-    public string Id => id;
+    public Guid Id => id;
+
+    public string Name => name;
 
     public Rect? Rect => m_rect;
 
@@ -34,6 +36,7 @@ public class HeuteLayoutSection(string id)
     {
         return new HeuteLayoutSectionSnapshot(
             Id,
+            Name,
             Rect,
             Size
         );
@@ -43,18 +46,19 @@ public class HeuteLayoutSection(string id)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
 
-        var section = new HeuteLayoutSection(snapshot.Id)
+        var section = new HeuteLayoutSection(snapshot.Id, snapshot.Name)
         {
             m_rect = snapshot.Rect,
             m_size = snapshot.Size
         };
-        
+
         return section;
     }
 }
 
 public sealed record HeuteLayoutSectionSnapshot(
-    string Id,
+    Guid Id,
+    string Name,
     Rect? Rect,
     GridSize? Size
 );

@@ -5,7 +5,7 @@ public class HeuteLayout(Guid id, string name)
 
     private HeuteLayoutSection[]? m_sections = null;
 
-    private readonly Dictionary<string, HeuteLayoutSection> m_sectionDictionary = [];
+    private readonly Dictionary<Guid, HeuteLayoutSection> m_sectionDictionary = [];
 
     //
 
@@ -45,9 +45,8 @@ public class HeuteLayout(Guid id, string name)
         }
     }
 
-    public bool HasSection(string sectionId)
+    public bool HasSection(Guid sectionId)
     {
-        ArgumentNullException.ThrowIfNull(sectionId);
         return m_sectionDictionary.ContainsKey(sectionId);
     }
 
