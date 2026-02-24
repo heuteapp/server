@@ -10,6 +10,8 @@ public class HeuteBoardCard(Guid id)
 
     private string? m_title = null;
 
+    private bool m_isVerified = false;
+
     //
 
     public Guid Id => id;
@@ -30,6 +32,14 @@ public class HeuteBoardCard(Guid id)
         }
     }
 
+    public bool IsVerified
+    {
+        get
+        {
+            return m_isVerified;
+        }
+    }
+    
     //
 
     internal void DoPlace(string sectionId, GridRect position)
@@ -39,12 +49,14 @@ public class HeuteBoardCard(Guid id)
 
         m_sectionId = sectionId;
         m_position = position;
+        m_isVerified = false;
     }
 
     internal void DoUnplace()
     {
         m_sectionId = null;
         m_position = null;
+        m_isVerified = false;
     }
 
     internal void DoSetTitle(string title)
@@ -52,6 +64,11 @@ public class HeuteBoardCard(Guid id)
         ArgumentNullException.ThrowIfNull(title);
 
         m_title = title;
+    }
+
+    internal void DoVerify()
+    {
+        m_isVerified = true;
     }
 
     //
