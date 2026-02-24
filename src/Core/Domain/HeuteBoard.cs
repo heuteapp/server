@@ -52,6 +52,34 @@ public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
         m_cardDictionary.Add(boardCard.Id, boardCard);
         m_cards = null;
     }
+
+    //
+
+    internal HeuteBoardSnapshot ToSnapshot()
+    {
+        return new HeuteBoardSnapshot(
+            Id,
+            OwnerId,
+            Layout,
+            new HeuteBoardProps(
+                Cards.Select(c => c.ToSnapshot())
+            )
+        );
+    }
+
+    internal static HeuteBoard FromSnapshot(HeuteBoardSnapshot snapshot)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+
+        var board = new HeuteBoard(snapshot.Id, snapshot.OwnerId, snapshot.Layout);
+
+        foreach (var card in snapshot.Props.Cards)
+        {
+            board.DoAddCard(card);
+        }
+
+        return board;
+    }
 }
 
 public sealed record HeuteBoardSnapshot(
