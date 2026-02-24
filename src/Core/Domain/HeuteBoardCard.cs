@@ -73,7 +73,7 @@ public class HeuteBoardCard(Guid id)
 
     //
 
-    public HeuteBoardCardSnapshot ToSnapshot()
+    internal HeuteBoardCardSnapshot ToSnapshot()
     {
         return new HeuteBoardCardSnapshot(
             Id,
@@ -85,7 +85,7 @@ public class HeuteBoardCard(Guid id)
         );
     }
 
-    public static HeuteBoardCard FromSnapshot(HeuteBoardCardSnapshot snapshot)
+    internal static HeuteBoardCard FromSnapshot(HeuteBoardCardSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
 
