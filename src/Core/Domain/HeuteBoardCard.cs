@@ -59,7 +59,7 @@ public class HeuteBoardCard(Guid id)
         m_isVerified = false;
     }
 
-    internal void DoSetTitle(string title)
+    internal void SetTitle(string title)
     {
         ArgumentNullException.ThrowIfNull(title);
 
