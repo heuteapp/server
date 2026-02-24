@@ -26,4 +26,30 @@ public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
 
         m_layout = layout;
     }
+
+    public void AddCard(HeuteBoardCardSnapshot card)
+    {
+        ArgumentNullException.ThrowIfNull(card);
+
+        if (HasCard(card.Id))
+        {
+            throw new InvalidOperationException($"Card with id {card.Id} already exists.");
+        }
+
+        DoAddCard(card);
+    }
+
+    public bool HasCard(Guid cardId)
+    {
+        return m_cardDictionary.ContainsKey(cardId);
+    }
+
+    //
+
+    private void DoAddCard(HeuteBoardCardSnapshot card)
+    {
+        var boardCard = HeuteBoardCard.FromSnapshot(card);
+        m_cardDictionary.Add(boardCard.Id, boardCard);
+        m_cards = null;
+    }
 }
