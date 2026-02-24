@@ -21,13 +21,25 @@ public class HeuteLayout(string id)
         DoAddSection(section);
     }
 
+    public void TryAddSection(HeuteLayoutSection section)
+    {
+        ArgumentNullException.ThrowIfNull(section);
+
+        if (HasSection(section.Id))
+        {
+            return;
+        }
+
+        DoAddSection(section);
+    }
+
     public void AddSections(IEnumerable<HeuteLayoutSection> sections)
     {
         ArgumentNullException.ThrowIfNull(sections);
 
         foreach (var section in sections)
         {
-            DoAddSection(section);
+            TryAddSection(section);
         }
     }
 
