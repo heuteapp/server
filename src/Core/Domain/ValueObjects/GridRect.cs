@@ -1,4 +1,4 @@
-namespace HeuteApp.Core.Domain;
+namespace HeuteApp.Core.Domain.ValueObjects;
 
 public readonly record struct GridRect(
     int Row,
