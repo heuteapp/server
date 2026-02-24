@@ -77,9 +77,11 @@ public class HeuteBoardCard(Guid id)
     {
         return new HeuteBoardCardSnapshot(
             Id,
-            SectionId,
-            Position,
-            Title
+            new HeuteBoardCardProps(
+                SectionId,
+                Position,
+                Title
+            )
         );
     }
 
@@ -89,15 +91,19 @@ public class HeuteBoardCard(Guid id)
 
         return new HeuteBoardCard(snapshot.Id)
         {
-            m_position = snapshot.Position,
-            m_sectionId = snapshot.SectionId,
-            m_title = snapshot.Title
+            m_position = snapshot.Props.Position,
+            m_sectionId = snapshot.Props.SectionId,
+            m_title = snapshot.Props.Title
         };
     }
 }
 
 public sealed record HeuteBoardCardSnapshot(
     Guid Id,
+    HeuteBoardCardProps Props
+);
+
+public sealed record HeuteBoardCardProps(
     string? SectionId,
     GridRect? Position,
     string? Title
