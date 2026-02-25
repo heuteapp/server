@@ -8,8 +8,6 @@ public class HeuteBoard
 
     private HeuteLayoutSnapshot m_layout;
 
-    private HeuteBoardCard[]? m_cards = null;
-
     private readonly Dictionary<Guid, HeuteBoardCard> m_cardDictionary = [];
 
     public HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout, HeuteBoardProps? props = null)
@@ -35,7 +33,7 @@ public class HeuteBoard
 
     public HeuteLayoutSnapshot Layout => m_layout;
 
-    public HeuteBoardCard[] Cards => m_cards ??= [.. m_cardDictionary.Values];
+    public IReadOnlyCollection<HeuteBoardCard> Cards => m_cardDictionary.Values;
 
     //
 
@@ -69,7 +67,6 @@ public class HeuteBoard
     {
         var boardCard = HeuteBoardCard.FromProps(id, props);
         m_cardDictionary.Add(boardCard.Id, boardCard);
-        m_cards = null;
     }
 
     //
