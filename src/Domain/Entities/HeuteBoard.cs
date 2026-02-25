@@ -45,6 +45,8 @@ public class HeuteBoard
     {
         ArgumentNullException.ThrowIfNull(layout);
         m_layoutId = layout.Id;
+
+        UnplaceAllCards();
     }
 
     public void AddCard(Guid id, HeuteBoardCardProps props)
