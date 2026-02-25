@@ -89,9 +89,10 @@ public class HeuteBoard
             throw new InvalidOperationException("Card is out of section bounds.");
 
         var conflictingCard = m_cardDictionary.Values
-            .Where(c => c.Id != cardId)
-            .Where(c => c.SectionId == sectionId)
-            .FirstOrDefault(c => c.Position?.Overlaps(position) ?? false);
+            .FirstOrDefault(c =>
+                c.Id != cardId &&
+                c.SectionId == sectionId &&
+                c.Position?.Overlaps(position) == true);
 
         if (conflictingCard is not null)
         {
