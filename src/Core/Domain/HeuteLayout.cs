@@ -70,12 +70,29 @@ public class HeuteLayout(Guid id, string name)
         );
     }
 
+    public HeuteLayoutProps ToProps()
+    {
+        return new HeuteLayoutProps(
+            Sections.Select(s => s.ToSnapshot())
+        );
+    }
+
     public static HeuteLayout FromSnapshot(HeuteLayoutSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
 
         var layout = new HeuteLayout(snapshot.Id, snapshot.Name);
         layout.AddSections(snapshot.Props.Sections.Select(HeuteLayoutSection.FromSnapshot));
+
+        return layout;
+    }
+
+    public static HeuteLayout FromProps(Guid id, string name, HeuteLayoutProps props)
+    {
+        ArgumentNullException.ThrowIfNull(props);
+
+        var layout = new HeuteLayout(id, name);
+        layout.AddSections(props.Sections.Select(HeuteLayoutSection.FromSnapshot));
 
         return layout;
     }
