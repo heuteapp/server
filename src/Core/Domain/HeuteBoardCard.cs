@@ -40,6 +40,13 @@ public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
     
     //
 
+    internal void SetTitle(string title)
+    {
+        ArgumentNullException.ThrowIfNull(title);
+
+        m_title = title;
+    }
+
     internal void DoPlace(string sectionId, GridRect position)
     {
         ArgumentNullException.ThrowIfNull(sectionId);
@@ -55,13 +62,6 @@ public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
         m_sectionId = null;
         m_position = null;
         m_isVerified = false;
-    }
-
-    internal void SetTitle(string title)
-    {
-        ArgumentNullException.ThrowIfNull(title);
-
-        m_title = title;
     }
 
     internal void DoVerify()
