@@ -59,6 +59,16 @@ public class HeuteBoard
         DoAddCard(id, props);
     }
 
+    public void RemoveCard(Guid cardId)
+    {
+        if (!HasCard(cardId))
+        {
+            throw new InvalidOperationException($"Card with id {cardId} does not exist.");
+        }
+
+        m_cardDictionary.Remove(cardId);
+    }
+
     public void PlaceCard(Guid cardId, Guid sectionId, GridRect position)
     {
         if (!HasCard(cardId))
