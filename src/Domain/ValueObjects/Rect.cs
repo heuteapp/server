@@ -14,4 +14,13 @@ public readonly record struct Rect(
             Y < other.Y + other.Height &&
             Y + Height > other.Y;
     }
+    
+    public bool Contains(Rect other)
+    {
+        return
+            other.X >= X &&
+            other.Y >= Y &&
+            other.X + other.Width <= X + Width &&
+            other.Y + other.Height <= Y + Height;
+    }
 }
