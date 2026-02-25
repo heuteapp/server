@@ -78,21 +78,14 @@ public class HeuteBoard
             throw new InvalidOperationException($"Card with id {cardId} does not exist.");
         }
 
-        var section = layout.Sections.First(s => s.Id == sectionId);
-
-        if(section == null)
-        {
-            throw new InvalidOperationException($"Section with id {sectionId} does not exist.");
-        }
+        var section = layout.Sections.FirstOrDefault(s => s.Id == sectionId) 
+            ?? throw new InvalidOperationException($"Section with id {sectionId} does not exist.");
 
         if (!section.Size.Contains(position))
             throw new InvalidOperationException("Card is out of section bounds.");
 
         var conflictingCard = m_cardDictionary.Values
-            .FirstOrDefault(c =>
-                c.Id != cardId &&
-                c.SectionId == sectionId &&
-                c.Position?.Overlaps(position) == true);
+            .FirstOrDefault(c => c.Id != cardId && c.SectionId == sectionId && c.Position?.Overlaps(position) == true);
 
         if (conflictingCard is not null)
         {
