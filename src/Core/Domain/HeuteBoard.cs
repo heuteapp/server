@@ -55,7 +55,7 @@ public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
 
     //
 
-    internal HeuteBoardSnapshot ToSnapshot()
+    public HeuteBoardSnapshot ToSnapshot()
     {
         return new HeuteBoardSnapshot(
             Id,
@@ -67,14 +67,14 @@ public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
         );
     }
 
-    internal HeuteBoardProps ToProps()
+    public HeuteBoardProps ToProps()
     {
         return new HeuteBoardProps(
             Cards.Select(c => c.ToSnapshot())
         );
     }
 
-    internal static HeuteBoard FromSnapshot(HeuteBoardSnapshot snapshot)
+    public static HeuteBoard FromSnapshot(HeuteBoardSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
 
@@ -88,7 +88,7 @@ public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
         return board;
     }
 
-    internal static HeuteBoard FromProps(Guid id, Guid ownerId, HeuteLayoutSnapshot layout, HeuteBoardProps props)
+    public static HeuteBoard FromProps(Guid id, Guid ownerId, HeuteLayoutSnapshot layout, HeuteBoardProps props)
     {
         ArgumentNullException.ThrowIfNull(layout);
         ArgumentNullException.ThrowIfNull(props);
