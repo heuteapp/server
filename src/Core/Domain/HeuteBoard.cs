@@ -27,16 +27,16 @@ public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
         m_layout = layout;
     }
 
-    public void AddCard(Guid id, HeuteBoardCardProps card)
+    public void AddCard(Guid id, HeuteBoardCardProps props)
     {
-        ArgumentNullException.ThrowIfNull(card);
+        ArgumentNullException.ThrowIfNull(props);
 
         if (HasCard(id))
         {
             throw new InvalidOperationException($"Card with id {id} already exists.");
         }
 
-        DoAddCard(new HeuteBoardCardSnapshot(id, card));
+        DoAddCard(id, props);
     }
 
     public bool HasCard(Guid cardId)
@@ -46,9 +46,9 @@ public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
 
     //
 
-    private void DoAddCard(HeuteBoardCardSnapshot card)
+    private void DoAddCard(Guid id, HeuteBoardCardProps props)
     {
-        var boardCard = HeuteBoardCard.FromSnapshot(card);
+        var boardCard = HeuteBoardCard.FromProps(id, props);
         m_cardDictionary.Add(boardCard.Id, boardCard);
         m_cards = null;
     }
@@ -82,7 +82,7 @@ public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
 
         foreach (var card in snapshot.Props.Cards)
         {
-            board.DoAddCard(card);
+            board.DoAddCard(card.Id, card.Props);
         }
 
         return board;
@@ -97,7 +97,7 @@ public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
 
         foreach (var card in props.Cards)
         {
-            board.DoAddCard(card);
+            board.DoAddCard(card.Id, card.Props);
         }
 
         return board;
