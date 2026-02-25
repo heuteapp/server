@@ -2,11 +2,11 @@ using HeuteApp.Core.Domain.ValueObjects;
 
 namespace HeuteApp.Core.Domain;
 
-public class HeuteLayoutSection(Guid id, string name, HeuteLayoutSectionProps? props = null)
+public class HeuteLayoutSection(Guid id, string name, HeuteLayoutSectionProps props)
 {
-    private Rect? m_rect = props?.Rect ?? null;
+    private Rect m_rect = props.Rect;
 
-    private GridSize? m_size = props?.Size ?? null;
+    private GridSize m_size = props.Size;
 
     //
     
@@ -14,18 +14,18 @@ public class HeuteLayoutSection(Guid id, string name, HeuteLayoutSectionProps? p
 
     public string Name => name;
 
-    public Rect? Rect => m_rect;
+    public Rect Rect => m_rect;
 
-    public GridSize? Size => m_size;
+    public GridSize Size => m_size;
 
     //
 
-    internal void SetRect(Rect? rect)
+    internal void SetRect(Rect rect)
     {
         m_rect = rect;
     }
 
-    internal void SetSize(GridSize? size)
+    internal void SetSize(GridSize size)
     {
         m_size = size;
     }
@@ -47,14 +47,7 @@ public class HeuteLayoutSection(Guid id, string name, HeuteLayoutSectionProps? p
     internal static HeuteLayoutSection FromSnapshot(HeuteLayoutSectionSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
-
-        var section = new HeuteLayoutSection(snapshot.Id, snapshot.Name)
-        {
-            m_rect = snapshot.Props.Rect,
-            m_size = snapshot.Props.Size
-        };
-
-        return section;
+        return new HeuteLayoutSection(snapshot.Id, snapshot.Name, snapshot.Props);
     }
 }
 
@@ -65,6 +58,6 @@ public sealed record HeuteLayoutSectionSnapshot(
 );
 
 public sealed record HeuteLayoutSectionProps(
-    Rect? Rect,
-    GridSize? Size
+    Rect Rect,
+    GridSize Size
 );
