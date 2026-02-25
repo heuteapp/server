@@ -71,11 +71,31 @@ public class HeuteBoard
         m_cardDictionary.Remove(cardId);
     }
 
-    public void PlaceCard(Guid cardId, Guid sectionId, GridRect position)
+    public void PlaceCard(HeuteLayout layout, Guid cardId, Guid sectionId, GridRect position)
     {
         if (!HasCard(cardId))
         {
             throw new InvalidOperationException($"Card with id {cardId} does not exist.");
+        }
+
+        var section = layout.Sections.First(s => s.Id == sectionId);
+
+        if(section == null)
+        {
+            throw new InvalidOperationException($"Section with id {sectionId} does not exist.");
+        }
+
+        if (!section.Size.Contains(position))
+            throw new InvalidOperationException("Card is out of section bounds.");
+
+        var conflictingCard = m_cardDictionary.Values
+            .Where(c => c.Id != cardId)
+            .Where(c => c.SectionId == sectionId)
+            .FirstOrDefault(c => c.Position?.Overlaps(position) ?? false);
+
+        if (conflictingCard is not null)
+        {
+            throw new InvalidOperationException($"Position overlaps with card {conflictingCard.Id}");
         }
 
         var card = m_cardDictionary[cardId];
