@@ -1,3 +1,5 @@
+using HeuteApp.Core.Domain.ValueObjects;
+
 namespace HeuteApp.Core.Domain;
 
 public class HeuteBoard
@@ -56,6 +58,17 @@ public class HeuteBoard
         }
 
         DoAddCard(id, props);
+    }
+
+    public void PlaceCard(Guid cardId, Guid sectionId, GridRect position)
+    {
+        if (!HasCard(cardId))
+        {
+            throw new InvalidOperationException($"Card with id {cardId} does not exist.");
+        }
+
+        var card = m_cardDictionary[cardId];
+        card.DoPlace(sectionId, position);
     }
 
     public bool HasCard(Guid cardId)

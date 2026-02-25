@@ -6,7 +6,7 @@ public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
 {   
     private string m_title = props.Title;
 
-    private string? m_sectionId = props.SectionId;
+    private Guid? m_sectionId = props.SectionId;
 
     private GridRect? m_position = props.Position;
 
@@ -18,7 +18,7 @@ public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
 
     public string Title => m_title;
 
-    public string? SectionId => m_sectionId;
+    public Guid? SectionId => m_sectionId;
 
     public GridRect? Position => m_position;
 
@@ -47,7 +47,7 @@ public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
         m_title = title;
     }
 
-    internal void DoPlace(string sectionId, GridRect position)
+    internal void DoPlace(Guid sectionId, GridRect position)
     {
         ArgumentNullException.ThrowIfNull(sectionId);
         ArgumentNullException.ThrowIfNull(position);
@@ -112,6 +112,6 @@ public sealed record HeuteBoardCardSnapshot(
 
 public sealed record HeuteBoardCardProps(
     string Title,
-    string? SectionId,
+    Guid? SectionId,
     GridRect? Position
 );
