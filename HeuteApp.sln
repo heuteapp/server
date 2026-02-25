@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D70D6933-16A2-469C-B8F6-98235D140BFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeuteApp.Domain", "src\Domain\HeuteApp.Domain.csproj", "{F7A13EC9-5E49-403F-B167-7E499ECD2CCE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeuteApp.Core", "src\Core\HeuteApp.Core.csproj", "{F7A13EC9-5E49-403F-B167-7E499ECD2CCE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeuteApp.Api", "src\Api\HeuteApp.Api.csproj", "{C428507C-03C6-4A8E-9FC3-DB2D4B4622E6}"
 EndProject
