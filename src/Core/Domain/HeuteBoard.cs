@@ -1,18 +1,37 @@
 namespace HeuteApp.Core.Domain;
 
-public class HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout)
+public class HeuteBoard
 {
-    private HeuteLayoutSnapshot m_layout = layout;
+    private readonly Guid m_id;
 
-    private HeuteBoardCard[]? m_cards = null;
+    private readonly Guid m_ownerId;
+
+    private HeuteLayoutSnapshot m_layout;
+
+    private HeuteBoardCard[]? m_cards;
 
     private readonly Dictionary<Guid, HeuteBoardCard> m_cardDictionary = [];
 
+    public HeuteBoard(Guid id, Guid ownerId, HeuteLayoutSnapshot layout, HeuteBoardProps? props = null)
+    {
+        m_id = id;
+        m_ownerId = ownerId;
+        m_layout = layout;
+
+        if (props != null)
+        {
+            foreach (var card in props.Cards)
+            {
+                DoAddCard(card.Id, card.Props);
+            }
+        }
+    }
+
     //
 
-    public Guid Id => id;
+    public Guid Id => m_id;
     
-    public Guid OwnerId => ownerId;
+    public Guid OwnerId => m_ownerId;
 
     public HeuteLayoutSnapshot Layout => m_layout;
 
