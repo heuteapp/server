@@ -2,13 +2,14 @@ using HeuteApp.Core.Domain.ValueObjects;
 
 namespace HeuteApp.Core.Domain;
 
-public class HeuteBoardCard(Guid id)
-{
-    private string? m_sectionId = null;
+public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
+{   
+    private string m_title = props.Title;
 
-    private GridRect? m_position = null;
+    private string? m_sectionId = props.SectionId;
 
-    private string? m_title = null;
+    private GridRect? m_position = props.Position;
+
 
     private bool m_isVerified = false;
 
@@ -16,11 +17,11 @@ public class HeuteBoardCard(Guid id)
 
     public Guid Id => id;
 
+    public string Title => m_title;
+
     public string? SectionId => m_sectionId;
 
     public GridRect? Position => m_position;
-
-    public string? Title => m_title;
 
     //
 
@@ -78,9 +79,9 @@ public class HeuteBoardCard(Guid id)
         return new HeuteBoardCardSnapshot(
             Id,
             new HeuteBoardCardProps(
+                Title,
                 SectionId,
-                Position,
-                Title
+                Position
             )
         );
     }
@@ -88,13 +89,7 @@ public class HeuteBoardCard(Guid id)
     internal static HeuteBoardCard FromSnapshot(HeuteBoardCardSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
-
-        return new HeuteBoardCard(snapshot.Id)
-        {
-            m_position = snapshot.Props.Position,
-            m_sectionId = snapshot.Props.SectionId,
-            m_title = snapshot.Props.Title
-        };
+        return new HeuteBoardCard(snapshot.Id, snapshot.Props);
     }
 }
 
@@ -104,7 +99,7 @@ public sealed record HeuteBoardCardSnapshot(
 );
 
 public sealed record HeuteBoardCardProps(
+    string Title,
     string? SectionId,
-    GridRect? Position,
-    string? Title
+    GridRect? Position
 );
