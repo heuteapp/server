@@ -14,4 +14,13 @@ public readonly record struct GridRect(
             Row < other.Row + other.RowSpan &&
             Row + RowSpan > other.Row;
     }
+
+    public bool Contains(GridRect other)
+    {
+        return
+            other.Col >= Col &&
+            other.Row >= Row &&
+            other.Col + other.ColSpan <= Col + ColSpan &&
+            other.Row + other.RowSpan <= Row + RowSpan;
+    }
 }
