@@ -20,45 +20,9 @@ public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
 
     //
 
-    public void AddSection(HeuteLayoutSection section)
-    {
-        ArgumentNullException.ThrowIfNull(section);
-        DoAddSection(section);
-    }
-
-    public void TryAddSection(HeuteLayoutSection section)
-    {
-        ArgumentNullException.ThrowIfNull(section);
-
-        if (HasSection(section.Id))
-        {
-            return;
-        }
-
-        DoAddSection(section);
-    }
-
-    public void AddSections(IEnumerable<HeuteLayoutSection> sections)
-    {
-        ArgumentNullException.ThrowIfNull(sections);
-
-        foreach (var section in sections)
-        {
-            TryAddSection(section);
-        }
-    }
-
     public bool HasSection(Guid sectionId)
     {
         return m_sectionDictionary.ContainsKey(sectionId);
-    }
-
-    //
-
-    private void DoAddSection(HeuteLayoutSection section)
-    {
-        m_sectionDictionary.Add(section.Id, section);
-        m_sections = null;
     }
 
     //
@@ -86,21 +50,13 @@ public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
     public static HeuteLayout FromSnapshot(HeuteLayoutSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
-
-        var layout = new HeuteLayout(snapshot.Id, snapshot.OwnerId, snapshot.Name, snapshot.Version);
-        layout.AddSections(snapshot.Props.Sections.Select(HeuteLayoutSection.FromSnapshot));
-
-        return layout;
+        return new HeuteLayout(snapshot.Id, snapshot.OwnerId, snapshot.Name, snapshot.Version);
     }
 
     public static HeuteLayout FromProps(Guid id, Guid ownerId, string name, int version, HeuteLayoutProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
-
-        var layout = new HeuteLayout(id, ownerId, name, version);
-        layout.AddSections(props.Sections.Select(HeuteLayoutSection.FromSnapshot));
-
-        return layout;
+        return new HeuteLayout(id, ownerId, name, version);
     }
 }
 
