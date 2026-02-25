@@ -8,17 +8,17 @@ public class HeuteBoard
 
     private readonly Guid m_ownerId;
 
-    private HeuteLayoutSnapshot m_layout;
+    private Guid m_layoutId;
 
     private readonly Dictionary<Guid, HeuteBoardCard> m_cardDictionary = [];
 
-    public HeuteBoard(Guid id, Guid ownerId, HeuteBoardProps props)
+    public HeuteBoard(Guid id, Guid ownerId, Guid layoutId, HeuteBoardProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
 
         m_id = id;
         m_ownerId = ownerId;
-        m_layout = props.Layout;
+        m_layoutId = layoutId;
 
         if (props != null)
         {
@@ -35,7 +35,7 @@ public class HeuteBoard
     
     public Guid OwnerId => m_ownerId;
 
-    public HeuteLayoutSnapshot Layout => m_layout;
+    public Guid LayoutId => m_layoutId;
 
     public IReadOnlyCollection<HeuteBoardCard> Cards => m_cardDictionary.Values;
 
@@ -44,8 +44,7 @@ public class HeuteBoard
     public void ChangeLayout(HeuteLayoutSnapshot layout)
     {
         ArgumentNullException.ThrowIfNull(layout);
-
-        m_layout = layout;
+        m_layoutId = layout.Id;
     }
 
     public void AddCard(Guid id, HeuteBoardCardProps props)
@@ -91,8 +90,8 @@ public class HeuteBoard
         return new HeuteBoardSnapshot(
             Id,
             OwnerId,
+            LayoutId,
             new HeuteBoardProps(
-                Layout,
                 Cards.Select(c => c.ToSnapshot())
             )
         );
@@ -101,7 +100,6 @@ public class HeuteBoard
     public HeuteBoardProps ToProps()
     {
         return new HeuteBoardProps(
-            Layout,
             Cards.Select(c => c.ToSnapshot())
         );
     }
@@ -109,25 +107,24 @@ public class HeuteBoard
     public static HeuteBoard FromSnapshot(HeuteBoardSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
-        return new HeuteBoard(snapshot.Id, snapshot.OwnerId, snapshot.Props);
+        return new HeuteBoard(snapshot.Id, snapshot.OwnerId, snapshot.LayoutId, snapshot.Props);
     }
 
-    public static HeuteBoard FromProps(Guid id, Guid ownerId, HeuteLayoutSnapshot layout, HeuteBoardProps props)
+    public static HeuteBoard FromProps(Guid id, Guid ownerId, Guid layoutId, HeuteBoardProps props)
     {
-        ArgumentNullException.ThrowIfNull(layout);
         ArgumentNullException.ThrowIfNull(props);
 
-        return new HeuteBoard(id, ownerId, props);
+        return new HeuteBoard(id, ownerId, layoutId, props);
     }
 }
 
 public sealed record HeuteBoardSnapshot(
     Guid Id,
     Guid OwnerId,
+    Guid LayoutId,
     HeuteBoardProps Props
 );
 
 public sealed record HeuteBoardProps(
-    HeuteLayoutSnapshot Layout,
     IEnumerable<HeuteBoardCardSnapshot> Cards
 );
