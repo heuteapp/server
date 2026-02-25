@@ -1,10 +1,33 @@
 namespace HeuteApp.Domain.Entities;
 
-public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
+public class HeuteLayout
 {
-    private HeuteLayoutSection[]? m_sections = null;
+    readonly Guid id;
+
+    readonly Guid ownerId;
+
+    readonly string name;
+
+    readonly int version;
 
     private readonly Dictionary<Guid, HeuteLayoutSection> m_sectionDictionary = [];
+
+    //
+
+    public HeuteLayout(Guid id, Guid ownerId, string name, int version, HeuteLayoutProps props)
+    {
+        ArgumentNullException.ThrowIfNull(props);
+
+        this.id = id;
+        this.ownerId = ownerId;
+        this.name = name;
+        this.version = version;
+
+        foreach (var section in props.Sections)
+        {
+            DoAddSection(section.Id, section.Name, section.Props);
+        }
+    }
 
     //
 
@@ -16,13 +39,21 @@ public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
 
     public int Version => version;
 
-    public HeuteLayoutSection[] Sections => m_sections ??= [.. m_sectionDictionary.Values];
+    public IReadOnlyCollection<HeuteLayoutSection> Sections => m_sectionDictionary.Values;
 
     //
 
     public bool HasSection(Guid sectionId)
     {
         return m_sectionDictionary.ContainsKey(sectionId);
+    }
+
+    //
+
+    private void DoAddSection(Guid sectionId, string name, HeuteLayoutSectionProps props)
+    {
+        var section = new HeuteLayoutSection(sectionId, name, props);
+        m_sectionDictionary.Add(sectionId, section);
     }
 
     //
@@ -50,13 +81,13 @@ public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
     public static HeuteLayout FromSnapshot(HeuteLayoutSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
-        return new HeuteLayout(snapshot.Id, snapshot.OwnerId, snapshot.Name, snapshot.Version);
+        return new HeuteLayout(snapshot.Id, snapshot.OwnerId, snapshot.Name, snapshot.Version, snapshot.Props);
     }
 
     public static HeuteLayout FromProps(Guid id, Guid ownerId, string name, int version, HeuteLayoutProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
-        return new HeuteLayout(id, ownerId, name, version);
+        return new HeuteLayout(id, ownerId, name, version, props);
     }
 }
 
