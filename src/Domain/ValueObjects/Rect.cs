@@ -1,4 +1,4 @@
-namespace HeuteApp.Core.Domain.ValueObjects;
+namespace HeuteApp.Domain.ValueObjects;
 
 public readonly record struct Rect(
     int X,

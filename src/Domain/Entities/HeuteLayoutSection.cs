@@ -1,6 +1,6 @@
-using HeuteApp.Core.Domain.ValueObjects;
+using HeuteApp.Domain.ValueObjects;
 
-namespace HeuteApp.Core.Domain;
+namespace HeuteApp.Domain.Entities;
 
 public class HeuteLayoutSection(Guid id, string name, HeuteLayoutSectionProps props)
 {
