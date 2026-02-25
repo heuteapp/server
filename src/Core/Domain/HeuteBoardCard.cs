@@ -10,7 +10,6 @@ public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
 
     private GridRect? m_position = props.Position;
 
-
     private bool m_isVerified = false;
 
     //
@@ -22,8 +21,6 @@ public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
     public string? SectionId => m_sectionId;
 
     public GridRect? Position => m_position;
-
-    //
 
     public bool IsPlaced
     {
