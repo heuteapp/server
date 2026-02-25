@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\HeuteApp.Core.csproj" />
+    <ProjectReference Include="..\Infrastructure\HeuteApp.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
