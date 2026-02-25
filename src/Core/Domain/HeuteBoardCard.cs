@@ -83,10 +83,25 @@ public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
         );
     }
 
+    internal HeuteBoardCardProps ToProps()
+    {
+        return new HeuteBoardCardProps(
+            Title,
+            SectionId,
+            Position
+        );
+    }
+
     internal static HeuteBoardCard FromSnapshot(HeuteBoardCardSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
         return new HeuteBoardCard(snapshot.Id, snapshot.Props);
+    }
+
+    internal static HeuteBoardCard FromProps(Guid id, HeuteBoardCardProps props)
+    {
+        ArgumentNullException.ThrowIfNull(props);
+        return new HeuteBoardCard(id, props);
     }
 }
 
