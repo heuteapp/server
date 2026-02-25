@@ -8,7 +8,7 @@ public class HeuteBoard
 
     private HeuteLayoutSnapshot m_layout;
 
-    private HeuteBoardCard[]? m_cards;
+    private HeuteBoardCard[]? m_cards = null;
 
     private readonly Dictionary<Guid, HeuteBoardCard> m_cardDictionary = [];
 
