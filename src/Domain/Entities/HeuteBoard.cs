@@ -80,6 +80,25 @@ public class HeuteBoard
         card.DoPlace(sectionId, position);
     }
 
+    public void UnplaceCard(Guid cardId)
+    {
+        if (!HasCard(cardId))
+        {
+            throw new InvalidOperationException($"Card with id {cardId} does not exist.");
+        }
+
+        var card = m_cardDictionary[cardId];
+        card.DoUnplace();
+    }
+
+    public void UnplaceAllCards()
+    {
+        foreach (var card in m_cardDictionary.Values)
+        {
+            card.DoUnplace();
+        }
+    }
+
     public bool HasCard(Guid cardId)
     {
         return m_cardDictionary.ContainsKey(cardId);
