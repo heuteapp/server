@@ -1,6 +1,6 @@
 namespace HeuteApp.Domain.Entities;
 
-public class HeuteLayout(Guid id, string name)
+public class HeuteLayout(Guid id, string name, int version)
 {
     private HeuteLayoutSection[]? m_sections = null;
 
@@ -11,6 +11,8 @@ public class HeuteLayout(Guid id, string name)
     public Guid Id => id;
 
     public string Name => name;
+
+    public int Version => version;
 
     public HeuteLayoutSection[] Sections => m_sections ??= [.. m_sectionDictionary.Values];
 
@@ -64,6 +66,7 @@ public class HeuteLayout(Guid id, string name)
         return new HeuteLayoutSnapshot(
             Id,
             Name,
+            Version,
             new HeuteLayoutProps(
                 Sections.Select(s => s.ToSnapshot())
             )
@@ -81,17 +84,17 @@ public class HeuteLayout(Guid id, string name)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
 
-        var layout = new HeuteLayout(snapshot.Id, snapshot.Name);
+        var layout = new HeuteLayout(snapshot.Id, snapshot.Name, snapshot.Version);
         layout.AddSections(snapshot.Props.Sections.Select(HeuteLayoutSection.FromSnapshot));
 
         return layout;
     }
 
-    public static HeuteLayout FromProps(Guid id, string name, HeuteLayoutProps props)
+    public static HeuteLayout FromProps(Guid id, string name, int version, HeuteLayoutProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
 
-        var layout = new HeuteLayout(id, name);
+        var layout = new HeuteLayout(id, name, version);
         layout.AddSections(props.Sections.Select(HeuteLayoutSection.FromSnapshot));
 
         return layout;
@@ -101,6 +104,7 @@ public class HeuteLayout(Guid id, string name)
 public sealed record HeuteLayoutSnapshot(
     Guid Id,
     string Name,
+    int Version,
     HeuteLayoutProps Props
 );
 
