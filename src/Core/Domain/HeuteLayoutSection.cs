@@ -44,10 +44,24 @@ public class HeuteLayoutSection(Guid id, string name, HeuteLayoutSectionProps pr
         );
     }
 
+    public HeuteLayoutSectionProps ToProps()
+    {
+        return new HeuteLayoutSectionProps(
+            Rect,
+            Size
+        );
+    }
+
     public static HeuteLayoutSection FromSnapshot(HeuteLayoutSectionSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
         return new HeuteLayoutSection(snapshot.Id, snapshot.Name, snapshot.Props);
+    }
+
+    public static HeuteLayoutSection FromProps(Guid id, string name, HeuteLayoutSectionProps props)
+    {
+        ArgumentNullException.ThrowIfNull(props);
+        return new HeuteLayoutSection(id, name, props);
     }
 }
 
