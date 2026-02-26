@@ -18,6 +18,9 @@ public class BoardConfig : IEntityTypeConfiguration<BoardEntity>
         builder.Property(b => b.LayoutId)
             .IsRequired();
 
+        builder.Property(b => b.Date)
+            .IsRequired();
+
         builder.HasMany(b => b.Cards)
             .WithOne(c => c.Board)
             .HasForeignKey(c => c.BoardId)
