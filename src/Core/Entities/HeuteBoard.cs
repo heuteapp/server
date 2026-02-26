@@ -10,11 +10,11 @@ public class HeuteBoard
 
     private Guid m_layoutId;
 
-    private readonly DateTime m_date;
+    private readonly DateOnly m_date;
 
     private readonly Dictionary<Guid, HeuteBoardCard> m_cardDictionary = [];
 
-    public HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateTime date, HeuteBoardProps props)
+    public HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date, HeuteBoardProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
 
@@ -40,7 +40,7 @@ public class HeuteBoard
 
     public Guid LayoutId => m_layoutId;
 
-    public DateTime Date => m_date;
+    public DateOnly Date => m_date;
 
     public IReadOnlyCollection<HeuteBoardCard> Cards => m_cardDictionary.Values;
 
@@ -165,7 +165,7 @@ public class HeuteBoard
         return new HeuteBoard(snapshot.Id, snapshot.OwnerId, snapshot.LayoutId, snapshot.Date, snapshot.Props);
     }
 
-    public static HeuteBoard FromProps(Guid id, Guid ownerId, Guid layoutId, DateTime date, HeuteBoardProps props)
+    public static HeuteBoard FromProps(Guid id, Guid ownerId, Guid layoutId, DateOnly date, HeuteBoardProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
 
@@ -177,7 +177,7 @@ public sealed record HeuteBoardSnapshot(
     Guid Id,
     Guid OwnerId,
     Guid LayoutId,
-    DateTime Date,
+    DateOnly Date,
     HeuteBoardProps Props
 );
 
