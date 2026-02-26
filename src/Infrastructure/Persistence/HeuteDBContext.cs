@@ -61,6 +61,8 @@ public class HeuteDbContext(DbContextOptions<HeuteDbContext> options) : DbContex
                 .WithOne(s => s.Layout)
                 .HasForeignKey(s => s.LayoutId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(l => new { l.OwnerId, l.Name, l.Version }).IsUnique();
         });
 
         modelBuilder.Entity<LayoutSectionEntity>(builder =>
