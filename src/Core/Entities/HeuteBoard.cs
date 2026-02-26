@@ -41,10 +41,9 @@ public class HeuteBoard
 
     //
 
-    public void ChangeLayout(HeuteLayoutSnapshot layout)
+    public void ChangeLayout(Guid layoutId)
     {
-        ArgumentNullException.ThrowIfNull(layout);
-        m_layoutId = layout.Id;
+        m_layoutId = layoutId;
 
         UnplaceAllCards();
     }
