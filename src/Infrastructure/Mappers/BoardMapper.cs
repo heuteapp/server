@@ -24,7 +24,19 @@ public static class BoardMapper
     public static HeuteBoardProps ToProps(this BoardEntity entity)
     {
         return new HeuteBoardProps(
-            entity.Cards.Select(c => c.ToSnapshot())
+            [.. entity.Cards.Select(c => c.ToSnapshot())]
         );
+    }
+
+    public static BoardEntity ToEntity(this HeuteBoard board)
+    {
+        return new BoardEntity
+        {
+            Id = board.Id,
+            OwnerId = board.OwnerId,
+            LayoutId = board.LayoutId,
+            Date = board.Date,
+            Cards = [.. board.Cards.Select(c => c.ToEntity(board.Id))]
+        };
     }
 }
