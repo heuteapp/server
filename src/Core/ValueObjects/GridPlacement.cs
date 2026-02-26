@@ -1,8 +1,5 @@
 namespace HeuteApp.Core.ValueObjects;
 
-public readonly record struct GridPlacement(
+public sealed record GridPlacement(
     int RowSpan,
-    int ColSpan)
-{
-    
-}
+    int ColSpan);

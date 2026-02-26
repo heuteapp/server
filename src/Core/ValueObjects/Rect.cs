@@ -1,6 +1,6 @@
 namespace HeuteApp.Core.ValueObjects;
 
-public readonly record struct Rect(
+public sealed record Rect(
     int X,
     int Y,
     int Width,

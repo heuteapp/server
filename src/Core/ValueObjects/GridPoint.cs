@@ -1,8 +1,5 @@
 namespace HeuteApp.Core.ValueObjects;
 
-public readonly record struct GridPoint(
+public sealed record GridPoint(
     int Row,
-    int Col)
-{
-    
-}
+    int Col);

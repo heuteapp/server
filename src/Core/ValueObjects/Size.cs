@@ -1,8 +1,5 @@
 namespace HeuteApp.Core.ValueObjects;
 
-public readonly record struct Size(
+public sealed record Size(
     int Width,
-    int Height)
-{
-    
-}
+    int Height);

@@ -1,8 +1,5 @@
 namespace HeuteApp.Core.ValueObjects;
 
-public readonly record struct Point(
+public sealed record Point(
     int X,
-    int Y)
-{
-    
-}
+    int Y);
