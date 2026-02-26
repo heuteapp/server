@@ -7,18 +7,23 @@ public static class BoardCardMapper
 {
     public static HeuteBoardCard ToDomainModel(this BoardCardEntity entity)
     {
-        return HeuteBoardCard.FromSnapshot(entity.ToSnapshot());
+        return HeuteBoardCard.FromProps(entity.Id, entity.ToProps());
     }
 
     public static HeuteBoardCardSnapshot ToSnapshot(this BoardCardEntity entity)
     {
         return new HeuteBoardCardSnapshot(
             entity.Id,
-            new HeuteBoardCardProps(
-                entity.Title,
-                entity.SectionId,
-                entity.Position
-            )
+            entity.ToProps()
+        );
+    }
+
+    public static HeuteBoardCardProps ToProps(this BoardCardEntity entity)
+    {
+        return new HeuteBoardCardProps(
+            entity.Title,
+            entity.SectionId,
+            entity.Position
         );
     }
 }
