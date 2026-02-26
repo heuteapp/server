@@ -10,6 +10,10 @@ public class HeuteDbContext(DbContextOptions<HeuteDbContext> options) : DbContex
 
     public DbSet<BoardCardEntity> BoardCards => Set<BoardCardEntity>();
 
+    public DbSet<LayoutEntity> Layouts => Set<LayoutEntity>();
+
+    public DbSet<LayoutSectionEntity> LayoutSections => Set<LayoutSectionEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BoardEntity>(builder =>
