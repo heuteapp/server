@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\HeuteApp.Core.csproj" />
+    <ProjectReference Include="..\Application\HeuteApp.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
