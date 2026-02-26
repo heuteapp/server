@@ -1,6 +1,6 @@
 using HeuteApp.Core.Entities;
 
-namespace HeuteApp.Core.Repositories;
+namespace HeuteApp.Application.Interfaces;
 
 public interface IBoardRepository
 {

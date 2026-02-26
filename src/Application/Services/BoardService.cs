@@ -1,5 +1,5 @@
 using HeuteApp.Core.Entities;
-using HeuteApp.Core.Repositories;
+using HeuteApp.Application.Interfaces;
 
 namespace HeuteApp.Application.Services;
 
