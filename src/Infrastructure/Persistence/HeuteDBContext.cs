@@ -58,5 +58,23 @@ public class HeuteDbContext(DbContextOptions<HeuteDbContext> options) : DbContex
                 .HasForeignKey(s => s.LayoutId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
+
+        modelBuilder.Entity<LayoutSectionEntity>(builder =>
+        {
+            builder.ToTable("layout_sections");
+
+            builder.HasKey(s => s.Id);
+
+            builder.Property(s => s.LayoutId).IsRequired();
+            builder.Property(s => s.Name).IsRequired();
+
+            builder.HasIndex(s => s.LayoutId);
+        });
+
+        modelBuilder.Entity<LayoutSectionEntity>()
+            .OwnsOne(x => x.Rect);
+
+        modelBuilder.Entity<LayoutSectionEntity>()
+            .OwnsOne(x => x.Size);
     }
 }
