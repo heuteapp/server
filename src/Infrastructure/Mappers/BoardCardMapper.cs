@@ -26,4 +26,16 @@ public static class BoardCardMapper
             entity.Position
         );
     }
+
+    public static BoardCardEntity ToEntity(this HeuteBoardCard card, Guid boardId)
+    {
+        return new BoardCardEntity
+        {
+            Id = card.Id,
+            BoardId = boardId,
+            Title = card.Title,
+            SectionId = card.SectionId,
+            Position = card.Position
+        };
+    }
 }
