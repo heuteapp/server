@@ -7,4 +7,6 @@ public class BoardEntity
     public Guid OwnerId { get; set; }
     
     public Guid LayoutId { get; set; }
+
+    public List<BoardCardEntity> Cards { get; set; } = [];
 }

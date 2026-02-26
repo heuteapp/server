@@ -7,6 +7,8 @@ public class BoardCardEntity
     public Guid Id { get; set; }
 
     public Guid BoardId { get; set; }
+
+    public BoardEntity? Board { get; set; } = null;
     
     public string Title { get; set; } = string.Empty;
 
