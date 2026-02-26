@@ -36,6 +36,8 @@ public class HeuteDbContext(DbContextOptions<HeuteDbContext> options) : DbContex
             builder.Property(c => c.BoardId).IsRequired();
             builder.Property(c => c.SectionId);
             builder.Property(c => c.Title).IsRequired();
+
+            builder.HasIndex(c => c.BoardId);
         });
 
         modelBuilder.Entity<BoardCardEntity>()
