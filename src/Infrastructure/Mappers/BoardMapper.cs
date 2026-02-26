@@ -7,7 +7,7 @@ public static class BoardMapper
 {
     public static HeuteBoard ToDomainModel(this BoardEntity entity)
     {
-        return HeuteBoard.FromSnapshot(entity.ToSnapshot());
+        return HeuteBoard.FromProps(entity.Id, entity.OwnerId, entity.LayoutId, entity.Date, entity.ToProps());
     }
 
     public static HeuteBoardSnapshot ToSnapshot(this BoardEntity entity)
@@ -17,9 +17,14 @@ public static class BoardMapper
             entity.OwnerId,
             entity.LayoutId,
             entity.Date,
-            new HeuteBoardProps(
-                entity.Cards.Select(c => c.ToSnapshot())
-            )
+            entity.ToProps()
         );
     }   
+
+    public static HeuteBoardProps ToProps(this BoardEntity entity)
+    {
+        return new HeuteBoardProps(
+            entity.Cards.Select(c => c.ToSnapshot())
+        );
+    }
 }
