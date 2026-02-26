@@ -20,6 +20,11 @@ public class HeuteDbContext(DbContextOptions<HeuteDbContext> options) : DbContex
 
             builder.Property(b => b.OwnerId).IsRequired();
             builder.Property(b => b.LayoutId).IsRequired();
+
+            builder.HasMany(b => b.Cards)
+                .WithOne(c => c.Board)
+                .HasForeignKey(c => c.BoardId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<BoardCardEntity>(builder =>
@@ -31,8 +36,6 @@ public class HeuteDbContext(DbContextOptions<HeuteDbContext> options) : DbContex
             builder.Property(c => c.BoardId).IsRequired();
             builder.Property(c => c.SectionId);
             builder.Property(c => c.Title).IsRequired();
-
-            //builder.Property(c => c.Position);
         });
 
         modelBuilder.Entity<BoardCardEntity>()
