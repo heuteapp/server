@@ -1,6 +1,6 @@
 namespace HeuteApp.Core.ValueObjects;
 
-public readonly record struct GridRect(
+public sealed record GridRect(
     int Row,
     int Col,
     int RowSpan,
