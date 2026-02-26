@@ -29,6 +29,11 @@ public class HeuteDbContext(DbContextOptions<HeuteDbContext> options) : DbContex
                 .WithOne(c => c.Board)
                 .HasForeignKey(c => c.BoardId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne<LayoutEntity>()
+                .WithMany()
+                .HasForeignKey(b => b.LayoutId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<BoardCardEntity>(builder =>
