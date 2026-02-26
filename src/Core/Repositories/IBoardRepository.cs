@@ -4,7 +4,7 @@ namespace HeuteApp.Core.Repositories;
 
 public interface IBoardRepository
 {
-    Task<HeuteBoard?> GetByIdAsync(Guid id);
+    Task<HeuteBoard?> GetByDateAsync(Guid ownerId, DateOnly date);
 
     Task AddAsync(HeuteBoard board);
 
