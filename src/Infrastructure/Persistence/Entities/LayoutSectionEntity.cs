@@ -8,6 +8,8 @@ public class LayoutSectionEntity
 
     public Guid LayoutId { get; set; }
 
+    public LayoutEntity Layout { get; set; } = null!;
+
     public string Name { get; set; } = string.Empty;
 
     public Rect Rect { get; set; } = null!;
