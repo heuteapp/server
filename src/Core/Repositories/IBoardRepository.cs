@@ -1,4 +1,4 @@
-using HeuteApp.Domain.Entities;
+using HeuteApp.Core.Entities;
 
 namespace HeuteApp.Domain.Repositories;
 
