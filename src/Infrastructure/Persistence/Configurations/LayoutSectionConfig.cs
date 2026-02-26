@@ -46,11 +46,11 @@ public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionEntity>
         builder.OwnsOne(s => s.Size, size =>
         {
             size.Property(sz => sz.ColCount)
-                .HasColumnName("size_col_count")
+                .HasColumnName("size_colCount")
                 .IsRequired();
 
             size.Property(sz => sz.RowCount)
-                .HasColumnName("size_row_count")
+                .HasColumnName("size_rowCount")
                 .IsRequired();
         });
 

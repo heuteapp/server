@@ -31,11 +31,11 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardEntity>
                     .IsRequired();
 
             position.Property(p => p.ColSpan)
-                    .HasColumnName("position_col_span")
+                    .HasColumnName("position_colSpan")
                     .IsRequired();
 
             position.Property(p => p.RowSpan)
-                    .HasColumnName("position_row_span")
+                    .HasColumnName("position_rowSpan")
                     .IsRequired();
         });
 
