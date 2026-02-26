@@ -1,4 +1,4 @@
-namespace HeuteApp.Domain.Entities;
+namespace HeuteApp.Core.Entities;
 
 public class HeuteLayout
 {

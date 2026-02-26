@@ -1,6 +1,6 @@
-using HeuteApp.Domain.ValueObjects;
+using HeuteApp.Core.ValueObjects;
 
-namespace HeuteApp.Domain.Entities;
+namespace HeuteApp.Core.Entities;
 
 public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
 {   
