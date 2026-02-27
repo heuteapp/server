@@ -1,5 +1,4 @@
 using HeuteApp.Core.Entities;
-using HeuteApp.Core.Mappers;
 using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Aggregates;
@@ -122,7 +121,7 @@ public class HeuteBoard
 
     private void DoAddCard(Guid id, BoardCardProps props)
     {
-        var boardCard = BoardCard.Create(id, props);
+        var boardCard = new BoardCard(id, props);
         m_cardDictionary.Add(boardCard.Id, boardCard);
     }
 }

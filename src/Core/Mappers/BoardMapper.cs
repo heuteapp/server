@@ -19,6 +19,6 @@ public static partial class BoardMapper
     {
         ArgumentNullException.ThrowIfNull(props);
 
-        return BoardCard.Create(id, props);
+        return new BoardCard(id, props);
     }
 }

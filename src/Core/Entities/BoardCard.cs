@@ -2,15 +2,15 @@ using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Entities;
 
-public class BoardCard
-{   
-    public Guid Id { get;  private set; }
+public class BoardCard(Guid id, BoardCardProps props)
+{
+    public Guid Id { get; private set; } = id;
 
-    public string? Title { get; private set; }
+    public string? Title { get; private set; } = props.Title;
 
-    public Guid? SectionId { get; private set; }
+    public Guid? SectionId { get; private set; } = props.SectionId;
 
-    public GridRect? Position { get; private set; }
+    public GridRect? Position { get; private set; } = props.Position;
 
     public bool IsPlaced
     {
@@ -21,22 +21,6 @@ public class BoardCard
     }
 
     public bool IsVerified { get; private set; } = false;
-
-    //
-
-    private BoardCard() { } // EF için
-
-    private BoardCard(Guid id, BoardCardProps props)
-    {
-        Id = id;
-        Title = props.Title;
-        SectionId = props.SectionId;
-        Position = props.Position;
-        IsVerified = false;
-    }
-    
-    public static BoardCard Create(Guid id, BoardCardProps props)
-        => new(id, props);
 
     //
 
