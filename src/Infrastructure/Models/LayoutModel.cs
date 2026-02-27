@@ -1,6 +1,6 @@
-namespace HeuteApp.Infrastructure.Entities;
+namespace HeuteApp.Infrastructure.Models;
 
-public class LayoutEntity
+public class LayoutModel
 {
     public Guid Id { get; set; }
 
@@ -10,5 +10,5 @@ public class LayoutEntity
 
     public int Version { get; set; } = 0;
 
-    public List<LayoutSectionEntity> Sections { get; set; } = [];
+    public List<LayoutSectionModel> Sections { get; set; } = [];
 }

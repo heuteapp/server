@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using HeuteApp.Infrastructure.Entities;
+using HeuteApp.Infrastructure.Models;
 
 namespace HeuteApp.Infrastructure.Configurations;
 
-public class BoardConfig : IEntityTypeConfiguration<BoardEntity>
+public class BoardConfig : IEntityTypeConfiguration<BoardModel>
 {
-    public void Configure(EntityTypeBuilder<BoardEntity> builder)
+    public void Configure(EntityTypeBuilder<BoardModel> builder)
     {
         builder.ToTable("boards");
 
@@ -26,7 +26,7 @@ public class BoardConfig : IEntityTypeConfiguration<BoardEntity>
             .HasForeignKey(c => c.BoardId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne<LayoutEntity>()
+        builder.HasOne<LayoutModel>()
             .WithMany()
             .HasForeignKey(b => b.LayoutId)
             .OnDelete(DeleteBehavior.Restrict);

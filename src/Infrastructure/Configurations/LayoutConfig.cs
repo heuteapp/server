@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using HeuteApp.Infrastructure.Entities;
+using HeuteApp.Infrastructure.Models;
 
 namespace HeuteApp.Infrastructure.Configurations;
 
-public class LayoutConfig : IEntityTypeConfiguration<LayoutEntity>
+public class LayoutConfig : IEntityTypeConfiguration<LayoutModel>
 {
-    public void Configure(EntityTypeBuilder<LayoutEntity> builder)
+    public void Configure(EntityTypeBuilder<LayoutModel> builder)
     {
         builder.ToTable("layouts");
 

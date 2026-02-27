@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using HeuteApp.Infrastructure.Entities;
+using HeuteApp.Infrastructure.Models;
 
 namespace HeuteApp.Infrastructure.Configurations;
 
-public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionEntity>
+public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionModel>
 {
-    public void Configure(EntityTypeBuilder<LayoutSectionEntity> builder)
+    public void Configure(EntityTypeBuilder<LayoutSectionModel> builder)
     {
         builder.ToTable("layout_sections");
 

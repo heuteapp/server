@@ -1,16 +1,16 @@
 using HeuteApp.Core.Aggregates;
-using HeuteApp.Infrastructure.Entities;
+using HeuteApp.Infrastructure.Models;
 
 namespace HeuteApp.Infrastructure.Mappers;
 
 public static class BoardMapper
 {
-    public static HeuteBoard ToDomainModel(this BoardEntity entity)
+    public static HeuteBoard ToDomainModel(this BoardModel entity)
     {
         return HeuteBoard.FromProps(entity.Id, entity.OwnerId, entity.LayoutId, entity.Date, entity.ToProps());
     }
 
-    public static HeuteBoardSnapshot ToSnapshot(this BoardEntity entity)
+    public static HeuteBoardSnapshot ToSnapshot(this BoardModel entity)
     {
         return new HeuteBoardSnapshot(
             entity.Id,
@@ -21,16 +21,16 @@ public static class BoardMapper
         );
     }   
 
-    public static HeuteBoardProps ToProps(this BoardEntity entity)
+    public static HeuteBoardProps ToProps(this BoardModel entity)
     {
         return new HeuteBoardProps(
             [.. entity.Cards.Select(c => c.ToSnapshot())]
         );
     }
 
-    public static BoardEntity ToEntity(this HeuteBoard board)
+    public static BoardModel ToEntity(this HeuteBoard board)
     {
-        return new BoardEntity
+        return new BoardModel
         {
             Id = board.Id,
             OwnerId = board.OwnerId,

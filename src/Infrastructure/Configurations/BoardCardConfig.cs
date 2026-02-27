@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using HeuteApp.Infrastructure.Entities;
+using HeuteApp.Infrastructure.Models;
 
 namespace HeuteApp.Infrastructure.Configurations;
 
-public class BoardCardConfig : IEntityTypeConfiguration<BoardCardEntity>
+public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
 {
-    public void Configure(EntityTypeBuilder<BoardCardEntity> builder)
+    public void Configure(EntityTypeBuilder<BoardCardModel> builder)
     {
         builder.ToTable("board_cards");
 

@@ -1,17 +1,17 @@
 using Microsoft.EntityFrameworkCore;
-using HeuteApp.Infrastructure.Entities;
+using HeuteApp.Infrastructure.Models;
 
 namespace HeuteApp.Infrastructure.Persistence;
 
 public class HeuteDbContext(DbContextOptions<HeuteDbContext> options) : DbContext(options)
 {
-    public DbSet<BoardEntity> Boards => Set<BoardEntity>();
+    public DbSet<BoardModel> Boards => Set<BoardModel>();
 
-    public DbSet<BoardCardEntity> BoardCards => Set<BoardCardEntity>();
+    public DbSet<BoardCardModel> BoardCards => Set<BoardCardModel>();
 
-    public DbSet<LayoutEntity> Layouts => Set<LayoutEntity>();
+    public DbSet<LayoutModel> Layouts => Set<LayoutModel>();
 
-    public DbSet<LayoutSectionEntity> LayoutSections => Set<LayoutSectionEntity>();
+    public DbSet<LayoutSectionModel> LayoutSections => Set<LayoutSectionModel>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

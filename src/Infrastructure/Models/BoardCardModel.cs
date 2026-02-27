@@ -1,14 +1,14 @@
 using HeuteApp.Core.ValueObjects;
 
-namespace HeuteApp.Infrastructure.Entities;
+namespace HeuteApp.Infrastructure.Models;
 
-public class BoardCardEntity
+public class BoardCardModel
 {
     public Guid Id { get; set; }
 
     public Guid BoardId { get; set; }
 
-    public BoardEntity? Board { get; set; } = null;
+    public BoardModel? Board { get; set; } = null;
     
     public string Title { get; set; } = string.Empty;
 

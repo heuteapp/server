@@ -1,6 +1,6 @@
-namespace HeuteApp.Infrastructure.Entities;
+namespace HeuteApp.Infrastructure.Models;
 
-public class BoardEntity
+public class BoardModel
 {
     public Guid Id { get; set; }
 
@@ -10,5 +10,5 @@ public class BoardEntity
 
     public DateOnly Date { get; set; }
 
-    public List<BoardCardEntity> Cards { get; set; } = [];
+    public List<BoardCardModel> Cards { get; set; } = [];
 }
