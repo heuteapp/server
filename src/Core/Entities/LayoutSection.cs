@@ -2,7 +2,7 @@ using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Entities;
 
-public class HeuteLayoutSection(Guid id, string name, HeuteLayoutSectionProps props)
+public class LayoutSection(Guid id, string name, LayoutSectionProps props)
 {
     private Rect m_rect = props.Rect;
 
@@ -32,46 +32,46 @@ public class HeuteLayoutSection(Guid id, string name, HeuteLayoutSectionProps pr
 
     //
 
-    public HeuteLayoutSectionSnapshot ToSnapshot()
+    public LayoutSectionSnapshot ToSnapshot()
     {
-        return new HeuteLayoutSectionSnapshot(
+        return new LayoutSectionSnapshot(
             Id,
             Name,
-            new HeuteLayoutSectionProps(
+            new LayoutSectionProps(
                 Rect,
                 Size
             )
         );
     }
 
-    public HeuteLayoutSectionProps ToProps()
+    public LayoutSectionProps ToProps()
     {
-        return new HeuteLayoutSectionProps(
+        return new LayoutSectionProps(
             Rect,
             Size
         );
     }
 
-    public static HeuteLayoutSection FromSnapshot(HeuteLayoutSectionSnapshot snapshot)
+    public static LayoutSection FromSnapshot(LayoutSectionSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
-        return new HeuteLayoutSection(snapshot.Id, snapshot.Name, snapshot.Props);
+        return new LayoutSection(snapshot.Id, snapshot.Name, snapshot.Props);
     }
 
-    public static HeuteLayoutSection FromProps(Guid id, string name, HeuteLayoutSectionProps props)
+    public static LayoutSection FromProps(Guid id, string name, LayoutSectionProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
-        return new HeuteLayoutSection(id, name, props);
+        return new LayoutSection(id, name, props);
     }
 }
 
-public sealed record HeuteLayoutSectionSnapshot(
+public sealed record LayoutSectionSnapshot(
     Guid Id,
     string Name,
-    HeuteLayoutSectionProps Props
+    LayoutSectionProps Props
 );
 
-public sealed record HeuteLayoutSectionProps(
+public sealed record LayoutSectionProps(
     Rect Rect,
     GridSize Size
 );

@@ -5,29 +5,29 @@ namespace HeuteApp.Infrastructure.Mappers;
 
 public static class BoardCardMapper
 {
-    public static HeuteBoardCard ToDomainModel(this BoardCardEntity entity)
+    public static BoardCard ToDomainModel(this BoardCardEntity entity)
     {
-        return HeuteBoardCard.FromProps(entity.Id, entity.ToProps());
+        return BoardCard.FromProps(entity.Id, entity.ToProps());
     }
 
-    public static HeuteBoardCardSnapshot ToSnapshot(this BoardCardEntity entity)
+    public static BoardCardSnapshot ToSnapshot(this BoardCardEntity entity)
     {
-        return new HeuteBoardCardSnapshot(
+        return new BoardCardSnapshot(
             entity.Id,
             entity.ToProps()
         );
     }
 
-    public static HeuteBoardCardProps ToProps(this BoardCardEntity entity)
+    public static BoardCardProps ToProps(this BoardCardEntity entity)
     {
-        return new HeuteBoardCardProps(
+        return new BoardCardProps(
             entity.Title,
             entity.SectionId,
             entity.Position
         );
     }
 
-    public static BoardCardEntity ToEntity(this HeuteBoardCard card, Guid boardId)
+    public static BoardCardEntity ToEntity(this BoardCard card, Guid boardId)
     {
         return new BoardCardEntity
         {

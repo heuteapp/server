@@ -12,7 +12,7 @@ public class HeuteLayout
 
     readonly int version;
 
-    private readonly Dictionary<Guid, HeuteLayoutSection> m_sectionDictionary = [];
+    private readonly Dictionary<Guid, LayoutSection> m_sectionDictionary = [];
 
     //
 
@@ -41,7 +41,7 @@ public class HeuteLayout
 
     public int Version => version;
 
-    public IReadOnlyCollection<HeuteLayoutSection> Sections => m_sectionDictionary.Values;
+    public IReadOnlyCollection<LayoutSection> Sections => m_sectionDictionary.Values;
 
     //
 
@@ -52,9 +52,9 @@ public class HeuteLayout
 
     //
 
-    private void DoAddSection(Guid sectionId, string name, HeuteLayoutSectionProps props)
+    private void DoAddSection(Guid sectionId, string name, LayoutSectionProps props)
     {
-        var section = new HeuteLayoutSection(sectionId, name, props);
+        var section = new LayoutSection(sectionId, name, props);
         m_sectionDictionary.Add(sectionId, section);
     }
 
@@ -102,5 +102,5 @@ public sealed record HeuteLayoutSnapshot(
 );
 
 public sealed record HeuteLayoutProps(
-    IEnumerable<HeuteLayoutSectionSnapshot> Sections
+    IEnumerable<LayoutSectionSnapshot> Sections
 );

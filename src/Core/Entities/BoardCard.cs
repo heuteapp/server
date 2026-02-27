@@ -2,7 +2,7 @@ using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Entities;
 
-public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
+public class BoardCard(Guid id, BoardCardProps props)
 {   
     private string m_title = props.Title;
 
@@ -71,11 +71,11 @@ public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
 
     //
 
-    public HeuteBoardCardSnapshot ToSnapshot()
+    public BoardCardSnapshot ToSnapshot()
     {
-        return new HeuteBoardCardSnapshot(
+        return new BoardCardSnapshot(
             Id,
-            new HeuteBoardCardProps(
+            new BoardCardProps(
                 Title,
                 SectionId,
                 Position
@@ -83,34 +83,34 @@ public class HeuteBoardCard(Guid id, HeuteBoardCardProps props)
         );
     }
 
-    public HeuteBoardCardProps ToProps()
+    public BoardCardProps ToProps()
     {
-        return new HeuteBoardCardProps(
+        return new BoardCardProps(
             Title,
             SectionId,
             Position
         );
     }
 
-    public static HeuteBoardCard FromSnapshot(HeuteBoardCardSnapshot snapshot)
+    public static BoardCard FromSnapshot(BoardCardSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
-        return new HeuteBoardCard(snapshot.Id, snapshot.Props);
+        return new BoardCard(snapshot.Id, snapshot.Props);
     }
 
-    public static HeuteBoardCard FromProps(Guid id, HeuteBoardCardProps props)
+    public static BoardCard FromProps(Guid id, BoardCardProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
-        return new HeuteBoardCard(id, props);
+        return new BoardCard(id, props);
     }
 }
 
-public sealed record HeuteBoardCardSnapshot(
+public sealed record BoardCardSnapshot(
     Guid Id,
-    HeuteBoardCardProps Props
+    BoardCardProps Props
 );
 
-public sealed record HeuteBoardCardProps(
+public sealed record BoardCardProps(
     string Title,
     Guid? SectionId,
     GridRect? Position

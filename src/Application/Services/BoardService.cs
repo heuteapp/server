@@ -20,7 +20,7 @@ public class BoardService(IBoardRepository repository, IUnitOfWork unitOfWork)
         await unitOfWork.SaveChangesAsync();
     }
 
-    public async Task AddCardAsync(Guid ownerId, DateOnly date, HeuteBoardCardProps props)
+    public async Task AddCardAsync(Guid ownerId, DateOnly date, BoardCardProps props)
     {
         var board = await repository.GetByDateAsync(ownerId, date) 
             ?? throw new Exception("Board not found.");
