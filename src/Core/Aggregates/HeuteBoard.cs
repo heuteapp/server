@@ -7,6 +7,11 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 {
     private readonly Dictionary<Guid, BoardCard> m_cardDictionary = [];
 
+    private HeuteBoard() : this(Guid.Empty, Guid.Empty, Guid.Empty, default)
+    {
+        
+    }
+
     //
 
     public Guid Id { get; private set; } = id;
@@ -17,7 +22,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 
     public DateOnly Date { get; private set; } = date;
 
-    public IReadOnlyCollection<BoardCard> Cards => [..m_cardDictionary.Values];
+    public ICollection<BoardCard> Cards { get; private set; } = [];
 
     //
 

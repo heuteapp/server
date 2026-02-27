@@ -6,6 +6,11 @@ public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
 {
     private readonly Dictionary<Guid, LayoutSection> m_sectionDictionary = [];
 
+    private HeuteLayout() : this(Guid.Empty, Guid.Empty, string.Empty, 0)
+    {
+        
+    }
+
     //
 
     public Guid Id { get; private set; } = id;
