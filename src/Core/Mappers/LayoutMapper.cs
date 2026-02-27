@@ -1,4 +1,3 @@
-using HeuteApp.Core.Aggregates;
 using HeuteApp.Core.Entities;
 
 namespace HeuteApp.Core.Mappers;
@@ -16,7 +15,7 @@ public static partial class LayoutMapper
     }
 
     //
-    
+
     public static LayoutSection ToDomain(this LayoutSectionProps props, Guid id, string name)
     {
         ArgumentNullException.ThrowIfNull(props);
