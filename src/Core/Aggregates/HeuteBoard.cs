@@ -55,7 +55,8 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException($"Card with id {cardId} does not exist.");
         }
 
-        Cards.RemoveAll(c => c.Id == cardId);
+        var card = Cards.First(c => c.Id == cardId);
+        Cards.Remove(card);
     }
 
     public void PlaceCard(HeuteLayout layout, Guid cardId, Guid sectionId, GridRect position)
