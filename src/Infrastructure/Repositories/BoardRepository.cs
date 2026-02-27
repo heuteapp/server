@@ -40,6 +40,5 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
             ?? throw new Exception("Board not found.");
 
         entity.SyncFromDomain(board);
-        await conext.SaveChangesAsync();
     }
 }

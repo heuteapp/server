@@ -27,7 +27,7 @@ public class BoardService(IBoardRepository repository, IUnitOfWork unitOfWork)
 
         board.AddCard(Guid.NewGuid(), props);
         
-        await repository.AddCardAsync(board.Id, props);
+        await repository.SaveAsync(board);
         await unitOfWork.SaveChangesAsync();
     }
 }
