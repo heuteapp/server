@@ -21,6 +21,8 @@ public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
 
     public int Version { get; private set; } = version;
 
+    public IReadOnlyCollection<LayoutSection> Sections => m_sectionDictionary.Values;
+
     //
 
     public void AddSection(Guid sectionId, string name, LayoutSectionProps props)
