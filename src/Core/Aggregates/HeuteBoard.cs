@@ -7,16 +7,6 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 {
     protected List<BoardCard> m_cards = [];
 
-    protected virtual BoardCard CardInstance(Guid id, BoardCardProps props)
-    {
-        return new BoardCard(id, props);
-    }
-
-    protected HeuteBoard() : this(Guid.Empty, Guid.Empty, Guid.Empty, default)
-    {
-        
-    }
-
     //
 
     public Guid Id { get; private set; } = id;
@@ -117,7 +107,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 
     private BoardCard DoAddCard(Guid id, BoardCardProps props)
     {
-        var boardCard = CardInstance(id, props);
+        var boardCard = new BoardCard(id, props);
         m_cards.Add(boardCard);
 
         return boardCard;
