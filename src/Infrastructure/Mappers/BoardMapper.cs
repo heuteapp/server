@@ -5,27 +5,21 @@ namespace HeuteApp.Infrastructure.Mappers;
 
 public static class BoardMapper
 {
-    public static HeuteBoard ToDomainModel(this BoardModel entity)
+    public static HeuteBoard ToDomain(this BoardModel model)
     {
-        return HeuteBoard.FromProps(entity.Id, entity.OwnerId, entity.LayoutId, entity.Date, entity.ToProps());
-    }
-
-    public static HeuteBoardSnapshot ToSnapshot(this BoardModel entity)
-    {
-        return new HeuteBoardSnapshot(
-            entity.Id,
-            entity.OwnerId,
-            entity.LayoutId,
-            entity.Date,
-            entity.ToProps()
+        HeuteBoard board = new(
+            model.Id,
+            model.OwnerId,
+            model.LayoutId,
+            model.Date
         );
-    }   
 
-    public static HeuteBoardProps ToProps(this BoardModel entity)
-    {
-        return new HeuteBoardProps(
-            [.. entity.Cards.Select(c => c.ToSnapshot())]
-        );
+        foreach (var card in model.Cards)
+        {
+            board.AddCard(card.Id, card.ToProps());
+        }
+
+        return board;
     }
 
     public static BoardModel ToEntity(this HeuteBoard board)
@@ -36,7 +30,7 @@ public static class BoardMapper
             OwnerId = board.OwnerId,
             LayoutId = board.LayoutId,
             Date = board.Date,
-            Cards = [.. board.Cards.Select(c => c.ToEntity(board.Id))]
+            Cards = [.. board.Cards.Select(c => c.ToModel(board.Id))]
         };
     }
 }
