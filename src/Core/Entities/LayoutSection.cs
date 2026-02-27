@@ -27,39 +27,8 @@ public class LayoutSection
         Size = props.Size;
     }
 
-    //
-
-    public LayoutSectionSnapshot ToSnapshot()
-    {
-        return new LayoutSectionSnapshot(
-            Id,
-            Name,
-            new LayoutSectionProps(
-                Rect,
-                Size
-            )
-        );
-    }
-
-    public LayoutSectionProps ToProps()
-    {
-        return new LayoutSectionProps(
-            Rect,
-            Size
-        );
-    }
-
-    public static LayoutSection FromSnapshot(LayoutSectionSnapshot snapshot)
-    {
-        ArgumentNullException.ThrowIfNull(snapshot);
-        return new LayoutSection(snapshot.Id, snapshot.Name, snapshot.Props);
-    }
-
-    public static LayoutSection FromProps(Guid id, string name, LayoutSectionProps props)
-    {
-        ArgumentNullException.ThrowIfNull(props);
-        return new LayoutSection(id, name, props);
-    }
+    public static LayoutSection Create(Guid id, string name, LayoutSectionProps props)
+        => new(id, name, props);
 }
 
 public sealed record LayoutSectionSnapshot(

@@ -38,6 +38,8 @@ public class BoardCard
     public static BoardCard Create(Guid id, BoardCardProps props)
         => new(id, props);
 
+    //
+
     internal void DoPlace(Guid sectionId, GridRect position)
     {
         ArgumentNullException.ThrowIfNull(position);
@@ -57,41 +59,6 @@ public class BoardCard
     internal void DoVerify()
     {
         IsVerified = true;
-    }
-
-    //
-
-    public BoardCardSnapshot ToSnapshot()
-    {
-        return new BoardCardSnapshot(
-            Id,
-            new BoardCardProps(
-                Title,
-                SectionId,
-                Position
-            )
-        );
-    }
-
-    public BoardCardProps ToProps()
-    {
-        return new BoardCardProps(
-            Title,
-            SectionId,
-            Position
-        );
-    }
-
-    public static BoardCard FromSnapshot(BoardCardSnapshot snapshot)
-    {
-        ArgumentNullException.ThrowIfNull(snapshot);
-        return new BoardCard(snapshot.Id, snapshot.Props);
-    }
-
-    public static BoardCard FromProps(Guid id, BoardCardProps props)
-    {
-        ArgumentNullException.ThrowIfNull(props);
-        return new BoardCard(id, props);
     }
 }
 

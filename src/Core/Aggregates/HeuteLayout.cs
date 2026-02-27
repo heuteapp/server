@@ -54,42 +54,8 @@ public class HeuteLayout
 
     private void DoAddSection(Guid sectionId, string name, LayoutSectionProps props)
     {
-        var section = new LayoutSection(sectionId, name, props);
+        var section = LayoutSection.Create(sectionId, name, props);
         m_sectionDictionary.Add(sectionId, section);
-    }
-
-    //
-
-    public HeuteLayoutSnapshot ToSnapshot()
-    {
-        return new HeuteLayoutSnapshot(
-            Id,
-            OwnerId,
-            Name,
-            Version,
-            new HeuteLayoutProps(
-                Sections.Select(s => s.ToSnapshot())
-            )
-        );
-    }
-
-    public HeuteLayoutProps ToProps()
-    {
-        return new HeuteLayoutProps(
-            Sections.Select(s => s.ToSnapshot())
-        );
-    }
-
-    public static HeuteLayout FromSnapshot(HeuteLayoutSnapshot snapshot)
-    {
-        ArgumentNullException.ThrowIfNull(snapshot);
-        return new HeuteLayout(snapshot.Id, snapshot.OwnerId, snapshot.Name, snapshot.Version, snapshot.Props);
-    }
-
-    public static HeuteLayout FromProps(Guid id, Guid ownerId, string name, int version, HeuteLayoutProps props)
-    {
-        ArgumentNullException.ThrowIfNull(props);
-        return new HeuteLayout(id, ownerId, name, version, props);
     }
 }
 

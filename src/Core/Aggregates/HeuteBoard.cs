@@ -135,43 +135,8 @@ public class HeuteBoard
 
     private void DoAddCard(Guid id, BoardCardProps props)
     {
-        var boardCard = BoardCard.FromProps(id, props);
+        var boardCard = BoardCard.Create(id, props);
         m_cardDictionary.Add(boardCard.Id, boardCard);
-    }
-
-    //
-
-    public HeuteBoardSnapshot ToSnapshot()
-    {
-        return new HeuteBoardSnapshot(
-            Id,
-            OwnerId,
-            LayoutId,
-            Date,
-            new HeuteBoardProps(
-                Cards.Select(c => c.ToSnapshot())
-            )
-        );
-    }
-
-    public HeuteBoardProps ToProps()
-    {
-        return new HeuteBoardProps(
-            Cards.Select(c => c.ToSnapshot())
-        );
-    }
-
-    public static HeuteBoard FromSnapshot(HeuteBoardSnapshot snapshot)
-    {
-        ArgumentNullException.ThrowIfNull(snapshot);
-        return new HeuteBoard(snapshot.Id, snapshot.OwnerId, snapshot.LayoutId, snapshot.Date, snapshot.Props);
-    }
-
-    public static HeuteBoard FromProps(Guid id, Guid ownerId, Guid layoutId, DateOnly date, HeuteBoardProps props)
-    {
-        ArgumentNullException.ThrowIfNull(props);
-
-        return new HeuteBoard(id, ownerId, layoutId, date, props);
     }
 }
 
