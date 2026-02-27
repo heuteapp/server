@@ -17,11 +17,11 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return entity?.ToDomainModel();
     }
 
-    public async Task AddAsync(HeuteBoard board)
+    public Task AddAsync(HeuteBoard board)
     {
         var entity = board.ToEntity();
-
         conext.Boards.Add(entity);
-        await conext.SaveChangesAsync();
+
+        return Task.CompletedTask;
     }
 }
