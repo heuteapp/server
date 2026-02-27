@@ -5,8 +5,6 @@ namespace HeuteApp.Core.Aggregates;
 
 public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 {
-    private readonly Dictionary<Guid, BoardCard> m_cardDictionary = [];
-
     protected HeuteBoard() : this(Guid.Empty, Guid.Empty, Guid.Empty, default)
     {
         
@@ -21,6 +19,8 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
     public Guid LayoutId { get; private set; } = layoutId;
 
     public DateOnly Date { get; private set; } = date;
+
+    public List<BoardCard> Cards { get; private set; } = [];
 
     //
 
@@ -40,7 +40,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException($"Card with id {id} already exists.");
         }
 
-        if(m_cardDictionary.Count >= 24)
+        if(Cards.Count >= 24)
         {
             throw new InvalidOperationException("Board already has maximum number of cards (24).");
         }
@@ -55,7 +55,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException($"Card with id {cardId} does not exist.");
         }
 
-        m_cardDictionary.Remove(cardId);
+        Cards.RemoveAll(c => c.Id == cardId);
     }
 
     public void PlaceCard(HeuteLayout layout, Guid cardId, Guid sectionId, GridRect position)
@@ -71,7 +71,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
         if (!section.Size.Contains(position))
             throw new InvalidOperationException("Card is out of section bounds.");
 
-        var conflictingCard = m_cardDictionary.Values
+        var conflictingCard = Cards
             .FirstOrDefault(c => c.Id != cardId && c.SectionId == sectionId && c.Position?.Overlaps(position) == true);
 
         if (conflictingCard is not null)
@@ -79,7 +79,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException($"Position overlaps with card {conflictingCard.Id}");
         }
 
-        var card = m_cardDictionary[cardId];
+        var card = Cards.First(c => c.Id == cardId);
         card.DoPlace(sectionId, position);
     }
 
@@ -90,13 +90,13 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException($"Card with id {cardId} does not exist.");
         }
 
-        var card = m_cardDictionary[cardId];
+        var card = Cards.First(c => c.Id == cardId);
         card.DoUnplace();
     }
 
     public void UnplaceAllCards()
     {
-        foreach (var card in m_cardDictionary.Values)
+        foreach (var card in Cards)
         {
             card.DoUnplace();
         }
@@ -104,12 +104,12 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 
     public bool HasCard(Guid cardId)
     {
-        return m_cardDictionary.ContainsKey(cardId);
+        return Cards.Any(c => c.Id == cardId);
     }
 
     public IEnumerable<BoardCard> GetCards()
     {
-        return m_cardDictionary.Values;
+        return Cards;
     }
 
     //
@@ -117,7 +117,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
     private BoardCard DoAddCard(Guid id, BoardCardProps props)
     {
         var boardCard = new BoardCard(id, props);
-        m_cardDictionary.Add(boardCard.Id, boardCard);
+        Cards.Add(boardCard);
 
         return boardCard;
     }
