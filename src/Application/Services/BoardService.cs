@@ -5,7 +5,7 @@ namespace HeuteApp.Application.Services;
 
 public class BoardService(IBoardRepository repository)
 {
-    public async Task CreateBoardAsync(Guid ownerId, string title, DateOnly date)
+    public async Task CreateBoardAsync(Guid ownerId, DateOnly date)
     {
         var existing = await repository
             .GetByDateAsync(ownerId, date);
