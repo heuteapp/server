@@ -1,5 +1,4 @@
 using HeuteApp.Core.Aggregates;
-using HeuteApp.Core.Entities;
 
 namespace HeuteApp.Application.Interfaces;
 
@@ -9,5 +8,5 @@ public interface IBoardRepository
 
     Task AddAsync(HeuteBoard board);
 
-    Task AddCardAsync(Guid boardId, BoardCardProps props);
+    Task SaveAsync(HeuteBoard board);
 }
