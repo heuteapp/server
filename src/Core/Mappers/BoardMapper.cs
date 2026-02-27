@@ -57,10 +57,24 @@ public static partial class BoardMapper
         return HeuteBoard.Create(snapshot.Id, snapshot.OwnerId, snapshot.LayoutId, snapshot.Date, snapshot.Props);
     }
 
+    public static HeuteBoard ToDomain(this HeuteBoardProps props, Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    {
+        ArgumentNullException.ThrowIfNull(props);
+
+        return HeuteBoard.Create(id, ownerId, layoutId, date, props);
+    }
+
     public static BoardCard ToDomain(this BoardCardSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
 
         return BoardCard.Create(snapshot.Id, snapshot.Props);
+    }
+
+    public static BoardCard ToDomain(this BoardCardProps props, Guid id)
+    {
+        ArgumentNullException.ThrowIfNull(props);
+
+        return BoardCard.Create(id, props);
     }
 }
