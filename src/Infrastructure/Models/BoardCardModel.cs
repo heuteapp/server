@@ -1,18 +1,22 @@
-using HeuteApp.Core.ValueObjects;
+using HeuteApp.Core.Entities;
 
 namespace HeuteApp.Infrastructure.Models;
 
-public class BoardCardModel
+public class BoardCardModel : BoardCard
 {
-    public Guid Id { get; set; }
+    private BoardCardModel() : base()
+    {
+        
+    }
+
+    public BoardCardModel(Guid id, BoardCardProps props) : base(id, props)
+    {
+        
+    }
+
+    //
 
     public Guid BoardId { get; set; }
 
     public BoardModel? Board { get; set; } = null;
-    
-    public string Title { get; set; } = string.Empty;
-
-    public Guid? SectionId { get; set; }
-
-    public GridRect? Position { get; set; }
 }
