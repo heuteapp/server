@@ -1,5 +1,5 @@
 using HeuteApp.Core.Entities;
-
+using HeuteApp.Core.Mappers;
 using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Aggregates;
@@ -31,7 +31,7 @@ public class HeuteBoard
         {
             foreach (var card in props.Cards)
             {
-                DoAddCard(card.Id, card.Props);
+                DoAddCard(card.Id, card.ToProps());
             }
         }
     }
@@ -145,14 +145,6 @@ public class HeuteBoard
     }
 }
 
-public sealed record HeuteBoardSnapshot(
-    Guid Id,
-    Guid OwnerId,
-    Guid LayoutId,
-    DateOnly Date,
-    HeuteBoardProps Props
-);
-
 public sealed record HeuteBoardProps(
-    IEnumerable<BoardCardSnapshot> Cards
+    IEnumerable<BoardCard> Cards
 );

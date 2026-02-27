@@ -31,12 +31,6 @@ public class LayoutSection
         => new(id, name, props);
 }
 
-public sealed record LayoutSectionSnapshot(
-    Guid Id,
-    string Name,
-    LayoutSectionProps Props
-);
-
 public sealed record LayoutSectionProps(
     Rect Rect,
     GridSize Size

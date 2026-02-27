@@ -1,4 +1,5 @@
 using HeuteApp.Core.Entities;
+using HeuteApp.Core.Mappers;
 
 namespace HeuteApp.Core.Aggregates;
 
@@ -27,7 +28,7 @@ public class HeuteLayout
 
         foreach (var section in props.Sections)
         {
-            DoAddSection(section.Id, section.Name, section.Props);
+            DoAddSection(section.Id, section.Name, section.ToProps());
         }
     }
 
@@ -59,14 +60,6 @@ public class HeuteLayout
     }
 }
 
-public sealed record HeuteLayoutSnapshot(
-    Guid Id,
-    Guid OwnerId,
-    string Name,
-    int Version,
-    HeuteLayoutProps Props
-);
-
 public sealed record HeuteLayoutProps(
-    IEnumerable<LayoutSectionSnapshot> Sections
+    IEnumerable<LayoutSection> Sections
 );

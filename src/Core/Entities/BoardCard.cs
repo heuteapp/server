@@ -62,11 +62,6 @@ public class BoardCard
     }
 }
 
-public sealed record BoardCardSnapshot(
-    Guid Id,
-    BoardCardProps Props
-);
-
 public sealed record BoardCardProps(
     string? Title,
     Guid? SectionId,
