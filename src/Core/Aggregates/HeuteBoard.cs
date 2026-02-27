@@ -22,8 +22,6 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 
     public DateOnly Date { get; private set; } = date;
 
-    public ICollection<BoardCard> Cards { get; private set; } = [];
-
     //
 
     public void ChangeLayout(Guid layoutId)
