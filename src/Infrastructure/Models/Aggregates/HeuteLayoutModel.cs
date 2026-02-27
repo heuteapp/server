@@ -1,3 +1,5 @@
+using HeuteApp.Infrastructure.Models.Entities;
+
 namespace HeuteApp.Infrastructure.Models.Aggregates;
 
 public class HeuteLayoutModel

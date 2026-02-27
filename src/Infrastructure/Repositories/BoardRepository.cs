@@ -3,7 +3,7 @@ using HeuteApp.Application.Interfaces;
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Infrastructure.Mappers;
 using HeuteApp.Core.Aggregates;
-using HeuteApp.Infrastructure.Models;
+using HeuteApp.Infrastructure.Models.Entities;
 using HeuteApp.Core.Entities;
 
 namespace HeuteApp.Infrastructure.Repositories;

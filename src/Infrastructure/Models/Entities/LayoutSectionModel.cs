@@ -1,6 +1,7 @@
 using HeuteApp.Core.ValueObjects;
+using HeuteApp.Infrastructure.Models.Aggregates;
 
-namespace HeuteApp.Infrastructure.Models;
+namespace HeuteApp.Infrastructure.Models.Entities;
 
 public class LayoutSectionModel
 {
