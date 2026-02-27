@@ -26,7 +26,7 @@ public class BoardConfig : IEntityTypeConfiguration<HeuteBoardModel>
             .HasForeignKey(c => c.BoardId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne<LayoutModel>()
+        builder.HasOne<HeuteLayoutModel>()
             .WithMany()
             .HasForeignKey(b => b.LayoutId)
             .OnDelete(DeleteBehavior.Restrict);

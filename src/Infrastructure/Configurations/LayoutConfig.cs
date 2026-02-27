@@ -4,9 +4,9 @@ using HeuteApp.Infrastructure.Models;
 
 namespace HeuteApp.Infrastructure.Configurations;
 
-public class LayoutConfig : IEntityTypeConfiguration<LayoutModel>
+public class LayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
 {
-    public void Configure(EntityTypeBuilder<LayoutModel> builder)
+    public void Configure(EntityTypeBuilder<HeuteLayoutModel> builder)
     {
         builder.ToTable("layouts");
 

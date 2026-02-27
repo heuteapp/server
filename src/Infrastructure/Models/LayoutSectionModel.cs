@@ -8,7 +8,7 @@ public class LayoutSectionModel
 
     public Guid LayoutId { get; set; }
 
-    public LayoutModel Layout { get; set; } = null!;
+    public HeuteLayoutModel Layout { get; set; } = null!;
 
     public string Name { get; set; } = string.Empty;
 

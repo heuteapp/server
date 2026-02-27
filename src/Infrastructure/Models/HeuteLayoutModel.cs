@@ -1,6 +1,6 @@
 namespace HeuteApp.Infrastructure.Models;
 
-public class LayoutModel
+public class HeuteLayoutModel
 {
     public Guid Id { get; set; }
 
