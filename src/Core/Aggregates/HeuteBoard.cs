@@ -6,14 +6,6 @@ namespace HeuteApp.Core.Aggregates;
 
 public class HeuteBoard
 {
-    private readonly Guid m_id;
-
-    private readonly Guid m_ownerId;
-
-    private Guid m_layoutId;
-
-    private readonly DateOnly m_date;
-
     private readonly Dictionary<Guid, BoardCard> m_cardDictionary = [];
 
     private HeuteBoard() { } 
@@ -22,17 +14,14 @@ public class HeuteBoard
     {
         ArgumentNullException.ThrowIfNull(props);
 
-        m_id = id;
-        m_ownerId = ownerId;
-        m_layoutId = layoutId;
-        m_date = date;
+        Id = id;
+        OwnerId = ownerId;
+        LayoutId = layoutId;
+        Date = date;
 
         if (props != null)
         {
-            foreach (var card in props.Cards)
-            {
-                DoAddCard(card.Id, card.ToProps());
-            }
+            Cards = [..props.Cards];
         }
     }
 
@@ -41,21 +30,34 @@ public class HeuteBoard
 
     //
 
-    public Guid Id => m_id;
+    public Guid Id { get; private set; }
     
-    public Guid OwnerId => m_ownerId;
+    public Guid OwnerId { get; private set; }
 
-    public Guid LayoutId => m_layoutId;
+    public Guid LayoutId { get; private set; }
 
-    public DateOnly Date => m_date;
+    public DateOnly Date { get; private set; }
 
-    public IReadOnlyCollection<BoardCard> Cards => m_cardDictionary.Values;
+    public IReadOnlyCollection<BoardCard> Cards {
+        get
+        {
+            return m_cardDictionary.Values;
+        }
+        private set
+        {
+            m_cardDictionary.Clear();
+            foreach (var card in value)
+            {
+                m_cardDictionary.Add(card.Id, card);
+            }
+        }
+    }
 
     //
 
     public void ChangeLayout(Guid layoutId)
     {
-        m_layoutId = layoutId;
+        LayoutId = layoutId;
 
         UnplaceAllCards();
     }
