@@ -5,6 +5,7 @@ using HeuteApp.Infrastructure.Mappers;
 using HeuteApp.Core.Aggregates;
 using HeuteApp.Infrastructure.Models.Entities;
 using HeuteApp.Core.Entities;
+using System.Reflection.Metadata;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
@@ -27,21 +28,15 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return Task.CompletedTask;
     }
 
-    public Task AddCardAsync(Guid boardId, BoardCardProps props)
+    public async Task AddCardAsync(Guid boardId, BoardCardProps props)
     {
-        var board = conext.Boards.FirstOrDefault(b => b.Id == boardId) 
-            ?? throw new ArgumentException("Board not found.");
+        var boardModel = await conext.Boards
+            .Include(b => b.Cards)
+            .FirstAsync(b => b.Id == boardId);
 
-        var cardEntity = new BoardCardModel()
-        {
-            BoardId = boardId,
-            Title = props.Title,
-            SectionId = props.SectionId,
-            Position = props.Position
-        };
+        var board = boardModel.ToDomain();
+        var card = board.AddCard(Guid.NewGuid(), props);
 
-        board.Cards.Add(cardEntity);
-
-        return Task.CompletedTask;
+        boardModel.Cards.Add(card.ToModel(board.Id));
     }
 }
