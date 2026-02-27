@@ -40,7 +40,6 @@ public class BoardCard
 
     internal void DoPlace(Guid sectionId, GridRect position)
     {
-        ArgumentNullException.ThrowIfNull(sectionId);
         ArgumentNullException.ThrowIfNull(position);
 
         SectionId = sectionId;
