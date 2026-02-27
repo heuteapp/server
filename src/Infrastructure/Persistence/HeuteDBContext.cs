@@ -7,11 +7,7 @@ public class HeuteDbContext(DbContextOptions<HeuteDbContext> options) : DbContex
 {
     public DbSet<BoardModel> Boards => Set<BoardModel>();
 
-    public DbSet<BoardCardModel> BoardCards => Set<BoardCardModel>();
-
     public DbSet<LayoutModel> Layouts => Set<LayoutModel>();
-
-    public DbSet<LayoutSectionModel> LayoutSections => Set<LayoutSectionModel>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
