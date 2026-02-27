@@ -33,4 +33,35 @@ public static class BoardMapper
             Cards = [.. board.Cards.Select(c => c.ToModel(board.Id))]
         };
     }
+
+    //
+
+    public static void SyncFromDomain(this HeuteBoardModel model, HeuteBoard board)
+    {
+        model.LayoutId = board.LayoutId;
+        model.Date = board.Date;
+
+        var domainCardIds = board.Cards.Select(c => c.Id).ToHashSet();
+        var modelCardIds = model.Cards.Select(c => c.Id).ToHashSet();
+
+        foreach (var card in model.Cards.Where(c => !domainCardIds.Contains(c.Id)).ToList())
+        {
+            model.Cards.Remove(card);
+        }
+
+        foreach (var card in board.Cards)
+        {
+            var existingCard = model.Cards.FirstOrDefault(c => c.Id == card.Id);
+            if (existingCard != null)
+            {
+                existingCard.Title = card.Title;
+                existingCard.SectionId = card.SectionId;
+                existingCard.Position = card.Position;
+            }
+            else
+            {
+                model.Cards.Add(card.ToModel(board.Id));
+            }
+        }
+    }
 }
