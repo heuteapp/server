@@ -2,71 +2,62 @@ using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Entities;
 
-public class BoardCard(Guid id, BoardCardProps props)
+public class BoardCard
 {   
-    private string m_title = props.Title;
+    public Guid Id { get;  private set; }
 
-    private Guid? m_sectionId = props.SectionId;
+    public string? Title { get; private set; }
 
-    private GridRect? m_position = props.Position;
+    public Guid? SectionId { get; private set; }
 
-    private bool m_isVerified = false;
-
-    //
-
-    public Guid Id => id;
-
-    public string Title => m_title;
-
-    public Guid? SectionId => m_sectionId;
-
-    public GridRect? Position => m_position;
+    public GridRect? Position { get; private set; }
 
     public bool IsPlaced
     {
         get
         {
-            return m_sectionId != null && m_position != null;
+            return SectionId != null && Position != null;
         }
     }
 
-    public bool IsVerified
-    {
-        get
-        {
-            return m_isVerified;
-        }
-    }
-    
+    public bool IsVerified { get; private set; } = false;
+
     //
 
-    internal void SetTitle(string title)
-    {
-        ArgumentNullException.ThrowIfNull(title);
+    private BoardCard() { } // EF için
 
-        m_title = title;
+    private BoardCard(Guid id, BoardCardProps props)
+    {
+        Id = id;
+        Title = props.Title;
+        SectionId = props.SectionId;
+        Position = props.Position;
+        IsVerified = false;
     }
+    
+    public static BoardCard Create(Guid id, BoardCardProps props)
+        => new(id, props);
 
     internal void DoPlace(Guid sectionId, GridRect position)
     {
         ArgumentNullException.ThrowIfNull(sectionId);
         ArgumentNullException.ThrowIfNull(position);
 
-        m_sectionId = sectionId;
-        m_position = position;
-        m_isVerified = false;
+        SectionId = sectionId;
+        Position = position;
+        IsVerified = false;
     }
 
     internal void DoUnplace()
     {
-        m_sectionId = null;
-        m_position = null;
-        m_isVerified = false;
+        SectionId = null;
+        Position = null;
+        IsVerified = false;
     }
 
     internal void DoVerify()
     {
-        m_isVerified = true;
+        IsVerified = true;
     }
 
     //
@@ -111,7 +102,7 @@ public sealed record BoardCardSnapshot(
 );
 
 public sealed record BoardCardProps(
-    string Title,
+    string? Title,
     Guid? SectionId,
     GridRect? Position
 );
