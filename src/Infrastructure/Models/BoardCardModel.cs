@@ -1,4 +1,5 @@
 using HeuteApp.Core.Entities;
+using HeuteApp.Infrastructure.Models.Aggregates;
 
 namespace HeuteApp.Infrastructure.Models;
 

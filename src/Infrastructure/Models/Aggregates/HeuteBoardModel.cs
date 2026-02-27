@@ -1,6 +1,6 @@
 using HeuteApp.Core.Aggregates;
 
-namespace HeuteApp.Infrastructure.Models;
+namespace HeuteApp.Infrastructure.Models.Aggregates;
 
 public class HeuteBoardModel : HeuteBoard
 {

@@ -16,7 +16,7 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
             .Include(b => b.Cards)
             .FirstOrDefaultAsync(b => b.OwnerId == ownerId && b.Date == date);
 
-        return entity?.ToDomain();
+        return entity;
     }
 
     public Task AddAsync(HeuteBoard board)
