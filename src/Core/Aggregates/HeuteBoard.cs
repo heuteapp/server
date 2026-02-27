@@ -7,7 +7,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 {
     private readonly Dictionary<Guid, BoardCard> m_cardDictionary = [];
 
-    private HeuteBoard() : this(Guid.Empty, Guid.Empty, Guid.Empty, default)
+    protected HeuteBoard() : this(Guid.Empty, Guid.Empty, Guid.Empty, default)
     {
         
     }

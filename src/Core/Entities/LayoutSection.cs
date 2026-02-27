@@ -4,7 +4,7 @@ namespace HeuteApp.Core.Entities;
 
 public class LayoutSection(Guid id, string name, LayoutSectionProps props)
 {
-    private LayoutSection() : this(Guid.Empty, string.Empty, new LayoutSectionProps(new Rect(0, 0, 0, 0), new GridSize(0, 0)))
+    protected LayoutSection() : this(Guid.Empty, string.Empty, new LayoutSectionProps(new Rect(0, 0, 0, 0), new GridSize(0, 0)))
     {
         
     }

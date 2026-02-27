@@ -4,7 +4,7 @@ namespace HeuteApp.Core.Entities;
 
 public class BoardCard(Guid id, BoardCardProps props)
 {
-    private BoardCard() : this(Guid.Empty, new BoardCardProps(null, null, null))
+    protected BoardCard() : this(Guid.Empty, new BoardCardProps(null, null, null))
     {
         
     }
