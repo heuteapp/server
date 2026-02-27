@@ -1,4 +1,4 @@
-using HeuteApp.Core.Entities;
+using HeuteApp.Core.Aggregates;
 using HeuteApp.Infrastructure.Persistence.Entities;
 
 namespace HeuteApp.Infrastructure.Mappers;

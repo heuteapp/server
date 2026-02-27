@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using HeuteApp.Application.Interfaces;
-using HeuteApp.Core.Entities;
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Infrastructure.Mappers;
+using HeuteApp.Core.Aggregates;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
