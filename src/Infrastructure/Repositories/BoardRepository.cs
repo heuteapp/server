@@ -24,4 +24,12 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
 
         return Task.CompletedTask;
     }
+
+    public Task UpdateAsync(HeuteBoard board)
+    {
+        var entity = board.ToEntity();
+        conext.Boards.Update(entity);
+
+        return Task.CompletedTask;
+    }
 }
