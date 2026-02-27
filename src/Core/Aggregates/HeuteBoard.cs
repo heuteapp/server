@@ -16,7 +16,9 @@ public class HeuteBoard
 
     private readonly Dictionary<Guid, BoardCard> m_cardDictionary = [];
 
-    public HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date, HeuteBoardProps props)
+    private HeuteBoard() { } 
+
+    private HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date, HeuteBoardProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
 
@@ -33,6 +35,9 @@ public class HeuteBoard
             }
         }
     }
+
+    public static HeuteBoard Create(Guid id, Guid ownerId, Guid layoutId, DateOnly date, HeuteBoardProps props)
+        => new(id, ownerId, layoutId, date, props);
 
     //
 
