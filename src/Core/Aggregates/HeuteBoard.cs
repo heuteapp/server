@@ -28,7 +28,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
         UnplaceAllCards();
     }
 
-    public void AddCard(Guid id, BoardCardProps props)
+    public BoardCard AddCard(Guid id, BoardCardProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
 
@@ -42,7 +42,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException("Board already has maximum number of cards (24).");
         }
 
-        DoAddCard(id, props);
+        return DoAddCard(id, props);
     }
 
     public void RemoveCard(Guid cardId)
@@ -106,9 +106,11 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 
     //
 
-    private void DoAddCard(Guid id, BoardCardProps props)
+    private BoardCard DoAddCard(Guid id, BoardCardProps props)
     {
         var boardCard = new BoardCard(id, props);
         m_cardDictionary.Add(boardCard.Id, boardCard);
+
+        return boardCard;
     }
 }
