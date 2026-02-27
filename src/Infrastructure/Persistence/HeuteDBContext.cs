@@ -5,7 +5,7 @@ namespace HeuteApp.Infrastructure.Persistence;
 
 public class HeuteDbContext(DbContextOptions<HeuteDbContext> options) : DbContext(options)
 {
-    public DbSet<BoardModel> Boards => Set<BoardModel>();
+    public DbSet<HeuteBoardModel> Boards => Set<HeuteBoardModel>();
 
     public DbSet<LayoutModel> Layouts => Set<LayoutModel>();
 
