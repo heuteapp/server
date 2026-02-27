@@ -3,14 +3,20 @@ using HeuteApp.Application.Interfaces;
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Infrastructure.Mappers;
 using HeuteApp.Core.Aggregates;
-using HeuteApp.Infrastructure.Models.Entities;
-using HeuteApp.Core.Entities;
-using System.Reflection.Metadata;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
 public class BoardRepository(HeuteDbContext conext) : IBoardRepository
 {
+    public async Task<HeuteBoard?> GetByIdAsync(Guid boardId)
+    {
+        var entity = await conext.Boards
+            .Include(b => b.Cards)
+            .FirstOrDefaultAsync(b => b.Id == boardId);
+
+        return entity?.ToDomain();
+    }
+
     public async Task<HeuteBoard?> GetByDateAsync(Guid ownerId, DateOnly date)
     {
         var entity = await conext.Boards
@@ -28,15 +34,12 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return Task.CompletedTask;
     }
 
-    public async Task AddCardAsync(Guid boardId, BoardCardProps props)
+    public async Task SaveAsync(HeuteBoard board)
     {
-        var boardModel = await conext.Boards
-            .Include(b => b.Cards)
-            .FirstAsync(b => b.Id == boardId);
+        var entity = await conext.Boards.Include(b => b.Cards).FirstOrDefaultAsync(b => b.Id == board.Id)
+            ?? throw new Exception("Board not found.");
 
-        var board = boardModel.ToDomain();
-        var card = board.AddCard(Guid.NewGuid(), props);
-
-        boardModel.Cards.Add(card.ToModel(board.Id));
+        entity.SyncFromDomain(board);
+        await conext.SaveChangesAsync();
     }
 }
