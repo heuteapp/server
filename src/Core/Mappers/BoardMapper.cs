@@ -47,4 +47,20 @@ public static partial class BoardMapper
             card.ToProps()
         );
     }
+
+    //
+
+    public static HeuteBoard ToDomain(this HeuteBoardSnapshot snapshot)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+
+        return HeuteBoard.Create(snapshot.Id, snapshot.OwnerId, snapshot.LayoutId, snapshot.Date, snapshot.Props);
+    }
+
+    public static BoardCard ToDomain(this BoardCardSnapshot snapshot)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+
+        return BoardCard.Create(snapshot.Id, snapshot.Props);
+    }
 }
