@@ -3,48 +3,40 @@ using HeuteApp.Core.Mappers;
 
 namespace HeuteApp.Core.Aggregates;
 
-public class HeuteLayout
+public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
 {
-    readonly Guid id;
-
-    readonly Guid ownerId;
-
-    readonly string name;
-
-    readonly int version;
-
     private readonly Dictionary<Guid, LayoutSection> m_sectionDictionary = [];
 
     //
 
-    public HeuteLayout(Guid id, Guid ownerId, string name, int version, HeuteLayoutProps props)
-    {
-        ArgumentNullException.ThrowIfNull(props);
+    public Guid Id { get; private set; } = id;
 
-        this.id = id;
-        this.ownerId = ownerId;
-        this.name = name;
-        this.version = version;
+    public Guid OwnerId { get; private set; } = ownerId;
 
-        foreach (var section in props.Sections)
-        {
-            DoAddSection(section.Id, section.Name, section.ToProps());
-        }
-    }
+    public string Name { get; private set; } = name;
 
-    //
-
-    public Guid Id => id;
-
-    public Guid OwnerId => ownerId;
-
-    public string Name => name;
-
-    public int Version => version;
+    public int Version { get; private set; } = version;
 
     public IReadOnlyCollection<LayoutSection> Sections => m_sectionDictionary.Values;
 
     //
+
+    public void AddSection(Guid sectionId, string name, LayoutSectionProps props)
+    {
+        ArgumentNullException.ThrowIfNull(props);
+
+        if (HasSection(sectionId))
+        {
+            throw new InvalidOperationException($"Section with id {sectionId} already exists.");
+        }
+
+        if(m_sectionDictionary.Count >= 4)
+        {
+            throw new InvalidOperationException("Layout already has maximum number of sections (4).");
+        }
+
+        DoAddSection(sectionId, name, props);
+    }
 
     public bool HasSection(Guid sectionId)
     {
@@ -59,7 +51,3 @@ public class HeuteLayout
         m_sectionDictionary.Add(sectionId, section);
     }
 }
-
-public sealed record HeuteLayoutProps(
-    IEnumerable<LayoutSection> Sections
-);
