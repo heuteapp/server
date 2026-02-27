@@ -3,32 +3,19 @@ using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Aggregates;
 
-public class HeuteBoard
+public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 {
     private readonly Dictionary<Guid, BoardCard> m_cardDictionary = [];
 
-    private HeuteBoard() { } 
-
-    private HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
-    {
-        Id = id;
-        OwnerId = ownerId;
-        LayoutId = layoutId;
-        Date = date;
-    }
-
-    public static HeuteBoard Create(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
-        => new(id, ownerId, layoutId, date);
-
     //
 
-    public Guid Id { get; private set; }
-    
-    public Guid OwnerId { get; private set; }
+    public Guid Id { get; private set; } = id;
 
-    public Guid LayoutId { get; private set; }
+    public Guid OwnerId { get; private set; } = ownerId;
 
-    public DateOnly Date { get; private set; }
+    public Guid LayoutId { get; private set; } = layoutId;
+
+    public DateOnly Date { get; private set; } = date;
 
     public IReadOnlyCollection<BoardCard> Cards => [..m_cardDictionary.Values];
 
