@@ -108,11 +108,6 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
         return Cards.Any(c => c.Id == cardId);
     }
 
-    public IEnumerable<BoardCard> GetCards()
-    {
-        return Cards;
-    }
-
     //
 
     private BoardCard DoAddCard(Guid id, BoardCardProps props)
