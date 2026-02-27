@@ -29,15 +29,9 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
 
     public Task AddCardAsync(Guid boardId, BoardCardProps props)
     {
-        var board = conext.Boards
-            .Include(b => b.Cards)
-            .FirstOrDefault(b => b.Id == boardId);
+        var board = conext.Boards.Include(b => b.Cards).FirstOrDefault(b => b.Id == boardId) 
+            ?? throw new ArgumentException("Board not found.");
             
-        if (board == null)
-        {
-            throw new ArgumentException("Board not found.");
-        }
-
         var cardEntity = new BoardCardModel
         {
             Id = Guid.NewGuid(),
