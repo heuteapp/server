@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using HeuteApp.Infrastructure.Persistence.Entities;
+using HeuteApp.Infrastructure.Entities;
 
-namespace HeuteApp.Infrastructure.Persistence.Configurations;
+namespace HeuteApp.Infrastructure.Configurations;
 
 public class LayoutConfig : IEntityTypeConfiguration<LayoutEntity>
 {

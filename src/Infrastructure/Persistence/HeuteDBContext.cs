@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using HeuteApp.Infrastructure.Persistence.Entities;
+using HeuteApp.Infrastructure.Entities;
 
 namespace HeuteApp.Infrastructure.Persistence;
 

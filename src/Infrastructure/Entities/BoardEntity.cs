@@ -1,4 +1,4 @@
-namespace HeuteApp.Infrastructure.Persistence.Entities;
+namespace HeuteApp.Infrastructure.Entities;
 
 public class BoardEntity
 {
