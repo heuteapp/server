@@ -4,9 +4,9 @@ using HeuteApp.Infrastructure.Models;
 
 namespace HeuteApp.Infrastructure.Configurations;
 
-public class BoardConfig : IEntityTypeConfiguration<BoardModel>
+public class BoardConfig : IEntityTypeConfiguration<HeuteBoardModel>
 {
-    public void Configure(EntityTypeBuilder<BoardModel> builder)
+    public void Configure(EntityTypeBuilder<HeuteBoardModel> builder)
     {
         builder.ToTable("boards");
 

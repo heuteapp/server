@@ -9,14 +9,14 @@ public class BoardCardModel : BoardCard
         
     }
 
-    public BoardCardModel(Guid id, BoardCardProps props) : base(id, props)
+    public BoardCardModel(Guid id, Guid boardId, BoardCardProps props) : base(id, props)
     {
-        
+        BoardId = boardId;
     }
 
     //
 
     public Guid BoardId { get; set; }
 
-    public BoardModel? Board { get; set; } = null;
+    public HeuteBoardModel? Board { get; set; } = null;
 }

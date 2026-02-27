@@ -5,7 +5,7 @@ namespace HeuteApp.Infrastructure.Mappers;
 
 public static class BoardMapper
 {
-    public static HeuteBoard ToDomain(this BoardModel model)
+    public static HeuteBoard ToDomain(this HeuteBoardModel model)
     {
         HeuteBoard board = new(
             model.Id,
@@ -22,9 +22,9 @@ public static class BoardMapper
         return board;
     }
 
-    public static BoardModel ToEntity(this HeuteBoard board)
+    public static HeuteBoardModel ToEntity(this HeuteBoard board)
     {
-        return new BoardModel
+        return new HeuteBoardModel
         {
             Id = board.Id,
             OwnerId = board.OwnerId,

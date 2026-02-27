@@ -22,13 +22,6 @@ public static class BoardCardMapper
 
     public static BoardCardModel ToModel(this BoardCard card, Guid boardId)
     {
-        return new BoardCardModel
-        {
-            Id = card.Id,
-            BoardId = boardId,
-            Title = card.Title ?? null!,
-            SectionId = card.SectionId,
-            Position = card.Position
-        };
+        return new BoardCardModel()
     }
 }

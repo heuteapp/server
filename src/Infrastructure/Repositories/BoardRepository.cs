@@ -32,14 +32,15 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         var board = conext.Boards.FirstOrDefault(b => b.Id == boardId) 
             ?? throw new ArgumentException("Board not found.");
 
-        var cardEntity = new BoardCardModel
-        {
-            Id = Guid.NewGuid(),
-            BoardId = boardId,
-            Title = props.Title ?? null!,
-            SectionId = props.SectionId,
-            Position = props.Position
-        };
+        var cardEntity = new BoardCardModel(
+            Guid.NewGuid(),
+            boardId,
+            new BoardCardProps(
+                props.Title,
+                props.SectionId,
+                props.Position
+            )
+        );
 
         board.Cards.Add(cardEntity);
 
