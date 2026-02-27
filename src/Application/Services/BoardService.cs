@@ -14,7 +14,7 @@ public class BoardService(IBoardRepository repository, IUnitOfWork unitOfWork)
         if (existing != null)
             throw new Exception("Board already exists for this date.");
 
-        var board = new HeuteBoard(Guid.NewGuid(), ownerId, Guid.Empty, date, new HeuteBoardProps(Cards: []));
+        var board = new HeuteBoard(Guid.NewGuid(), ownerId, Guid.Empty, date);
 
         await repository.AddAsync(board);
         await unitOfWork.SaveChangesAsync();
@@ -27,7 +27,7 @@ public class BoardService(IBoardRepository repository, IUnitOfWork unitOfWork)
 
         board.AddCard(Guid.NewGuid(), props);
         
-        await repository.UpdateAsync(board);
+        await repository.AddCardAsync(board.Id, props);
         await unitOfWork.SaveChangesAsync();
     }
 }
