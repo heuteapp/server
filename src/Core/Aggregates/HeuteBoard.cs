@@ -107,6 +107,11 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
         return m_cardDictionary.ContainsKey(cardId);
     }
 
+    public IEnumerable<BoardCard> GetCards()
+    {
+        return m_cardDictionary.Values;
+    }
+
     //
 
     private BoardCard DoAddCard(Guid id, BoardCardProps props)
