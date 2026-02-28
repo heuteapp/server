@@ -4,13 +4,15 @@ namespace HeuteApp.Core.Entities;
 
 public class BoardCard(Guid id, BoardCardProps props)
 {
+    protected BoardCard() : this(Guid.Empty, null!) { }
+
     public Guid Id { get; private set; } = id;
 
-    public string? Title { get; private set; } = props.Title;
+    public string? Title { get; internal set; } = props.Title;
 
-    public Guid? SectionId { get; private set; } = props.SectionId;
+    public Guid? SectionId { get; internal set; } = props.SectionId;
 
-    public GridRect? Position { get; private set; } = props.Position;
+    public GridRect? Position { get; internal set; } = props.Position;
 
     public bool IsPlaced
     {

@@ -6,11 +6,6 @@ namespace HeuteApp.Infrastructure.Mappers;
 
 public static class BoardCardMapper
 {
-    public static BoardCard ToDomain(this BoardCardModel model)
-    {
-        return model.ToProps().ToDomain(model.Id);
-    }
-
     public static BoardCardProps ToProps(this BoardCardModel model)
     {
         return new BoardCardProps(
@@ -18,16 +13,5 @@ public static class BoardCardMapper
             model.SectionId,
             model.Position
         );
-    }
-
-    public static BoardCardModel ToModel(this BoardCard card, Guid boardId)
-    {
-        return new BoardCardModel()
-        {
-            BoardId = boardId,
-            Title = card.Title,
-            SectionId = card.SectionId,
-            Position = card.Position
-        };
     }
 }
