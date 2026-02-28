@@ -7,6 +7,11 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 {
     protected Dictionary<Guid, BoardCard> m_cards = [];
 
+    protected virtual BoardCard OnCardInstance(Guid id, BoardCardProps props)
+    {
+        return new BoardCard(id, props);
+    }
+
     protected virtual void OnAddCard(BoardCard card)
     {
         m_cards.Add(card.Id, card);
@@ -120,7 +125,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 
     private BoardCard DoAddCard(Guid id, BoardCardProps props)
     {
-        var boardCard = new BoardCard(id, props);
+        var boardCard = OnCardInstance(id, props);
         OnAddCard(boardCard);
         return boardCard;
     }
