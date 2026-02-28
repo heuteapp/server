@@ -79,7 +79,7 @@ public class TestController : ControllerBase
     public async Task<IActionResult> AddCard(Guid boardId)
     {
         var board = await _context.Boards
-            .Include(b => b.Cards)
+            .Include("m_cards")
             .FirstOrDefaultAsync(b => b.Id == boardId);
 
         if (board == null)
