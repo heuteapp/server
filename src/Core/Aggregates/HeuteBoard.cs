@@ -7,6 +7,18 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 {
     protected Dictionary<Guid, BoardCard> m_cards = [];
 
+    protected virtual void OnAddCard(BoardCard card)
+    {
+        m_cards.Add(card.Id, card);
+    }
+
+    protected virtual void OnRemoveCard(BoardCard card)
+    {
+        m_cards.Remove(card.Id);
+    }
+
+    protected HeuteBoard() : this(Guid.Empty, Guid.Empty, Guid.Empty, DateOnly.MinValue) { }
+
     //
 
     public Guid Id { get; private set; } = id;
@@ -52,8 +64,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException($"Card with id {cardId} does not exist.");
         }
 
-        var card = GetCards().First(c => c.Id == cardId);
-        if(card != null) m_cards.Remove(card.Id);
+        DoRemoveCard(cardId);
     }
 
     public void PlaceCard(HeuteLayout layout, Guid cardId, Guid sectionId, GridRect position)
@@ -110,8 +121,14 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
     private BoardCard DoAddCard(Guid id, BoardCardProps props)
     {
         var boardCard = new BoardCard(id, props);
-        m_cards.Add(id, boardCard);
-
+        OnAddCard(boardCard);
         return boardCard;
+    }
+
+    private BoardCard DoRemoveCard(Guid cardId)
+    {
+        var card = GetCards().First(c => c.Id == cardId);
+        OnRemoveCard(card);
+        return card;
     }
 }
