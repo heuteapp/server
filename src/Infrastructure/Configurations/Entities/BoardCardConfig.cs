@@ -20,6 +20,8 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
         builder.Property(c => c.Title)
                .IsRequired();
 
+        builder.Ignore(c => c.IsVerified);
+
         builder.OwnsOne(c => c.Position, position =>
         {
             position.Property(p => p.Col)
