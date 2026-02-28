@@ -1,16 +1,24 @@
+using HeuteApp.Core.Aggregates;
+using HeuteApp.Core.Entities;
 using HeuteApp.Infrastructure.Models.Entities;
 
 namespace HeuteApp.Infrastructure.Models.Aggregates;
 
-public class HeuteLayoutModel
+public class HeuteLayoutModel : HeuteLayout
 {
-    public Guid Id { get; set; }
+    protected override LayoutSection OnCreateSection(Guid id, string name, LayoutSectionProps props)
+    {
+        return LayoutSectionModel.Create(id, name, this, props);
+    }
 
-    public Guid? OwnerId { get; set; } = null;
+    protected HeuteLayoutModel() { }
 
-    public string Name { get; set; } = string.Empty;
+    protected HeuteLayoutModel(Guid id, Guid ownerId, string name, int version) : base(id, ownerId, name, version) { }
 
-    public int Version { get; set; } = 0;
+    //
 
-    public List<LayoutSectionModel> Sections { get; set; } = [];
+    public static new HeuteLayoutModel Create(Guid id, Guid ownerId, string name, int version)
+    {
+        return new HeuteLayoutModel(id, ownerId, name, version);
+    }
 }
