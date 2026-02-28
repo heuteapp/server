@@ -3,26 +3,39 @@ using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Aggregates;
 
-public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+public class HeuteBoard
 {
     private readonly List<BoardCard> m_cards = [];
 
     protected virtual BoardCard OnCreateCard(Guid id, BoardCardProps props)
     {
-        return new BoardCard(id, props);
+        return BoardCard.Create(id, props);
     }
 
-    protected HeuteBoard() : this(Guid.Empty, Guid.Empty, Guid.Empty, DateOnly.MinValue) { }
+    protected HeuteBoard() { }
+
+    protected HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    {
+        Id = id;
+        OwnerId = ownerId;
+        LayoutId = layoutId;
+        Date = date;
+    }
+
+    public static HeuteBoard Create(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    {
+        return new HeuteBoard(id, ownerId, layoutId, date);
+    }
 
     //
 
-    public Guid Id { get; private set; } = id;
+    public Guid Id { get; private set; }
 
-    public Guid OwnerId { get; private set; } = ownerId;
+    public Guid OwnerId { get; private set; }
 
-    public Guid LayoutId { get; private set; } = layoutId;
+    public Guid LayoutId { get; private set; }
 
-    public DateOnly Date { get; private set; } = date;
+    public DateOnly Date { get; private set; }
 
     public IReadOnlyCollection<BoardCard> Cards => m_cards.AsReadOnly();
 

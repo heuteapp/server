@@ -4,9 +4,9 @@ namespace HeuteApp.Core.Entities;
 
 public class BoardCard
 {
-    private BoardCard() { }
+    protected BoardCard() { }
 
-    private BoardCard(Guid id, BoardCardProps props)
+    protected BoardCard(Guid id, BoardCardProps props)
     {
         Id = id;
         Title = props.Title;

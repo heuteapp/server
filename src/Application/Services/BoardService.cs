@@ -14,7 +14,7 @@ public class BoardService(IBoardRepository repository, IUnitOfWork unitOfWork)
         if (existing != null)
             throw new Exception("Board already exists for this date.");
 
-        var board = new HeuteBoard(Guid.NewGuid(), ownerId, Guid.Empty, date);
+        var board = HeuteBoard.Create(Guid.NewGuid(), ownerId, Guid.Empty, date);
 
         await repository.AddAsync(board);
         await unitOfWork.SaveChangesAsync();
