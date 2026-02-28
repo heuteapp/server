@@ -12,6 +12,7 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
     {
         var entity = await conext.Boards
             .Include("m_cards")
+            .Include(c => c.Layout)
             .FirstOrDefaultAsync(b => b.Id == boardId);
 
         return entity;
@@ -21,6 +22,7 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
     {
         var entity = await conext.Boards
             .Include("m_cards")
+            .Include(c => c.Layout)
             .FirstOrDefaultAsync(b => b.OwnerId == ownerId && b.Date == date);
 
         return entity;
