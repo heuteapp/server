@@ -3,8 +3,24 @@ using HeuteApp.Infrastructure.Models.Aggregates;
 
 namespace HeuteApp.Infrastructure.Models.Entities;
 
-public class BoardCardModel(Guid id, BoardCardProps props) : BoardCard(id, props)
+public class BoardCardModel : BoardCard
 {
+    protected BoardCardModel() { }
+
+    protected BoardCardModel(Guid id, HeuteBoardModel? board, BoardCardProps props) : base(id, props)
+    {
+        BoardId = board?.Id ?? Guid.Empty;
+        Board = board;
+    }
+
+    public static BoardCardModel Create(Guid id, HeuteBoardModel board, BoardCardProps props)
+    {
+        ArgumentNullException.ThrowIfNull(props);
+        return new BoardCardModel(id, board, props);
+    }
+
+    //
+
     public Guid BoardId { get; set; }
 
     public HeuteBoardModel? Board { get; set; }
