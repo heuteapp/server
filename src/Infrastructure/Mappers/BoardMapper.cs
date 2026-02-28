@@ -30,7 +30,7 @@ public static class BoardMapper
             OwnerId = board.OwnerId,
             LayoutId = board.LayoutId,
             Date = board.Date,
-            Cards = [.. board.Cards.Select(c => c.ToModel(board.Id))]
+            Cards = [.. board.GetCards().Select(c => c.ToModel(board.Id))]
         };
     }
 
@@ -41,7 +41,7 @@ public static class BoardMapper
         model.LayoutId = board.LayoutId;
         model.Date = board.Date;
 
-        var domainCardIds = board.Cards.Select(c => c.Id).ToHashSet();
+        var domainCardIds = board.GetCards().Select(c => c.Id).ToHashSet();
         var modelCardIds = model.Cards.Select(c => c.Id).ToHashSet();
 
         foreach (var card in model.Cards.Where(c => !domainCardIds.Contains(c.Id)).ToList())
@@ -49,7 +49,7 @@ public static class BoardMapper
             model.Cards.Remove(card);
         }
 
-        foreach (var card in board.Cards)
+        foreach (var card in board.GetCards())
         {
             var existingCard = model.Cards.FirstOrDefault(c => c.Id == card.Id);
             if (existingCard != null)

@@ -17,7 +17,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 
     public DateOnly Date { get; private set; } = date;
 
-    public IReadOnlyCollection<BoardCard> Cards => m_cards.Values;
+    public IReadOnlyCollection<BoardCard> GetCards() => m_cards.Values;
 
     //
 
@@ -52,7 +52,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException($"Card with id {cardId} does not exist.");
         }
 
-        var card = Cards.First(c => c.Id == cardId);
+        var card = GetCards().First(c => c.Id == cardId);
         if(card != null) m_cards.Remove(card.Id);
     }
 
@@ -69,7 +69,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
         if (!section.Size.Contains(position))
             throw new InvalidOperationException("Card is out of section bounds.");
 
-        var conflictingCard = Cards
+        var conflictingCard = GetCards()
             .FirstOrDefault(c => c.Id != cardId && c.SectionId == sectionId && c.Position?.Overlaps(position) == true);
 
         if (conflictingCard is not null)
@@ -77,7 +77,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException($"Position overlaps with card {conflictingCard.Id}");
         }
 
-        var card = Cards.First(c => c.Id == cardId);
+        var card = GetCards().First(c => c.Id == cardId);
         card.DoPlace(sectionId, position);
     }
 
@@ -88,13 +88,13 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException($"Card with id {cardId} does not exist.");
         }
 
-        var card = Cards.First(c => c.Id == cardId);
+        var card = GetCards().First(c => c.Id == cardId);
         card.DoUnplace();
     }
 
     public void UnplaceAllCards()
     {
-        foreach (var card in Cards)
+        foreach (var card in GetCards())
         {
             card.DoUnplace();
         }
