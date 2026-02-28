@@ -82,7 +82,7 @@ public class HeuteBoard
             throw new InvalidOperationException($"Card with id {cardId} does not exist.");
         }
 
-        var section = layout.GetSections().FirstOrDefault(s => s.Id == sectionId) 
+        var section = layout.Sections.FirstOrDefault(s => s.Id == sectionId) 
             ?? throw new InvalidOperationException($"Section with id {sectionId} does not exist.");
 
         if (!section.Size.Contains(position))

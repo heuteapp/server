@@ -4,7 +4,7 @@ namespace HeuteApp.Core.Aggregates;
 
 public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
 {
-    private readonly Dictionary<Guid, LayoutSection> m_sectionDictionary = [];
+    private readonly List<LayoutSection> m_sections = [];
 
     protected HeuteLayout() : this(Guid.Empty, Guid.Empty, string.Empty, 0)
     {
@@ -21,7 +21,7 @@ public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
 
     public int Version { get; private set; } = version;
 
-    public IReadOnlyCollection<LayoutSection> Sections => m_sectionDictionary.Values;
+    public IReadOnlyCollection<LayoutSection> Sections => m_sections;
 
     //
 
@@ -34,7 +34,7 @@ public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
             throw new InvalidOperationException($"Section with id {sectionId} already exists.");
         }
 
-        if(m_sectionDictionary.Count >= 4)
+        if(m_sections.Count >= 4)
         {
             throw new InvalidOperationException("Layout already has maximum number of sections (4).");
         }
@@ -44,12 +44,7 @@ public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
 
     public bool HasSection(Guid sectionId)
     {
-        return m_sectionDictionary.ContainsKey(sectionId);
-    }
-
-    public IEnumerable<LayoutSection> GetSections()
-    {
-        return m_sectionDictionary.Values;
+        return m_sections.Any(s => s.Id == sectionId);
     }
 
     //
@@ -57,6 +52,6 @@ public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
     private void DoAddSection(Guid sectionId, string name, LayoutSectionProps props)
     {
         var section = new LayoutSection(sectionId, name, props);
-        m_sectionDictionary.Add(sectionId, section);
+        m_sections.Add(section);
     }
 }
