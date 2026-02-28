@@ -5,21 +5,11 @@ namespace HeuteApp.Core.Aggregates;
 
 public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 {
-    protected Dictionary<Guid, BoardCard> m_cards = [];
+    private readonly List<BoardCard> m_cards = [];
 
-    protected virtual BoardCard OnCardInstance(Guid id, BoardCardProps props)
+    protected virtual BoardCard OnCreateCard(Guid id, BoardCardProps props)
     {
         return new BoardCard(id, props);
-    }
-
-    protected virtual void OnAddCard(BoardCard card)
-    {
-        m_cards.Add(card.Id, card);
-    }
-
-    protected virtual void OnRemoveCard(BoardCard card)
-    {
-        m_cards.Remove(card.Id);
     }
 
     protected HeuteBoard() : this(Guid.Empty, Guid.Empty, Guid.Empty, DateOnly.MinValue) { }
@@ -34,7 +24,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 
     public DateOnly Date { get; private set; } = date;
 
-    public IReadOnlyCollection<BoardCard> GetCards() => m_cards.Values;
+    public IReadOnlyCollection<BoardCard> Cards => m_cards.AsReadOnly();
 
     //
 
@@ -85,7 +75,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
         if (!section.Size.Contains(position))
             throw new InvalidOperationException("Card is out of section bounds.");
 
-        var conflictingCard = GetCards()
+        var conflictingCard = Cards
             .FirstOrDefault(c => c.Id != cardId && c.SectionId == sectionId && c.Position?.Overlaps(position) == true);
 
         if (conflictingCard is not null)
@@ -93,7 +83,7 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException($"Position overlaps with card {conflictingCard.Id}");
         }
 
-        var card = GetCards().First(c => c.Id == cardId);
+        var card = Cards.First(c => c.Id == cardId);
         card.DoPlace(sectionId, position);
     }
 
@@ -104,13 +94,13 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
             throw new InvalidOperationException($"Card with id {cardId} does not exist.");
         }
 
-        var card = GetCards().First(c => c.Id == cardId);
+        var card = Cards.First(c => c.Id == cardId);
         card.DoUnplace();
     }
 
     public void UnplaceAllCards()
     {
-        foreach (var card in GetCards())
+        foreach (var card in Cards)
         {
             card.DoUnplace();
         }
@@ -118,22 +108,22 @@ public class HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
 
     public bool HasCard(Guid cardId)
     {
-        return m_cards.ContainsKey(cardId);
+        return m_cards.Any(c => c.Id == cardId);
     }
 
     //
 
     private BoardCard DoAddCard(Guid id, BoardCardProps props)
     {
-        var boardCard = OnCardInstance(id, props);
-        OnAddCard(boardCard);
+        var boardCard = OnCreateCard(id, props);
+        m_cards.Add(boardCard);
         return boardCard;
     }
 
     private BoardCard DoRemoveCard(Guid cardId)
     {
-        var card = GetCards().First(c => c.Id == cardId);
-        OnRemoveCard(card);
+        var card = Cards.First(c => c.Id == cardId);
+        m_cards.Remove(card);
         return card;
     }
 }
