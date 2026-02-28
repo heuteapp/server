@@ -20,6 +20,6 @@ public static partial class LayoutMapper
     {
         ArgumentNullException.ThrowIfNull(props);
 
-        return new LayoutSection(id, name, props);
+        return LayoutSection.Create(id, name, props);
     }
 }
