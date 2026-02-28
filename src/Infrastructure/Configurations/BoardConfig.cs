@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using HeuteApp.Infrastructure.Models.Aggregates;
+using HeuteApp.Infrastructure.Models.Entities;
 
 namespace HeuteApp.Infrastructure.Configurations;
 
@@ -21,7 +22,7 @@ public class BoardConfig : IEntityTypeConfiguration<HeuteBoardModel>
         builder.Property(b => b.Date)
             .IsRequired();
 
-        builder.HasMany(b => b.Cards)
+        builder.HasMany<BoardCardModel>("m_cards")
             .WithOne(c => c.Board)
             .HasForeignKey(c => c.BoardId)
             .OnDelete(DeleteBehavior.Cascade);
@@ -30,5 +31,8 @@ public class BoardConfig : IEntityTypeConfiguration<HeuteBoardModel>
             .WithMany()
             .HasForeignKey(b => b.LayoutId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Navigation("m_cards")
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }
