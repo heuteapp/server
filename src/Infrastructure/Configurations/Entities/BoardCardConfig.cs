@@ -23,11 +23,6 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
 
         builder.Ignore(c => c.IsVerified);
 
-        builder.HasOne(c => c.Board)
-               .WithMany("m_cards")
-               .HasForeignKey(c => c.BoardId)
-               .OnDelete(DeleteBehavior.Cascade);
-
         builder.OwnsOne(c => c.Position, position =>
         {
             position.Property(p => p.Col)

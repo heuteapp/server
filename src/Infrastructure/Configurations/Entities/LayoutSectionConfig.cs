@@ -19,12 +19,6 @@ public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionModel>
         builder.Property(s => s.Name)
                .IsRequired();
 
-        // 🔥 Layout ile ilişkiyi açık tanımlamak daha sağlıklı
-        builder.HasOne<HeuteLayoutModel>()
-               .WithMany("m_sections")
-               .HasForeignKey(s => s.LayoutId)
-               .OnDelete(DeleteBehavior.Cascade);
-
         builder.HasIndex(s => s.LayoutId);
 
         builder.OwnsOne(s => s.Rect, rect =>
