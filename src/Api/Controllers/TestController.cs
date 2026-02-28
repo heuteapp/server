@@ -63,8 +63,16 @@ public class TestController : ControllerBase
     [HttpPost("create-board")]
     public async Task<IActionResult> CreateBoard()
     {
+        var layout = await _layoutService.GetLayoutByIdAsync(
+            Guid.Parse("d33cd55c-c215-4cc0-8297-31e93a5e9ef0")
+        );
+
+        if(layout == null)
+            return NotFound("Layout not found. Please create the layout first.");
+
         await _boardService.CreateBoardAsync(
-            Guid.Parse("11111111-1111-1111-1111-111111111111"),
+            Guid.Parse("11111111-1111-1111-1111-111111111112"),
+            layout,
             DateOnly.FromDateTime(DateTime.UtcNow)
         );
 
@@ -78,7 +86,7 @@ public class TestController : ControllerBase
     public async Task<IActionResult> AddCard(DateOnly date, Guid sectionId, GridRect position)
     {
         await _boardService.AddCardAsync(
-            Guid.Parse("11111111-1111-1111-1111-111111111111"),
+            Guid.Parse("11111111-1111-1111-1111-111111111112"),
             date,
             new BoardCardProps
             (

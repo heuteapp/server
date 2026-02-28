@@ -28,12 +28,14 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return entity;
     }
 
-    public Task AddAsync(HeuteBoard board)
+    public Task<HeuteBoard?> CreateAsync(Guid guid, Guid ownerId, HeuteLayout layout, DateOnly date)
     {
-        if (board is not HeuteBoardModel model)
-            throw new ArgumentException("Expected HeuteBoardModel", nameof(board));
-            
+        if(layout is not HeuteLayoutModel layoutModel)
+            throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
+
+        var model = HeuteBoardModel.Create(guid, ownerId, layoutModel, date);
+
         conext.Boards.Add(model);
-        return Task.CompletedTask;
+        return Task.FromResult<HeuteBoard?>(model);
     }
 }

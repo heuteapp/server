@@ -8,5 +8,5 @@ public interface IBoardRepository
     
     Task<HeuteBoard?> GetByDateAsync(Guid ownerId, DateOnly date);
 
-    Task AddAsync(HeuteBoard board);
+    Task<HeuteBoard?> CreateAsync(Guid guid, Guid ownerId, HeuteLayout layout, DateOnly date);
 }

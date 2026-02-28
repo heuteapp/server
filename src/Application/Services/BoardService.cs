@@ -6,7 +6,7 @@ namespace HeuteApp.Application.Services;
 
 public class BoardService(IBoardRepository repository, IUnitOfWork unitOfWork)
 {
-    public async Task CreateBoardAsync(Guid ownerId, DateOnly date)
+    public async Task CreateBoardAsync(Guid ownerId, HeuteLayout layout, DateOnly date)
     {
         var existing = await repository
             .GetByDateAsync(ownerId, date);
@@ -14,9 +14,7 @@ public class BoardService(IBoardRepository repository, IUnitOfWork unitOfWork)
         if (existing != null)
             throw new Exception("Board already exists for this date.");
 
-        var board = HeuteBoard.Create(Guid.NewGuid(), ownerId, Guid.Empty, date);
-
-        await repository.AddAsync(board);
+        await repository.CreateAsync(Guid.NewGuid(), ownerId, layout, date);
         await unitOfWork.SaveChangesAsync();
     }
 
