@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using HeuteApp.Infrastructure.Models.Aggregates;
 using HeuteApp.Core.Entities;
+using HeuteApp.Infrastructure.Models.Entities;
 
 namespace HeuteApp.Infrastructure.Persistence;
 
