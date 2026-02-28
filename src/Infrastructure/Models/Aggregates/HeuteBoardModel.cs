@@ -13,12 +13,19 @@ public class HeuteBoardModel : HeuteBoard
 
     protected HeuteBoardModel() { }
 
-    protected HeuteBoardModel(Guid id, Guid ownerId, Guid layoutId, DateOnly date) : base(id, ownerId, layoutId, date) { }
+    protected HeuteBoardModel(Guid id, Guid ownerId, HeuteLayoutModel layout, DateOnly date) : base(id, ownerId, layout.Id, date) 
+    { 
+        Layout = layout;
+    }
 
     //
 
-    public static new HeuteBoardModel Create(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    public HeuteLayoutModel? Layout { get; private set; }
+
+    //
+
+    public static HeuteBoardModel Create(Guid id, Guid ownerId, HeuteLayoutModel layout, DateOnly date)
     {
-        return new HeuteBoardModel(id, ownerId, layoutId, date);
+        return new HeuteBoardModel(id, ownerId, layout, date);
     }
 }
