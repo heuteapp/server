@@ -2,15 +2,33 @@ using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Entities;
 
-public class LayoutSection(Guid id, string name, LayoutSectionProps props)
+public class LayoutSection
 {
-    public Guid Id { get; private set; } = id;
+    protected LayoutSection() { }
 
-    public string Name { get; private set; } = name;
+    protected LayoutSection(Guid id, string name, LayoutSectionProps props)
+    {
+        Id = id;
+        Name = name;
+        Rect = props.Rect;
+        Size = props.Size;
+    }
 
-    public Rect Rect { get; internal set; } = props.Rect;
+    public static LayoutSection Create(Guid id, string name, LayoutSectionProps props)
+    {
+        ArgumentNullException.ThrowIfNull(props);
+        return new LayoutSection(id, name, props);
+    }
 
-    public GridSize Size { get; internal set; } = props.Size;
+    //
+
+    public Guid Id { get; private set; }
+
+    public string Name { get; private set; } = null!;
+
+    public Rect Rect { get; internal set; } = null!;
+
+    public GridSize Size { get; internal set; } = null!;
 }
 
 public sealed record LayoutSectionProps(

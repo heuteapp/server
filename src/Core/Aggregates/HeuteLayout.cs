@@ -2,24 +2,42 @@ using HeuteApp.Core.Entities;
  
 namespace HeuteApp.Core.Aggregates;
 
-public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
+public class HeuteLayout
 {
     private readonly List<LayoutSection> m_sections = [];
 
-    protected HeuteLayout() : this(Guid.Empty, Guid.Empty, string.Empty, 0)
+    protected virtual LayoutSection OnCreateSection(Guid id, string name, LayoutSectionProps props)
+    {
+        return LayoutSection.Create(id, name, props);
+    }
+
+    protected HeuteLayout()
     {
         
     }
 
+    protected HeuteLayout(Guid id, Guid ownerId, string name, int version)
+    {
+        Id = id;
+        OwnerId = ownerId;
+        Name = name;
+        Version = version;
+    }
+
+    public static HeuteLayout Create(Guid id, Guid ownerId, string name, int version)
+    {
+        return new HeuteLayout(id, ownerId, name, version);
+    }
+
     //
 
-    public Guid Id { get; private set; } = id;
+    public Guid Id { get; private set; }
 
-    public Guid OwnerId { get; private set; } = ownerId;
+    public Guid OwnerId { get; private set; }
 
-    public string Name { get; private set; } = name;
+    public string Name { get; private set; } = null!;
 
-    public int Version { get; private set; } = version;
+    public int Version { get; private set; } = 0;
 
     public IReadOnlyCollection<LayoutSection> Sections => m_sections;
 
@@ -51,7 +69,7 @@ public class HeuteLayout(Guid id, Guid ownerId, string name, int version)
 
     private void DoAddSection(Guid sectionId, string name, LayoutSectionProps props)
     {
-        var section = new LayoutSection(sectionId, name, props);
+        var section = OnCreateSection(sectionId, name, props);
         m_sections.Add(section);
     }
 }
