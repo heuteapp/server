@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Application.Services;
+using HeuteApp.Application.Interfaces;
+using HeuteApp.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,7 @@ builder.Services.AddDbContext<HeuteDbContext>(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<BoardService, BoardService>();
 
 var app = builder.Build();
