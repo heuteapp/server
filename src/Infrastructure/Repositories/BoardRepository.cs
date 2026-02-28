@@ -11,7 +11,7 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
     public async Task<HeuteBoard?> GetByIdAsync(Guid boardId)
     {
         var entity = await conext.Boards
-            .Include(b => b.Cards)
+            .Include("m_cards")
             .FirstOrDefaultAsync(b => b.Id == boardId);
 
         return entity;
@@ -20,7 +20,7 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
     public async Task<HeuteBoard?> GetByDateAsync(Guid ownerId, DateOnly date)
     {
         var entity = await conext.Boards
-            .Include(b => b.Cards)
+            .Include("m_cards")
             .FirstOrDefaultAsync(b => b.OwnerId == ownerId && b.Date == date);
 
         return entity;
