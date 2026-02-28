@@ -3,7 +3,7 @@ using HeuteApp.Infrastructure.Models.Aggregates;
 
 namespace HeuteApp.Infrastructure.Models.Entities;
 
-public class BoardCardModel : BoardCard
+public class BoardCardModel(Guid id, BoardCardProps props) : BoardCard(id, props)
 {
     public Guid BoardId { get; set; }
 

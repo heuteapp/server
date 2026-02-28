@@ -1,16 +1,29 @@
+using HeuteApp.Core.Aggregates;
+using HeuteApp.Core.Entities;
 using HeuteApp.Infrastructure.Models.Entities;
 
 namespace HeuteApp.Infrastructure.Models.Aggregates;
 
-public class HeuteBoardModel
+public class HeuteBoardModel : HeuteBoard
 {
-    public Guid Id { get; set; }
+    protected override BoardCard OnCardInstance(Guid id, BoardCardProps props)
+    {
+        return new BoardCardModel(id, props);
+    }
 
-    public Guid OwnerId { get; set; }
+    protected override void OnAddCard(BoardCard card)
+    {
+        base.OnAddCard(card);
+        Cards.Add((BoardCardModel)card);
+    }
 
-    public Guid LayoutId { get; set; }
+    override protected void OnRemoveCard(BoardCard card)
+    {
+        base.OnRemoveCard(card);
+        Cards.RemoveAll(c => c.Id == card.Id);
+    }
 
-    public DateOnly Date { get; set; }
+    //
 
     public List<BoardCardModel> Cards { get; set; } = [];
 }
