@@ -57,9 +57,9 @@ public class HeuteBoard
             throw new InvalidOperationException($"Card with id {id} already exists.");
         }
 
-        if(m_cards.Count >= 24)
+        if(m_cards.Count >= 12)
         {
-            throw new InvalidOperationException("Board already has maximum number of cards (24).");
+            throw new InvalidOperationException("Board already has maximum number of cards (12).");
         }
 
         return DoAddCard(id, props);
