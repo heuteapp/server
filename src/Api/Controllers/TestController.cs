@@ -4,6 +4,7 @@ using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Infrastructure.Models.Aggregates;
 using HeuteApp.Core.ValueObjects;
 using HeuteApp.Core.Entities;
+using HeuteApp.Application.Services;
 
 namespace HeuteApp.Api.Controllers;
 
@@ -11,11 +12,14 @@ namespace HeuteApp.Api.Controllers;
 [Route("api/test")]
 public class TestController : ControllerBase
 {
+    private readonly BoardService _service;
+    
     private readonly HeuteDbContext _context;
 
-    public TestController(HeuteDbContext context)
+    public TestController(HeuteDbContext context, BoardService service)
     {
         _context = context;
+        _service = service;
     }
 
     // =========================
@@ -75,27 +79,20 @@ public class TestController : ControllerBase
     // =========================
     // ADD CARD
     // =========================
-    [HttpPost("{boardId}/add-card")]
-    public async Task<IActionResult> AddCard(Guid boardId)
+    [HttpPost("{date}/add-card")]
+    public async Task<IActionResult> AddCard(DateOnly date, Guid sectionId, GridRect position)
     {
-        var board = await _context.Boards
-            .Include("m_cards")
-            .FirstOrDefaultAsync(b => b.Id == boardId);
-
-        if (board == null)
-            return NotFound();
-
-        var card = board.AddCard(
-            Guid.NewGuid(),
-            new BoardCardProps(
-                Title: "Demo Card",
-                SectionId: null,
-                Position: null
+        await _service.AddCardAsync(
+            Guid.Parse("11111111-1111-1111-1111-111111111111"),
+            date,
+            new BoardCardProps
+            (
+                "Test Card",
+                sectionId,
+                position
             )
         );
 
-        await _context.SaveChangesAsync();
-
-        return Ok(card.Id);
+        return Ok("Card added successfully");
     }
 }
