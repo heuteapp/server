@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using HeuteApp.Infrastructure.Models.Aggregates;
 using HeuteApp.Infrastructure.Models.Entities;
 
-namespace HeuteApp.Infrastructure.Configurations;
+namespace HeuteApp.Infrastructure.Configurations.Aggregates;
 
 public class BoardConfig : IEntityTypeConfiguration<HeuteBoardModel>
 {
