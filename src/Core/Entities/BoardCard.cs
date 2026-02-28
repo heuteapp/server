@@ -2,17 +2,33 @@ using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Entities;
 
-public class BoardCard(Guid id, BoardCardProps props)
+public class BoardCard
 {
-    protected BoardCard() : this(Guid.Empty, null!) { }
+    private BoardCard() { }
 
-    public Guid Id { get; private set; } = id;
+    private BoardCard(Guid id, BoardCardProps props)
+    {
+        Id = id;
+        Title = props.Title;
+        SectionId = props.SectionId;
+        Position = props.Position;
+    }
 
-    public string? Title { get; internal set; } = props.Title;
+    public static BoardCard Create(Guid id, BoardCardProps props)
+    {
+        ArgumentNullException.ThrowIfNull(props);
+        return new BoardCard(id, props);
+    }
 
-    public Guid? SectionId { get; internal set; } = props.SectionId;
+    //
 
-    public GridRect? Position { get; internal set; } = props.Position;
+    public Guid Id { get; private set; }
+
+    public string? Title { get; internal set; }
+
+    public Guid? SectionId { get; internal set; }
+
+    public GridRect? Position { get; internal set; }
 
     public bool IsPlaced
     {
