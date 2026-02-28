@@ -21,7 +21,7 @@ public class BoardCardModel : BoardCard
 
     //
 
-    public Guid BoardId { get; set; }
+    public Guid BoardId { get; private set; }
 
-    public HeuteBoardModel? Board { get; set; }
+    public HeuteBoardModel? Board { get; private set; }
 }
