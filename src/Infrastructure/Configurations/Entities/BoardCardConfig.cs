@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using HeuteApp.Infrastructure.Models.Entities;
+using HeuteApp.Infrastructure.Models.Aggregates;
 
 namespace HeuteApp.Infrastructure.Configurations.Entities;
 
@@ -21,6 +22,11 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
                .IsRequired();
 
         builder.Ignore(c => c.IsVerified);
+
+        builder.HasOne(c => c.Board)
+               .WithMany("m_cards")
+               .HasForeignKey(c => c.BoardId)
+               .OnDelete(DeleteBehavior.Cascade);
 
         builder.OwnsOne(c => c.Position, position =>
         {
