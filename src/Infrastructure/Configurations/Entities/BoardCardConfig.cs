@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using HeuteApp.Infrastructure.Models.Entities;
 
-namespace HeuteApp.Infrastructure.Configurations;
+namespace HeuteApp.Infrastructure.Configurations.Entities;
 
 public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
 {

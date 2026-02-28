@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using HeuteApp.Infrastructure.Models.Entities;
 
-namespace HeuteApp.Infrastructure.Configurations;
+namespace HeuteApp.Infrastructure.Configurations.Entities;
 
 public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionModel>
 {
@@ -20,7 +20,6 @@ public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionModel>
 
         builder.HasIndex(s => s.LayoutId);
 
-        // Rect Value Object
         builder.OwnsOne(s => s.Rect, rect =>
         {
             rect.Property(r => r.X)
