@@ -11,15 +11,18 @@ namespace HeuteApp.Api.Controllers;
 [ApiController]
 [Route("api/test")]
 public class TestController : ControllerBase
-{
-    private readonly BoardService _service;
-    
+{    
     private readonly HeuteDbContext _context;
 
-    public TestController(HeuteDbContext context, BoardService service)
+    private readonly BoardService _boardService;
+    
+    private readonly LayoutService _layoutService;
+
+    public TestController(HeuteDbContext context, BoardService boardService, LayoutService layoutService)
     {
         _context = context;
-        _service = service;
+        _boardService = boardService;
+        _layoutService = layoutService;
     }
 
     // =========================
@@ -60,20 +63,12 @@ public class TestController : ControllerBase
     [HttpPost("create-board")]
     public async Task<IActionResult> CreateBoard()
     {
-        var layout = await _context.Layouts
-            .FirstAsync();
-
-        var board = HeuteBoardModel.Create(
-            Guid.NewGuid(),
+        await _boardService.CreateBoardAsync(
             Guid.Parse("11111111-1111-1111-1111-111111111111"),
-            layout.Id,
             DateOnly.FromDateTime(DateTime.UtcNow)
         );
 
-        _context.Boards.Add(board);
-        await _context.SaveChangesAsync();
-
-        return Ok(board.Id);
+        return Ok("Board created successfully");
     }
 
     // =========================
@@ -82,7 +77,7 @@ public class TestController : ControllerBase
     [HttpPost("{date}/add-card")]
     public async Task<IActionResult> AddCard(DateOnly date, Guid sectionId, GridRect position)
     {
-        await _service.AddCardAsync(
+        await _boardService.AddCardAsync(
             Guid.Parse("11111111-1111-1111-1111-111111111111"),
             date,
             new BoardCardProps
