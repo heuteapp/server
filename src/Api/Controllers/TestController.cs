@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Infrastructure.Models.Aggregates;
+using HeuteApp.Core.ValueObjects;
 using HeuteApp.Core.Entities;
 
 namespace HeuteApp.Api.Controllers;
@@ -17,13 +18,51 @@ public class TestController : ControllerBase
         _context = context;
     }
 
+    // =========================
+    // CREATE LAYOUT + SECTION
+    // =========================
+    [HttpPost("create-layout")]
+    public async Task<IActionResult> CreateLayout()
+    {
+        var layout = HeuteLayoutModel.Create(
+            Guid.NewGuid(),
+            // an example guid
+            Guid.Parse("11111111-1111-1111-1111-111111111111"),
+            "Test Layout",
+            version: 1
+        );
+
+        layout.AddSection(
+            Guid.NewGuid(),
+            "first",
+            new(new Rect(0, 0, 100, 50), new GridSize(18, 4))
+        );
+
+        layout.AddSection(
+            Guid.NewGuid(),
+            "second",
+            new(new Rect(0, 50, 100, 50), new GridSize(18, 4))
+        );
+
+        _context.Layouts.Add(layout);
+        await _context.SaveChangesAsync();
+
+        return Ok(layout.Id);
+    }
+
+    // =========================
+    // CREATE BOARD
+    // =========================
     [HttpPost("create-board")]
     public async Task<IActionResult> CreateBoard()
     {
+        var layout = await _context.Layouts
+            .FirstAsync();
+
         var board = HeuteBoardModel.Create(
             Guid.NewGuid(),
-            Guid.NewGuid(),
-            Guid.NewGuid(),
+            Guid.Parse("11111111-1111-1111-1111-111111111111"),
+            layout.Id,
             DateOnly.FromDateTime(DateTime.UtcNow)
         );
 
@@ -33,6 +72,9 @@ public class TestController : ControllerBase
         return Ok(board.Id);
     }
 
+    // =========================
+    // ADD CARD
+    // =========================
     [HttpPost("{boardId}/add-card")]
     public async Task<IActionResult> AddCard(Guid boardId)
     {
@@ -46,7 +88,7 @@ public class TestController : ControllerBase
         var card = board.AddCard(
             Guid.NewGuid(),
             new BoardCardProps(
-                Title: "Test Card",
+                Title: "Demo Card",
                 SectionId: null,
                 Position: null
             )
