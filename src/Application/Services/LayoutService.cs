@@ -10,6 +10,11 @@ public class LayoutService(ILayoutRepository repository, IUnitOfWork unitOfWork)
         return await repository.GetByNameAsync(ownerId, name, version);
     }
 
+    public async Task<IEnumerable<HeuteLayout>> GetLayouts(Guid ownerId)
+    {
+        return await repository.GetByOwnerAsync(ownerId);
+    }
+
     public async Task CreateLayoutAsync(Guid ownerId, string name, int version)
     {
         var existing = await repository
