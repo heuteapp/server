@@ -6,7 +6,7 @@ public interface ILayoutRepository
 {
     Task<HeuteLayout?> GetByIdAsync(Guid layoutId);
     
-    Task<HeuteLayout?> GetByNameAsync(Guid ownerId, string name, int version);
+    Task<HeuteLayout?> GetByNameAsync(Guid ownerId, string name, int? version);
 
     Task<IEnumerable<HeuteLayout>> GetByOwnerAsync(Guid ownerId);
 

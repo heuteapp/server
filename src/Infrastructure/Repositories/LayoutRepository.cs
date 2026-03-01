@@ -17,11 +17,13 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return entity;
     }
 
-    public async Task<HeuteLayout?> GetByNameAsync(Guid ownerId, string name, int version)
+    public async Task<HeuteLayout?> GetByNameAsync(Guid ownerId, string name, int? version)
     {
+        var m_version = version ?? await GetLastestVersionAsync(ownerId, name);
+
         var entity = await context.Layouts
             .Include("m_sections")
-            .FirstOrDefaultAsync(b => b.OwnerId == ownerId && b.Name == name && b.Version == version);
+            .FirstOrDefaultAsync(b => b.OwnerId == ownerId && b.Name == name && b.Version == m_version);
 
         return entity;
     }
