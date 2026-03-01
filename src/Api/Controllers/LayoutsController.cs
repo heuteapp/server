@@ -28,10 +28,10 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
         return Ok(board);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateLayout([FromBody] CreateLayoutRequest request)
+    [HttpPost("{ownerId:guid}")]
+    public async Task<IActionResult> CreateLayout(Guid ownerId, [FromBody] CreateLayoutRequest request)
     {
-        var layout = await layoutService.CreateLayoutAsync(request.OwnerId, request.Name, request.Version);
+        var layout = await layoutService.CreateLayoutAsync(ownerId, request.Name, request.Version);
 
         return Ok(layout);
     }
