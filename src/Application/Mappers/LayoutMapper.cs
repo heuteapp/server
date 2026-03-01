@@ -8,6 +8,8 @@ public static class LayoutMapper
 {
     public static LayoutResult ToResult(this HeuteLayout layout)
     {
+        ArgumentNullException.ThrowIfNull(layout);
+        
         return new LayoutResult(
             layout.Id,
             layout.OwnerId,
@@ -18,7 +20,9 @@ public static class LayoutMapper
     }
 
     public static LayoutSectionResult ToResult(this LayoutSection section)
-    {
+    {    
+        ArgumentNullException.ThrowIfNull(section);
+        
         return new LayoutSectionResult(
             section.Id,
             section.Name,
