@@ -29,20 +29,16 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
         builder.OwnsOne(c => c.Position, position =>
         {
             position.Property(p => p.Col)
-                    .HasColumnName("position_col")
-                    .IsRequired();
+                .HasColumnName("position_col");
 
             position.Property(p => p.Row)
-                    .HasColumnName("position_row")
-                    .IsRequired();
+                .HasColumnName("position_row");
 
             position.Property(p => p.ColSpan)
-                    .HasColumnName("position_colSpan")
-                    .IsRequired();
+                .HasColumnName("position_colSpan");
 
             position.Property(p => p.RowSpan)
-                    .HasColumnName("position_rowSpan")
-                    .IsRequired();
+                .HasColumnName("position_rowSpan");
         });
 
         builder.Navigation(c => c.Position)
