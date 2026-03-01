@@ -9,7 +9,7 @@ public sealed record GridSize(
         return
             rect.Col >= 1 &&
             rect.Row >= 1 &&
-            rect.Col + rect.ColSpan <= ColCount &&
-            rect.Row + rect.RowSpan <= RowCount;
+            rect.Col + rect.ColSpan - 1 <= ColCount &&
+            rect.Row + rect.RowSpan - 1 <= RowCount;
     }
 }
