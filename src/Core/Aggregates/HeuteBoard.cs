@@ -82,19 +82,8 @@ public class HeuteBoard
             throw new InvalidOperationException($"Card with id {cardId} does not exist.");
         }
 
-        var section = layout.Sections.FirstOrDefault(s => s.Id == sectionId) 
-            ?? throw new InvalidOperationException($"Section with id {sectionId} does not exist.");
-
-        if (!section.Size.Contains(position))
-            throw new InvalidOperationException("Card is out of section bounds.");
-
-        var conflictingCard = Cards
-            .FirstOrDefault(c => c.Id != cardId && c.SectionId == sectionId && c.Position?.Overlaps(position) == true);
-
-        if (conflictingCard is not null)
-        {
-            throw new InvalidOperationException($"Position overlaps with card {conflictingCard.Id}");
-        }
+        EnsureFitsInSection(layout, sectionId, position);
+        EnsureNoOverlap(cardId, sectionId, position);
 
         var card = Cards.First(c => c.Id == cardId);
         card.DoPlace(sectionId, position);
@@ -138,5 +127,29 @@ public class HeuteBoard
         var card = Cards.First(c => c.Id == cardId);
         m_cards.Remove(card);
         return card;
+    }
+
+    private void EnsureFitsInSection(HeuteLayout layout, Guid sectionId, GridRect position)
+    {
+        ArgumentNullException.ThrowIfNull(layout);
+
+        var section = layout.Sections.FirstOrDefault(s => s.Id == sectionId)
+            ?? throw new InvalidOperationException(
+                $"Section with id {sectionId} does not exist.");
+
+        if (!section.Size.Contains(position))
+            throw new InvalidOperationException(
+                "Card is out of section bounds.");
+    }
+
+    private void EnsureNoOverlap(Guid cardId, Guid sectionId, GridRect position)
+    {
+        var conflict = m_cards.FirstOrDefault(c =>
+            c.Id != cardId &&
+            c.SectionId == sectionId &&
+            c.Position?.Overlaps(position) == true);
+
+        if (conflict is not null)
+            throw new InvalidOperationException($"Position overlaps with card {conflict.Id}");
     }
 }
