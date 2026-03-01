@@ -12,6 +12,12 @@ public class BoardCard
         Title = props.Title;
         SectionId = props.SectionId;
         Position = props.Position;
+
+        if(SectionId == null != (Position == null))
+        {
+            SectionId = null;
+            Position = null;
+        }
     }
 
     public static BoardCard Create(Guid id, BoardCardProps props)
