@@ -1,18 +1,41 @@
+using HeuteApp.Core.Aggregates;
+using HeuteApp.Core.Entities;
 using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Api.Models.Response;
 
-public record LayoutResponse(
+public sealed record LayoutResponse(
     Guid Id,
     Guid OwnerId,
     string Name,
     int Version,
-    IEnumerable<LayoutSectionResponse> Sections
-);
+    IEnumerable<LayoutSectionResponse> Sections) 
+{
+    public static LayoutResponse FromDomain(HeuteLayout layout)
+    {
+        return new LayoutResponse(
+            layout.Id,
+            layout.OwnerId,
+            layout.Name,
+            layout.Version,
+            layout.Sections.Select(s => LayoutSectionResponse.FromDomain(s))
+        );
+    }
+}
 
-public record LayoutSectionResponse(
+public sealed record LayoutSectionResponse(
     Guid Id,
     string Name,
     Rect Rect,
-    GridSize Size
-);
+    GridSize Size)
+{
+    public static LayoutSectionResponse FromDomain(LayoutSection section)
+    {
+        return new LayoutSectionResponse(
+            section.Id,
+            section.Name,
+            section.Rect,
+            section.Size
+        );
+    }
+}
