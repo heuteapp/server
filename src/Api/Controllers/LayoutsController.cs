@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace HeuteApp.Api.Controllers;
 
 [ApiController]
-[Route("layouts")]
+[Route("user/{ownerId:guid}/layouts")]
 public class LayoutsController(LayoutService layoutService) : ControllerBase
 {
-    [HttpGet("{ownerId:guid}/layout")]
-    public async Task<IActionResult> GetLayout(Guid ownerId, [FromQuery] string name, [FromQuery] int version)
+    [HttpGet("{name:string}")]
+    public async Task<IActionResult> GetLayout(Guid ownerId, string name, [FromQuery] int? version)
     {
         var board = await layoutService.GetLayoutAsync(ownerId, name, version);
 
@@ -19,7 +19,7 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
         return Ok(board);
     }    
     
-    [HttpGet("{ownerId:guid}")]
+    [HttpGet]
     public async Task<IActionResult> GetLayouts(Guid ownerId)
     {
         var boards = await layoutService.GetLayoutsAsync(ownerId);
@@ -27,7 +27,7 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
         return Ok(boards);
     }
 
-    [HttpPost("{ownerId:guid}")]
+    [HttpPost]
     public async Task<IActionResult> CreateLayout(Guid ownerId, [FromBody] CreateLayoutRequest request)
     {
         var layout = await layoutService.CreateLayoutAsync(ownerId, request.Name, request.Version);
