@@ -48,7 +48,7 @@ public class HeuteBoard
         UnplaceAllCards();
     }
 
-    public BoardCard AddCard(Guid id, BoardCardProps props)
+    public BoardCard AddCard(HeuteLayout layout, Guid id, BoardCardProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
 
@@ -60,6 +60,12 @@ public class HeuteBoard
         if(m_cards.Count >= 12)
         {
             throw new InvalidOperationException("Board already has maximum number of cards (12).");
+        }
+
+        if(props.Position is not null && props.SectionId is not null)
+        {
+            EnsureFitsInSection(layout, props.SectionId.Value, props.Position);
+            EnsureNoOverlap(id, props.SectionId.Value, props.Position);
         }
 
         return DoAddCard(id, props);
@@ -142,10 +148,10 @@ public class HeuteBoard
                 "Card is out of section bounds.");
     }
 
-    private void EnsureNoOverlap(Guid cardId, Guid sectionId, GridRect position)
+    private void EnsureNoOverlap(Guid? cardId, Guid sectionId, GridRect position)
     {
         var conflict = m_cards.FirstOrDefault(c =>
-            c.Id != cardId &&
+            (cardId == null || c.Id != cardId) &&
             c.SectionId == sectionId &&
             c.Position?.Overlaps(position) == true);
 
