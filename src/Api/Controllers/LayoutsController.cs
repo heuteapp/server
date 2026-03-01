@@ -1,4 +1,5 @@
 using HeuteApp.Api.Models.Request;
+using HeuteApp.Api.Models.Response;
 using HeuteApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,12 +12,12 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
     [HttpGet("{name}")]
     public async Task<IActionResult> GetLayout(Guid ownerId, string name, [FromQuery] int? version)
     {
-        var board = await layoutService.GetLayoutAsync(ownerId, name, version);
+        var layout = await layoutService.GetLayoutAsync(ownerId, name, version);
 
-        if(board == null)
+        if(layout == null)
             return NotFound("Layout not found for the given name and version.");
 
-        return Ok(board);
+        return Ok(LayoutResponse.FromDomain(layout));
     }    
     
     [HttpGet]
