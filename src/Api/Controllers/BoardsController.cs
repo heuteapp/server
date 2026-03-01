@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace HeuteApp.Api.Controllers;
 
 [ApiController]
-[Route("boards")]
+[Route("user/{ownerId:guid}/boards")]
 public class BoardsController(BoardService boardService) : ControllerBase
 {
-    [HttpGet("{ownerId:guid}")]
-    public async Task<IActionResult> GetBoard(Guid ownerId, [FromQuery] DateOnly date)
+    [HttpGet("{date:DateOnly}")]
+    public async Task<IActionResult> GetBoard(Guid ownerId, DateOnly date)
     {
         var board = await boardService.GetBoardAsync(ownerId, date);
 
@@ -20,9 +20,9 @@ public class BoardsController(BoardService boardService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateBoard([FromBody] CreateBoardRequest request)
+    public async Task<IActionResult> CreateBoard(Guid ownerId, [FromBody] CreateBoardRequest request)
     {
-        var board = await boardService.CreateBoardAsync(request.OwnerId, request.LayoutName, request.LayoutVersion);
+        var board = await boardService.CreateBoardAsync(ownerId, request.LayoutName, request.LayoutVersion);
 
         return Ok(board);
     }
