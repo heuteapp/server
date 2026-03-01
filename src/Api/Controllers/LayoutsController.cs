@@ -19,7 +19,7 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
         return Ok(board);
     }
 
-    [HttpGet]
+    [HttpGet("list")]
     public async Task<IActionResult> GetLayouts([FromQuery] GetLayoutsRequest request)
     {
         var boards = await layoutService.GetLayoutsAsync(request.OwnerId);
