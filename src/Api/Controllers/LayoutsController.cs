@@ -11,7 +11,7 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetLayout([FromQuery] GetLayoutRequest request)
     {
-        var board = await layoutService.GetLayoutByNameAsync(request.OwnerId, request.Name, request.Version);
+        var board = await layoutService.GetLayout(request.OwnerId, request.Name, request.Version);
 
         if(board == null)
             return NotFound("Layout not found for the given name and version.");

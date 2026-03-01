@@ -5,12 +5,7 @@ namespace HeuteApp.Application.Services;
 
 public class LayoutService(ILayoutRepository repository, IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteLayout?> GetLayoutByIdAsync(Guid layoutId)
-    {
-        return await repository.GetByIdAsync(layoutId);
-    }
-
-    public async Task<HeuteLayout?> GetLayoutByNameAsync(Guid ownerId, string name, int version)
+    public async Task<HeuteLayout?> GetLayout(Guid ownerId, string name, int version)
     {
         return await repository.GetByNameAsync(ownerId, name, version);
     }
