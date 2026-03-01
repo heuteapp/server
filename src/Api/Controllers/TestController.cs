@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Infrastructure.Models.Aggregates;
 using HeuteApp.Core.ValueObjects;
@@ -10,21 +9,8 @@ namespace HeuteApp.Api.Controllers;
 
 [ApiController]
 [Route("api/test")]
-public class TestController : ControllerBase
+public class TestController(HeuteDbContext context, BoardService boardService, LayoutService layoutService) : ControllerBase
 {    
-    private readonly HeuteDbContext _context;
-
-    private readonly BoardService _boardService;
-    
-    private readonly LayoutService _layoutService;
-
-    public TestController(HeuteDbContext context, BoardService boardService, LayoutService layoutService)
-    {
-        _context = context;
-        _boardService = boardService;
-        _layoutService = layoutService;
-    }
-
     // =========================
     // CREATE LAYOUT + SECTION
     // =========================
@@ -51,8 +37,8 @@ public class TestController : ControllerBase
             new(new Rect(0, 50, 100, 50), new GridSize(18, 4))
         );
 
-        _context.Layouts.Add(layout);
-        await _context.SaveChangesAsync();
+        context.Layouts.Add(layout);
+        await context.SaveChangesAsync();
 
         return Ok(layout.Id);
     }
@@ -63,14 +49,14 @@ public class TestController : ControllerBase
     [HttpPost("create-board")]
     public async Task<IActionResult> CreateBoard()
     {
-        var layout = await _layoutService.GetLayoutByIdAsync(
+        var layout = await layoutService.GetLayoutByIdAsync(
             Guid.Parse("d33cd55c-c215-4cc0-8297-31e93a5e9ef0")
         );
 
         if(layout == null)
             return NotFound("Layout not found. Please create the layout first.");
 
-        await _boardService.CreateBoardAsync(
+        await boardService.CreateBoardAsync(
             Guid.Parse("11111111-1111-1111-1111-111111111112"),
             layout,
             DateOnly.FromDateTime(DateTime.UtcNow)
@@ -83,9 +69,9 @@ public class TestController : ControllerBase
     // ADD CARD
     // =========================
     [HttpPost("{date}/add-card")]
-    public async Task<IActionResult> AddCard(DateOnly date, Guid sectionId, GridRect position)
+    public async Task<IActionResult> AddCard(DateOnly date, Guid? sectionId, GridRect? position)
     {
-        await _boardService.AddCardAsync(
+        await boardService.AddCardAsync(
             Guid.Parse("11111111-1111-1111-1111-111111111112"),
             date,
             new BoardCardProps
