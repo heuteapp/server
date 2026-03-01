@@ -26,4 +26,12 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
 
         return Ok(boards);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateLayout([FromBody] CreateLayoutRequest request)
+    {
+        var layout = await layoutService.CreateLayoutAsync(request.OwnerId, request.Name, request.Version);
+
+        return Ok(layout);
+    }
 }
