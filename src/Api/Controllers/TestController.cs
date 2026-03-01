@@ -15,14 +15,13 @@ public class TestController(HeuteDbContext context, BoardService boardService, L
     // CREATE LAYOUT + SECTION
     // =========================
     [HttpPost("create-layout")]
-    public async Task<IActionResult> CreateLayout()
+    public async Task<IActionResult> CreateLayout(string name, int version)
     {
         var layout = HeuteLayoutModel.Create(
             Guid.NewGuid(),
-            // an example guid
             Guid.Parse("11111111-1111-1111-1111-111111111111"),
-            "Test Layout",
-            version: 1
+            name,
+            version
         );
 
         layout.AddSection(
@@ -47,17 +46,15 @@ public class TestController(HeuteDbContext context, BoardService boardService, L
     // CREATE BOARD
     // =========================
     [HttpPost("create-board")]
-    public async Task<IActionResult> CreateBoard()
+    public async Task<IActionResult> CreateBoard(string name, int version)
     {
-        var layout = await layoutService.GetLayoutByIdAsync(
-            Guid.Parse("d33cd55c-c215-4cc0-8297-31e93a5e9ef0")
-        );
+        var layout = await layoutService.GetLayoutByNameAsync(Guid.Parse("11111111-1111-1111-1111-111111111111"), name, version);
 
         if(layout == null)
             return NotFound("Layout not found. Please create the layout first.");
 
         await boardService.CreateBoardAsync(
-            Guid.Parse("11111111-1111-1111-1111-111111111112"),
+            Guid.Parse("11111111-1111-1111-1111-111111111111"),
             layout,
             DateOnly.FromDateTime(DateTime.UtcNow)
         );
@@ -72,7 +69,7 @@ public class TestController(HeuteDbContext context, BoardService boardService, L
     public async Task<IActionResult> AddCard(DateOnly date, Guid? sectionId, GridRect? position)
     {
         await boardService.AddCardAsync(
-            Guid.Parse("11111111-1111-1111-1111-111111111112"),
+            Guid.Parse("11111111-1111-1111-1111-111111111111"),
             date,
             new BoardCardProps
             (
