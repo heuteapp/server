@@ -8,23 +8,24 @@ namespace HeuteApp.Api.Controllers;
 [Route("layouts")]
 public class LayoutsController(LayoutService layoutService) : ControllerBase
 {
-    [HttpGet]
-    public async Task<IActionResult> GetLayout([FromQuery] GetLayoutRequest request)
+
+    [HttpGet("{ownerId:guid}")]
+    public async Task<IActionResult> GetLayouts(Guid ownerId)
     {
-        var board = await layoutService.GetLayoutAsync(request.OwnerId, request.Name, request.Version);
+        var boards = await layoutService.GetLayoutsAsync(ownerId);
+
+        return Ok(boards);
+    }
+
+    [HttpGet("{ownerId:guid}/layout")]
+    public async Task<IActionResult> GetLayout(Guid ownerId, [FromQuery] string name, [FromQuery] int version)
+    {
+        var board = await layoutService.GetLayoutAsync(ownerId, name, version);
 
         if(board == null)
             return NotFound("Layout not found for the given name and version.");
 
         return Ok(board);
-    }
-
-    [HttpGet("list")]
-    public async Task<IActionResult> GetLayouts([FromQuery] GetLayoutsRequest request)
-    {
-        var boards = await layoutService.GetLayoutsAsync(request.OwnerId);
-
-        return Ok(boards);
     }
 
     [HttpPost]
