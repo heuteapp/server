@@ -26,6 +26,16 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return entity;
     }
 
+    public async Task<int?> GetLastVersionAsync(Guid ownerId, string name)
+    {
+        var entity = await context.Layouts
+            .Where(b => b.OwnerId == ownerId && b.Name == name)
+            .OrderByDescending(b => b.Version)
+            .FirstOrDefaultAsync();
+
+        return entity?.Version;
+    }
+
     public Task<HeuteLayout> CreateAsync(Guid ownerId, string name)
     {
         var layout = HeuteLayoutModel.Create(Guid.NewGuid(), ownerId, name, 1);
