@@ -18,4 +18,12 @@ public class BoardsController(BoardService boardService) : ControllerBase
 
         return Ok(board);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateBoard([FromBody] CreateBoardRequest request)
+    {
+        var board = await boardService.CreateBoardAsync(request.OwnerId, request.Date, request.LayoutName, request.LayoutVersion);
+
+        return Ok(board);
+    }
 }
