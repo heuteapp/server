@@ -19,8 +19,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
-builder.Services.AddScoped<BoardService, BoardService>();
 builder.Services.AddScoped<ILayoutRepository, LayoutRepository>();
+builder.Services.AddScoped<BoardService, BoardService>();
 builder.Services.AddScoped<LayoutService, LayoutService>();
 
 var app = builder.Build();
