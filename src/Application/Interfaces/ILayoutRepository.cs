@@ -8,6 +8,8 @@ public interface ILayoutRepository
     
     Task<HeuteLayout?> GetByNameAsync(Guid ownerId, string name, int version);
 
+    Task<IEnumerable<HeuteLayout>> GetByOwnerAsync(Guid ownerId);
+
     Task<int?> GetLastVersionAsync(Guid ownerId, string name);
 
     Task<HeuteLayout> CreateAsync(Guid ownerId, string name);

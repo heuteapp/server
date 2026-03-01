@@ -26,6 +26,16 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return entity;
     }
 
+    public async Task<IEnumerable<HeuteLayout>> GetByOwnerAsync(Guid ownerId)
+    {
+        var entities = await context.Layouts
+            .Include("m_sections")
+            .Where(b => b.OwnerId == ownerId)
+            .ToListAsync();
+
+        return entities;
+    }
+
     public async Task<int?> GetLastVersionAsync(Guid ownerId, string name)
     {
         var entity = await context.Layouts
