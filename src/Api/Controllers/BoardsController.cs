@@ -8,7 +8,7 @@ namespace HeuteApp.Api.Controllers;
 [Route("boards")]
 public class BoardsController(BoardService boardService) : ControllerBase
 {
-    [HttpPost]
+    [HttpGet]
     public async Task<IActionResult> GetBoard([FromQuery] GetBoardRequest request)
     {
         var board = await boardService.GetBoardByDateAsync(request.OwnerId, request.Date);
