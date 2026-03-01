@@ -23,9 +23,7 @@ public class LayoutService(ILayoutRepository repository, IUnitOfWork unitOfWork)
         if (existing != null)
             throw new Exception("Layout already exists for this owner, name, and version.");
 
-        var layout = HeuteLayout.Create(Guid.NewGuid(), ownerId, name, version);
-
-        await repository.AddAsync(layout);
+        await repository.CreateAsync(ownerId, name);
         await unitOfWork.SaveChangesAsync();
     }
 }

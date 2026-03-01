@@ -8,5 +8,5 @@ public interface ILayoutRepository
     
     Task<HeuteLayout?> GetByNameAsync(Guid ownerId, string name, int version);
 
-    Task AddAsync(HeuteLayout layout);
+    Task<HeuteLayout> CreateAsync(Guid ownerId, string name);
 }

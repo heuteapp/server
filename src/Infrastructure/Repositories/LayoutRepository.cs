@@ -26,12 +26,11 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return entity;
     }
 
-    public Task AddAsync(HeuteLayout layout)
+    public Task<HeuteLayout> CreateAsync(Guid ownerId, string name)
     {
-        if (layout is not HeuteLayoutModel model)
-            throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
-            
-        context.Layouts.Add(model);
-        return Task.CompletedTask;
+        var layout = HeuteLayoutModel.Create(Guid.NewGuid(), ownerId, name, 1);
+
+        context.Layouts.Add(layout);
+        return Task.FromResult<HeuteLayout>(layout);
     }
 }
