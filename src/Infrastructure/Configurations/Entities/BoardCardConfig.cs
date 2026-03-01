@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using HeuteApp.Infrastructure.Models.Entities;
-using HeuteApp.Infrastructure.Models.Aggregates;
 
 namespace HeuteApp.Infrastructure.Configurations.Entities;
 
@@ -19,30 +18,17 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
         builder.Property(c => c.BoardId)
                .IsRequired();
 
-        builder.Property(c => c.SectionId);
+        builder.Property(c => c.SectionId)
+                .IsRequired(false);
 
         builder.Property(c => c.Title)
                .IsRequired();
 
         builder.Ignore(c => c.IsVerified);
 
-        builder.OwnsOne(c => c.Position, position =>
-        {
-            position.Property(p => p.Col)
-                .HasColumnName("position_col");
-
-            position.Property(p => p.Row)
-                .HasColumnName("position_row");
-
-            position.Property(p => p.ColSpan)
-                .HasColumnName("position_colSpan");
-
-            position.Property(p => p.RowSpan)
-                .HasColumnName("position_rowSpan");
-        });
-
-        builder.Navigation(c => c.Position)
-               .IsRequired(false);
+        builder.Property(c => c.Position)
+                .HasColumnType("jsonb")
+                .IsRequired(false);
 
         builder.HasIndex(c => c.BoardId);
     }
