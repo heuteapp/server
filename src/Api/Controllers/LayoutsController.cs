@@ -8,7 +8,7 @@ namespace HeuteApp.Api.Controllers;
 [Route("user/{ownerId:guid}/layouts")]
 public class LayoutsController(LayoutService layoutService) : ControllerBase
 {
-    [HttpGet("{name:string}")]
+    [HttpGet("{name}")]
     public async Task<IActionResult> GetLayout(Guid ownerId, string name, [FromQuery] int? version)
     {
         var board = await layoutService.GetLayoutAsync(ownerId, name, version);
