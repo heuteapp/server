@@ -20,7 +20,7 @@ public class BoardsController(BoardService boardService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateBoard([FromQuery] CreateBoardRequest request)
+    public async Task<IActionResult> CreateBoard([FromBody] CreateBoardRequest request)
     {
         var board = await boardService.CreateBoardAsync(request.OwnerId, request.LayoutName, request.LayoutVersion);
 
