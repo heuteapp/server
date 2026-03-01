@@ -11,7 +11,7 @@ public class BoardsController(BoardService boardService) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetBoard([FromQuery] GetBoardRequest request)
     {
-        var board = await boardService.GetBoardByDateAsync(request.OwnerId, request.Date);
+        var board = await boardService.GetBoardAsync(request.OwnerId, request.Date);
 
         if(board == null)
             return NotFound("Board not found for the given date.");
