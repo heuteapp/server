@@ -11,8 +11,10 @@ public class BoardService(IBoardRepository boardRepository, ILayoutRepository la
         return await boardRepository.GetByDateAsync(ownerId, date);
     }
 
-    public async Task<HeuteBoard> CreateBoardAsync(Guid ownerId, DateOnly date, string layoutName, int layoutVersion)
+    public async Task<HeuteBoard> CreateBoardAsync(Guid ownerId, string layoutName, int layoutVersion)
     {
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
+        
         var existing = await boardRepository
             .GetByDateAsync(ownerId, date);
 

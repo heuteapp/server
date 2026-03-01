@@ -22,7 +22,7 @@ public class BoardsController(BoardService boardService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateBoard([FromQuery] CreateBoardRequest request)
     {
-        var board = await boardService.CreateBoardAsync(request.OwnerId, request.Date, request.LayoutName, request.LayoutVersion);
+        var board = await boardService.CreateBoardAsync(request.OwnerId, request.LayoutName, request.LayoutVersion);
 
         return Ok(board);
     }
