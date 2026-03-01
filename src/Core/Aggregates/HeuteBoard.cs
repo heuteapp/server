@@ -145,7 +145,7 @@ public class HeuteBoard
 
         if (!section.Size.Contains(position))
             throw new InvalidOperationException(
-                "Card is out of section bounds.");
+                $"Position {position} does not fit within section size {section.Size}.");
     }
 
     private void EnsureNoOverlap(Guid? cardId, Guid sectionId, GridRect position)
