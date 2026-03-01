@@ -13,6 +13,9 @@ public class BoardConfig : IEntityTypeConfiguration<HeuteBoardModel>
 
         builder.HasKey(b => b.Id);
 
+        builder.Property(c => c.Id)
+            .ValueGeneratedNever();
+
         builder.Property(b => b.OwnerId)
             .IsRequired();
 

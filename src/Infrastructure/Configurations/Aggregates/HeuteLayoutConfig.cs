@@ -13,6 +13,9 @@ public class LayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
 
        builder.HasKey(l => l.Id);
 
+       builder.Property(c => c.Id)
+              .ValueGeneratedNever();
+
        builder.Property(l => l.OwnerId)
               .IsRequired();
 

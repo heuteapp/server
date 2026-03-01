@@ -13,6 +13,9 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
 
         builder.HasKey(c => c.Id);
 
+        builder.Property(c => c.Id)
+                .ValueGeneratedNever();
+                
         builder.Property(c => c.BoardId)
                .IsRequired();
 
