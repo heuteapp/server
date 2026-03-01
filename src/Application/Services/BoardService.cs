@@ -11,7 +11,7 @@ public class BoardService(IBoardRepository boardRepository, ILayoutRepository la
         return await boardRepository.GetByDateAsync(ownerId, date);
     }
 
-    public async Task CreateBoardAsync(Guid ownerId, HeuteLayout layout, DateOnly date)
+    public async Task<HeuteBoard> CreateBoardAsync(Guid ownerId, DateOnly date, string layoutName, int layoutVersion)
     {
         var existing = await boardRepository
             .GetByDateAsync(ownerId, date);
@@ -19,8 +19,13 @@ public class BoardService(IBoardRepository boardRepository, ILayoutRepository la
         if (existing != null)
             throw new Exception("Board already exists for this date.");
 
-        await boardRepository.CreateAsync(Guid.NewGuid(), ownerId, layout, date);
+        var layout = await layoutRepository.GetByNameAsync(ownerId, layoutName, layoutVersion)
+            ?? throw new Exception("Layout not found.");
+
+        var board = await boardRepository.CreateAsync(Guid.NewGuid(), ownerId, date, layout);
         await unitOfWork.SaveChangesAsync();
+
+        return board;
     }
 
     public async Task AddCardAsync(Guid ownerId, DateOnly date, BoardCardProps props)
