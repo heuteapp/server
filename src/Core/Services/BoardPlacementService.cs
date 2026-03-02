@@ -9,11 +9,12 @@ public class BoardPlacementService
 {
 
     public BoardCard AddCard(HeuteBoard board, HeuteLayout layout, Guid id, BoardCardProps props)
-    {
+    {        
+        ArgumentNullException.ThrowIfNull(board);
+
         if(board.IsMaxCardsReached())
             throw new InvalidOperationException($"Board cannot have more than {HeuteBoard.MaxCardCount} cards");
 
-        ArgumentNullException.ThrowIfNull(board);
         ArgumentNullException.ThrowIfNull(props);
 
         var card = board.Internal_CreateCard(id, props);
