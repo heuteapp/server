@@ -25,7 +25,7 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
     {
         var layouts = await layoutService.GetLayoutsAsync(ownerId);
 
-        return Ok(layouts.Select(l => l.ToPublicResponse()));
+        return Ok(layouts.Select(l => l.ToPublicResponse()).ToList());
     }
 
     [HttpPost]
@@ -33,6 +33,10 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
     {
         var layout = await layoutService.CreateLayoutAsync(ownerId, request.Name);
 
-        return Ok(layout.ToPublicResponse());
+        return CreatedAtAction(
+            nameof(GetLayout), 
+            new { ownerId, name = layout.Name, version = layout.Version }, 
+            layout.ToPublicResponse()
+        );
     }
 }
