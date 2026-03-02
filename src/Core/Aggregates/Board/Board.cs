@@ -2,7 +2,7 @@ using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Aggregates.Board;
 
-public class HeuteBoard
+public class Board
 {
     private readonly List<BoardCard> m_cards = [];
 
@@ -11,9 +11,9 @@ public class HeuteBoard
         return BoardCard.Create(id, props);
     }
 
-    protected HeuteBoard() { }
+    protected Board() { }
 
-    protected HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    protected Board(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
     {
         Id = id;
         OwnerId = ownerId;
@@ -21,9 +21,9 @@ public class HeuteBoard
         Date = date;
     }
 
-    public static HeuteBoard Create(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    public static Board Create(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
     {
-        return new HeuteBoard(id, ownerId, layoutId, date);
+        return new Board(id, ownerId, layoutId, date);
     }
 
     //

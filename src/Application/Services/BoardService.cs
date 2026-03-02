@@ -5,12 +5,12 @@ namespace HeuteApp.Application.Services;
 
 public class BoardService(IBoardRepository boardRepository, ILayoutRepository layoutRepository, IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteBoard?> GetBoardAsync(Guid ownerId, DateOnly date)
+    public async Task<Board?> GetBoardAsync(Guid ownerId, DateOnly date)
     {
         return await boardRepository.GetByDateAsync(ownerId, date);
     }
 
-    public async Task<HeuteBoard> CreateBoardAsync(Guid ownerId, string layoutName, int layoutVersion)
+    public async Task<Board> CreateBoardAsync(Guid ownerId, string layoutName, int layoutVersion)
     {
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 

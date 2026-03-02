@@ -3,7 +3,7 @@ using HeuteApp.Infrastructure.Models.Entities;
 
 namespace HeuteApp.Infrastructure.Models.Aggregates;
 
-public class HeuteBoardModel : HeuteBoard
+public class HeuteBoardModel : Board
 {    
     protected override BoardCard OnCreateCard(Guid id, BoardCardProps props)
     {
