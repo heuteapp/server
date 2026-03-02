@@ -1,9 +1,7 @@
-using HeuteApp.Core.Enums;
-
 namespace HeuteApp.Core.ValueObjects;
 
 public sealed record LayoutKey(
-    LayoutScopeType Scope,
+    Guid? OwnerId,
     string Name,
     int Version
 );
