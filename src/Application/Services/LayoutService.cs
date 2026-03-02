@@ -1,21 +1,25 @@
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Application.Interfaces;
+using HeuteApp.Application.Results.Layout;
+using HeuteApp.Application.Mappers;
 
 namespace HeuteApp.Application.Services;
 
 public class LayoutService(ILayoutRepository repository, IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteLayout?> GetLayoutAsync(Guid ownerId, string name, int? version)
+    public async Task<HeuteLayoutResult?> GetLayoutAsync(Guid ownerId, string name, int? version)
     {
-        return await repository.GetByNameAsync(ownerId, name, version);
+        var layout = await repository.GetByNameAsync(ownerId, name, version);
+        return layout?.ToResult();
     }
 
-    public async Task<IEnumerable<HeuteLayout>> GetLayoutsAsync(Guid ownerId)
+    public async Task<IEnumerable<HeuteLayoutResult>> GetLayoutsAsync(Guid ownerId)
     {
-        return await repository.GetByOwnerAsync(ownerId);
+        var layouts = await repository.GetByOwnerAsync(ownerId);
+        return layouts.Select(l => l.ToResult());
     }
 
-    public async Task<HeuteLayout> CreateLayoutAsync(Guid ownerId, string name, int version)
+    public async Task<HeuteLayoutResult> CreateLayoutAsync(Guid ownerId, string name, int version)
     {
         var existing = await repository
             .GetByNameAsync(ownerId, name, version);
@@ -26,6 +30,6 @@ public class LayoutService(ILayoutRepository repository, IUnitOfWork unitOfWork)
         var layout = await repository.CreateAsync(ownerId, name);
         await unitOfWork.SaveChangesAsync();
 
-        return layout;
+        return layout.ToResult();
     }
 }
