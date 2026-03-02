@@ -3,7 +3,6 @@ using HeuteApp.Application.Interfaces;
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Infrastructure.Models.Layout;
-using HeuteApp.Core.ValueObjects.Layout;
 using HeuteApp.Application.Models.Layout.Contracts;
 
 namespace HeuteApp.Infrastructure.Repositories;
