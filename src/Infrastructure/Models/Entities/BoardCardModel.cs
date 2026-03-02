@@ -1,4 +1,4 @@
-using HeuteApp.Core.Entities;
+using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Infrastructure.Models.Aggregates;
 
 namespace HeuteApp.Infrastructure.Models.Entities;

@@ -1,5 +1,4 @@
-using HeuteApp.Core.Entities;
-using HeuteApp.Core.Mappers;
+using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Infrastructure.Models.Entities;
 
 namespace HeuteApp.Infrastructure.Mappers;

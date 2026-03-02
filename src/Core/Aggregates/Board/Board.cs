@@ -1,7 +1,6 @@
-using HeuteApp.Core.Entities;
 using HeuteApp.Core.ValueObjects;
 
-namespace HeuteApp.Core.Aggregates;
+namespace HeuteApp.Core.Aggregates.Board;
 
 public class HeuteBoard
 {

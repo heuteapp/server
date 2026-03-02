@@ -1,6 +1,5 @@
-using HeuteApp.Core.Aggregates;
 using HeuteApp.Application.Interfaces;
-using HeuteApp.Core.Entities;
+using HeuteApp.Core.Aggregates.Board;
 
 namespace HeuteApp.Application.Services;
 

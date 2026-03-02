@@ -1,4 +1,5 @@
 using HeuteApp.Core.Aggregates;
+using HeuteApp.Core.Aggregates.Board;
 
 namespace HeuteApp.Application.Interfaces;
 
