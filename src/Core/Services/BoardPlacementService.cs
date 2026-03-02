@@ -18,8 +18,27 @@ public class BoardPlacementService
 
         var card = board.Internal_CreateCard(id, props);
 
+        if(card.CanBePlaced)
+        {
+            PlaceCard(board, layout, card.Id, card.SectionId!.Value, card.Position!);
+        }
+
         board.Internal_AddCard(card);
         return card;
+    }
+
+    public void PlaceCard(HeuteBoard board, HeuteLayout layout, Guid cardId, Guid sectionId, GridRect position)
+    {
+        ArgumentNullException.ThrowIfNull(board);
+        ArgumentNullException.ThrowIfNull(layout);
+
+        var card = board.Cards.FirstOrDefault(c => c.Id == cardId) 
+            ?? throw new InvalidOperationException("Card not found");
+
+        EnsureFitsInSection(layout, sectionId, position);
+        EnsureNoOverlap(board, cardId, sectionId, position);
+
+        card.DoPlace(sectionId, position);
     }
 
     public bool IsFitsInSection(HeuteLayout layout, Guid sectionId, GridRect position)

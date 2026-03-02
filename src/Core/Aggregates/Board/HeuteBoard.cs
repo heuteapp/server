@@ -7,14 +7,14 @@ public class HeuteBoard
 {
     public static int MaxCardCount => 12;
 
+    public static HeuteBoard Create(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    {
+        return new HeuteBoard(id, ownerId, layoutId, date);
+    }
+
     //
 
     private readonly List<BoardCard> m_cards = [];
-
-    protected virtual BoardCard OnCreateCard(Guid id, BoardCardProps props)
-    {
-        return BoardCard.Create(id, props);
-    }
 
     protected HeuteBoard() { }
 
@@ -26,9 +26,9 @@ public class HeuteBoard
         Date = date;
     }
 
-    public static HeuteBoard Create(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    internal protected virtual BoardCard Internal_CreateCard(Guid id, BoardCardProps props)
     {
-        return new HeuteBoard(id, ownerId, layoutId, date);
+        return BoardCard.Create(id, props);
     }
 
     //
@@ -48,13 +48,6 @@ public class HeuteBoard
     public bool IsMaxCardsReached()
     {
         return Cards.Count >= MaxCardCount;
-    }
-
-    //
-
-    internal BoardCard Internal_CreateCard(Guid id, BoardCardProps props)
-    {
-        return OnCreateCard(id, props);
     }
 
     internal bool Internal_AddCard(BoardCard card)
