@@ -7,6 +7,18 @@ namespace HeuteApp.Core.Services;
 
 public class BoardPlacementService
 {
+
+    public BoardCard AddCard(HeuteBoard board, HeuteLayout layout, Guid id, BoardCardProps props)
+    {
+        ArgumentNullException.ThrowIfNull(board);
+        ArgumentNullException.ThrowIfNull(props);
+
+        var card = board.Internal_CreateCard(id, props);
+        
+        board.Internal_AddCard(card);
+        return card;
+    }
+
     public bool IsFitsInSection(HeuteLayout layout, Guid sectionId, GridRect position)
     {
         ArgumentNullException.ThrowIfNull(layout);
