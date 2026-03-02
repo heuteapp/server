@@ -36,21 +36,17 @@ public class BoardCard
 
     public GridRect? Position { get; internal set; }
 
-    public bool IsPlaceable
-    {
-        get
-        {
-            return SectionId != null && Position != null;
-        }
-    }
+    public bool HasPlacement => 
+        SectionId is not null && 
+        Position is not null;
 
-    public bool IsPlaced
-    {
-        get
-        {
-            return IsPlaceable && IsVerified;
-        }
-    }
+    public bool CanBePlaced =>
+        HasPlacement &&
+        !IsVerified;
+
+    public bool IsPlaced =>
+        HasPlacement &&
+        IsVerified;
 
     public bool IsVerified { get; private set; } = false;
 
