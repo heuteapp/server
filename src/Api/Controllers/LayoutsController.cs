@@ -17,21 +17,21 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
         if(layout == null)
             return NotFound("Layout not found for the given name and version.");
 
-        return Ok(LayoutResponse.FromDomain(layout));
+        return Ok(layout);
     }    
     
     [HttpGet]
     public async Task<IActionResult> GetLayouts(Guid ownerId)
     {
-        var boards = await layoutService.GetLayoutsAsync(ownerId);
+        var layouts = await layoutService.GetLayoutsAsync(ownerId);
 
-        return Ok(boards);
+        return Ok(layouts);
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateLayout(Guid ownerId, [FromBody] CreateLayoutRequest request)
     {
-        var layout = await layoutService.CreateLayoutAsync(ownerId, request.Name, request.Version);
+        var layout = await layoutService.CreateLayoutAsync(ownerId, request.Name);
 
         return Ok(layout);
     }
