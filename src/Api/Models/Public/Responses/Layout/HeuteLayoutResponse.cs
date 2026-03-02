@@ -1,8 +1,6 @@
 namespace HeuteApp.Api.Models.Public.Responses.Layout;
 
-public record HeuteLayoutResponse(
-    Guid Id,
-    Guid OwnerId,
+public sealed record PublicHeuteLayoutResponse(
     string Name,
     int Version,
-    IReadOnlyList<LayoutS> Sections);
+    IReadOnlyList<PublicLayoutSectionResponse> Sections);
