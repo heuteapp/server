@@ -41,6 +41,13 @@ public class HeuteBoard
 
     //
 
+    public bool IsMaxCardsReached()
+    {
+        return Cards.Count >= 12;
+    }
+
+    //
+
     internal BoardCard Internal_CreateCard(Guid id, BoardCardProps props)
     {
         return OnCreateCard(id, props);
