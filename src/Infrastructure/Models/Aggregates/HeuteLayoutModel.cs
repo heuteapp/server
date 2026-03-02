@@ -3,7 +3,7 @@ using HeuteApp.Infrastructure.Models.Entities;
 
 namespace HeuteApp.Infrastructure.Models.Aggregates;
 
-public class HeuteLayoutModel : HeuteLayout
+public class HeuteLayoutModel : Layout
 {
     protected override LayoutSection OnCreateSection(Guid id, string name, LayoutSectionProps props)
     {

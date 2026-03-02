@@ -5,7 +5,7 @@ namespace HeuteApp.Application.Mappers;
 
 public static class LayoutMapper
 {
-    public static LayoutResult ToResult(this HeuteLayout layout)
+    public static LayoutResult ToResult(this Layout layout)
     {
         ArgumentNullException.ThrowIfNull(layout);
         

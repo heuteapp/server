@@ -29,7 +29,7 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return entity;
     }
 
-    public Task<Board> CreateAsync(Guid guid, Guid ownerId, DateOnly date, HeuteLayout layout)
+    public Task<Board> CreateAsync(Guid guid, Guid ownerId, DateOnly date, Layout layout)
     {
         if(layout is not HeuteLayoutModel layoutModel)
             throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
