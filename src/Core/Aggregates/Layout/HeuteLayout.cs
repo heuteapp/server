@@ -1,6 +1,5 @@
-using HeuteApp.Core.Entities;
  
-namespace HeuteApp.Core.Aggregates;
+namespace HeuteApp.Core.Aggregates.Layout;
 
 public class HeuteLayout
 {

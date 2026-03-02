@@ -1,3 +1,4 @@
+using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Aggregates.Board;

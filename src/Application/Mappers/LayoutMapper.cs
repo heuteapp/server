@@ -1,6 +1,5 @@
 using HeuteApp.Application.Models.Result;
-using HeuteApp.Core.Aggregates;
-using HeuteApp.Core.Entities;
+using HeuteApp.Core.Aggregates.Layout;
 
 namespace HeuteApp.Application.Mappers;
 

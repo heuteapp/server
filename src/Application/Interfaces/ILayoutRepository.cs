@@ -1,4 +1,4 @@
-using HeuteApp.Core.Aggregates;
+using HeuteApp.Core.Aggregates.Layout;
 
 namespace HeuteApp.Application.Interfaces;
 

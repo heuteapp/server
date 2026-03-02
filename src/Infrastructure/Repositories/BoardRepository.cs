@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using HeuteApp.Core.Aggregates.Board;
+using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Infrastructure.Persistence;
-using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Infrastructure.Models.Aggregates;
-using HeuteApp.Core.Aggregates;
 
 namespace HeuteApp.Infrastructure.Repositories;
 

@@ -1,6 +1,6 @@
 using HeuteApp.Core.ValueObjects;
 
-namespace HeuteApp.Core.Entities;
+namespace HeuteApp.Core.Aggregates.Layout;
 
 public class LayoutSection
 {
