@@ -1,15 +1,15 @@
-using HeuteApp.Application.Models.Result;
 using HeuteApp.Core.Aggregates.Layout;
+using HeuteApp.Application.Results.Layout;
 
 namespace HeuteApp.Application.Mappers;
 
 public static class LayoutMapper
 {
-    public static LayoutResult ToResult(this HeuteLayout layout)
+    public static HeuteLayoutResult ToResult(this HeuteLayout layout)
     {
         ArgumentNullException.ThrowIfNull(layout);
         
-        return new LayoutResult(
+        return new HeuteLayoutResult(
             layout.Id,
             layout.OwnerId,
             layout.Name,
