@@ -21,15 +21,22 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
 
     public async Task<HeuteLayout?> GetByKeyAsync(LayoutLookup key)
     {
-        var ownerId = key.OwnerId;
-        var name = key.Name;
-        var version = key.Version ?? await GetLastestVersionAsync(key.OwnerId, key.Name);
-
-        var entity = await context.Layouts
+        var query = context.Layouts
             .Include("m_sections")
-            .FirstOrDefaultAsync(b => b.OwnerId == ownerId && b.Name == name && b.Version == version);
+            .Where(l =>
+                l.OwnerId == key.OwnerId &&
+                l.Name == key.Name);
 
-        return entity;
+        if (key.Version.HasValue)
+        {
+            query = query.Where(l => l.Version == key.Version.Value);
+        }
+        else
+        {
+            query = query.OrderByDescending(l => l.Version);
+        }
+
+        return await query.FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<HeuteLayout>> GetByOwnerAsync(Guid ownerId)
