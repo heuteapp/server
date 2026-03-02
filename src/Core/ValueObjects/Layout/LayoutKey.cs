@@ -6,9 +6,9 @@ public sealed record LayoutKey
 
     public string Name { get; }
     
-    public int? Version { get; }
+    public int Version { get; }
 
-    public LayoutKey(Guid? ownerId, string name, int? version)
+    public LayoutKey(Guid? ownerId, string name, int version)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
