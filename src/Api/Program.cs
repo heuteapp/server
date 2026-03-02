@@ -4,6 +4,7 @@ using HeuteApp.Application.Services;
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Infrastructure.Repositories;
 using Npgsql;
+using HeuteApp.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<ILayoutRepository, LayoutRepository>();
+builder.Services.AddScoped<BoardPlacementService, BoardPlacementService>();
 builder.Services.AddScoped<BoardService, BoardService>();
 builder.Services.AddScoped<LayoutService, LayoutService>();
 
