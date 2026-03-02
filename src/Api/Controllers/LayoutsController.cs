@@ -1,5 +1,5 @@
+using HeuteApp.Api.Mappers.Layout;
 using HeuteApp.Api.Models.Request;
-using HeuteApp.Api.Models.Response;
 using HeuteApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +17,7 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
         if(layout == null)
             return NotFound("Layout not found for the given name and version.");
 
-        return Ok(layout);
+        return Ok(layout.ToPublicResponse());
     }    
     
     [HttpGet]
@@ -25,7 +25,7 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
     {
         var layouts = await layoutService.GetLayoutsAsync(ownerId);
 
-        return Ok(layouts);
+        return Ok(layouts.Select(l => l.ToPublicResponse()));
     }
 
     [HttpPost]
@@ -33,6 +33,6 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
     {
         var layout = await layoutService.CreateLayoutAsync(ownerId, request.Name);
 
-        return Ok(layout);
+        return Ok(layout.ToPublicResponse());
     }
 }
