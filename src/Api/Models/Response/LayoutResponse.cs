@@ -1,5 +1,4 @@
-using HeuteApp.Core.Aggregates;
-using HeuteApp.Core.Entities;
+using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Api.Models.Response;
