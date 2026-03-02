@@ -1,6 +1,6 @@
 namespace HeuteApp.Core.Enums;
 
-public enum LayoutScope
+public enum LayoutScopeType
 {
     System,
 
