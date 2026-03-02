@@ -41,11 +41,11 @@ public class HeuteBoard
 
     //
 
-    internal BoardCard Internal_CreateCard(Guid id, BoardCardProps props)
+    internal BoardCard Internal_AddCard(Guid id, BoardCardProps props)
     {
-        var boardCard = OnCreateCard(id, props);
-        m_cards.Add(boardCard);
-        return boardCard;
+        var card = OnCreateCard(id, props);
+        m_cards.Add(card);
+        return card;
     }
 
     internal BoardCard Internal_RemoveCard(Guid cardId)
