@@ -1,7 +1,7 @@
 using HeuteApp.Core.Aggregates.Board;
-using HeuteApp.Infrastructure.Models.Entities;
+using HeuteApp.Infrastructure.Models.Aggregates;
 
-namespace HeuteApp.Infrastructure.Models.Aggregates;
+namespace HeuteApp.Infrastructure.Models.Board;
 
 public class HeuteBoardModel : HeuteBoard
 {    

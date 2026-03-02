@@ -4,6 +4,7 @@ using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Infrastructure.Models.Aggregates;
+using HeuteApp.Infrastructure.Models.Board;
 
 namespace HeuteApp.Infrastructure.Repositories;
 

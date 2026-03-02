@@ -1,7 +1,6 @@
 using HeuteApp.Core.Aggregates.Board;
-using HeuteApp.Infrastructure.Models.Aggregates;
 
-namespace HeuteApp.Infrastructure.Models.Entities;
+namespace HeuteApp.Infrastructure.Models.Board;
 
 public class BoardCardModel : BoardCard
 {

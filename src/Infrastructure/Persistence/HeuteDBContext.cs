@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using HeuteApp.Infrastructure.Models.Aggregates;
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Core.Aggregates.Board;
+using HeuteApp.Infrastructure.Models.Board;
 
 namespace HeuteApp.Infrastructure.Persistence;
 
