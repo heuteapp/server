@@ -7,7 +7,6 @@ namespace HeuteApp.Core.Services;
 
 public class BoardPlacementService
 {
-
     public BoardCard AddCard(HeuteBoard board, HeuteLayout layout, Guid id, BoardCardProps props)
     {        
         ArgumentNullException.ThrowIfNull(board);
