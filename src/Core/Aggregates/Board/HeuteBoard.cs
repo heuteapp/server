@@ -48,6 +48,9 @@ public class HeuteBoard
 
     internal bool Internal_AddCard(BoardCard card)
     {
+        if(Cards.Count >= 12)
+            throw new InvalidOperationException("Board cannot have more than 12 cards");
+
         ArgumentNullException.ThrowIfNull(card);
 
         if (m_cards.Any(c => c.Id == card.Id))
