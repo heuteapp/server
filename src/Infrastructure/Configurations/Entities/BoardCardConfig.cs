@@ -25,6 +25,10 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
                .IsRequired();
 
         builder.Ignore(c => c.IsVerified);
+        builder.Ignore(c => c.HasPlacement);
+        builder.Ignore(c => c.CanBePlaced);
+        builder.Ignore(c => c.IsPlaced);
+
 
         builder.Property(c => c.Position)
                 .HasColumnType("jsonb")
