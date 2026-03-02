@@ -5,5 +5,4 @@ public sealed record HeuteBoardResult(
     Guid OwnerId,
     Guid LayoutId,
     DateOnly Date,
-    IReadOnlyCollection<BoardCardResult> Cards
-);
+    IReadOnlyCollection<BoardCardResult> Cards);
