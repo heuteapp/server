@@ -19,10 +19,10 @@ public class LayoutService(ILayoutRepository repository, IUnitOfWork unitOfWork)
         return layouts.Select(l => l.ToResult());
     }
 
-    public async Task<HeuteLayoutResult> CreateLayoutAsync(Guid ownerId, string name, int version)
+    public async Task<HeuteLayoutResult> CreateLayoutAsync(Guid ownerId, string name)
     {
-        var existing = await repository
-            .GetByNameAsync(ownerId, name, version);
+        var lastVersion = await repository.GetLastestVersionAsync(ownerId, name);
+        var existing = await repository.GetByNameAsync(ownerId, name, lastVersion);
 
         if (existing != null)
             throw new Exception("Layout already exists for this owner, name, and version.");
