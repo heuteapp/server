@@ -5,17 +5,17 @@ namespace HeuteApp.Application.Services;
 
 public class LayoutService(ILayoutRepository repository, IUnitOfWork unitOfWork)
 {
-    public async Task<Layout?> GetLayoutAsync(Guid ownerId, string name, int? version)
+    public async Task<HeuteLayout?> GetLayoutAsync(Guid ownerId, string name, int? version)
     {
         return await repository.GetByNameAsync(ownerId, name, version);
     }
 
-    public async Task<IEnumerable<Layout>> GetLayoutsAsync(Guid ownerId)
+    public async Task<IEnumerable<HeuteLayout>> GetLayoutsAsync(Guid ownerId)
     {
         return await repository.GetByOwnerAsync(ownerId);
     }
 
-    public async Task<Layout> CreateLayoutAsync(Guid ownerId, string name, int version)
+    public async Task<HeuteLayout> CreateLayoutAsync(Guid ownerId, string name, int version)
     {
         var existing = await repository
             .GetByNameAsync(ownerId, name, version);

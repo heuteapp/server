@@ -1,6 +1,6 @@
  namespace HeuteApp.Core.Aggregates.Layout;
 
-public class Layout
+public class HeuteLayout
 {
     private readonly List<LayoutSection> m_sections = [];
 
@@ -9,12 +9,12 @@ public class Layout
         return LayoutSection.Create(id, name, props);
     }
 
-    protected Layout()
+    protected HeuteLayout()
     {
         
     }
 
-    protected Layout(Guid id, Guid ownerId, string name, int version)
+    protected HeuteLayout(Guid id, Guid ownerId, string name, int version)
     {
         Id = id;
         OwnerId = ownerId;
@@ -22,9 +22,9 @@ public class Layout
         Version = version;
     }
 
-    public static Layout Create(Guid id, Guid ownerId, string name, int version)
+    public static HeuteLayout Create(Guid id, Guid ownerId, string name, int version)
     {
-        return new Layout(id, ownerId, name, version);
+        return new HeuteLayout(id, ownerId, name, version);
     }
 
     //

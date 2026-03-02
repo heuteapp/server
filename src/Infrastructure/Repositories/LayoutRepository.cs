@@ -8,7 +8,7 @@ namespace HeuteApp.Infrastructure.Repositories;
 
 public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
 {
-    public async Task<Layout?> GetByIdAsync(Guid layoutId)
+    public async Task<HeuteLayout?> GetByIdAsync(Guid layoutId)
     {
         var entity = await context.Layouts
             .Include("m_sections")
@@ -17,7 +17,7 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return entity;
     }
 
-    public async Task<Layout?> GetByNameAsync(Guid ownerId, string name, int? version)
+    public async Task<HeuteLayout?> GetByNameAsync(Guid ownerId, string name, int? version)
     {
         var m_version = version ?? await GetLastestVersionAsync(ownerId, name);
 
@@ -28,7 +28,7 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return entity;
     }
 
-    public async Task<IEnumerable<Layout>> GetByOwnerAsync(Guid ownerId)
+    public async Task<IEnumerable<HeuteLayout>> GetByOwnerAsync(Guid ownerId)
     {
         var entities = await context.Layouts
             .Include("m_sections")
@@ -48,7 +48,7 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return entity?.Version;
     }
 
-    public async Task<Layout> CreateAsync(Guid ownerId, string name)
+    public async Task<HeuteLayout> CreateAsync(Guid ownerId, string name)
     {
         var lastVersion = await GetLastestVersionAsync(ownerId, name);
 

@@ -9,7 +9,7 @@ namespace HeuteApp.Infrastructure.Repositories;
 
 public class BoardRepository(HeuteDbContext conext) : IBoardRepository
 {
-    public async Task<Board?> GetByIdAsync(Guid boardId)
+    public async Task<HeuteBoard?> GetByIdAsync(Guid boardId)
     {
         var entity = await conext.Boards
             .Include("m_cards")
@@ -19,7 +19,7 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return entity;
     }
 
-    public async Task<Board?> GetByDateAsync(Guid ownerId, DateOnly date)
+    public async Task<HeuteBoard?> GetByDateAsync(Guid ownerId, DateOnly date)
     {
         var entity = await conext.Boards
             .Include("m_cards")
@@ -29,7 +29,7 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return entity;
     }
 
-    public Task<Board> CreateAsync(Guid guid, Guid ownerId, DateOnly date, Layout layout)
+    public Task<HeuteBoard> CreateAsync(Guid guid, Guid ownerId, DateOnly date, HeuteLayout layout)
     {
         if(layout is not HeuteLayoutModel layoutModel)
             throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
@@ -37,6 +37,6 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         var model = HeuteBoardModel.Create(guid, ownerId, layoutModel, date);
 
         conext.Boards.Add(model);
-        return Task.FromResult<Board>(model);
+        return Task.FromResult<HeuteBoard>(model);
     }
 }

@@ -10,7 +10,7 @@ public sealed record LayoutResponse(
     int Version,
     IEnumerable<LayoutSectionResponse> Sections) 
 {
-    public static LayoutResponse FromDomain(Layout layout)
+    public static LayoutResponse FromDomain(HeuteLayout layout)
     {
         return new LayoutResponse(
             layout.Id,

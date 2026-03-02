@@ -5,9 +5,9 @@ namespace HeuteApp.Application.Interfaces;
 
 public interface IBoardRepository
 {    
-    Task<Board?> GetByIdAsync(Guid boardId);
+    Task<HeuteBoard?> GetByIdAsync(Guid boardId);
 
-    Task<Board?> GetByDateAsync(Guid ownerId, DateOnly date);
+    Task<HeuteBoard?> GetByDateAsync(Guid ownerId, DateOnly date);
 
-    Task<Board> CreateAsync(Guid guid, Guid ownerId, DateOnly date, Layout layout);
+    Task<HeuteBoard> CreateAsync(Guid guid, Guid ownerId, DateOnly date, HeuteLayout layout);
 }

@@ -1,8 +1,9 @@
+using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Core.ValueObjects;
 
 namespace HeuteApp.Core.Aggregates.Board;
 
-public class Board
+public class HeuteBoard
 {
     private readonly List<BoardCard> m_cards = [];
 
@@ -11,9 +12,9 @@ public class Board
         return BoardCard.Create(id, props);
     }
 
-    protected Board() { }
+    protected HeuteBoard() { }
 
-    protected Board(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    protected HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
     {
         Id = id;
         OwnerId = ownerId;
@@ -21,9 +22,9 @@ public class Board
         Date = date;
     }
 
-    public static Board Create(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    public static HeuteBoard Create(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
     {
-        return new Board(id, ownerId, layoutId, date);
+        return new HeuteBoard(id, ownerId, layoutId, date);
     }
 
     //
@@ -47,7 +48,7 @@ public class Board
         UnplaceAllCards();
     }
 
-    public BoardCard AddCard(Layout.Layout layout, Guid id, BoardCardProps props)
+    public BoardCard AddCard(HeuteLayout layout, Guid id, BoardCardProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
 
@@ -80,7 +81,7 @@ public class Board
         DoRemoveCard(cardId);
     }
 
-    public void PlaceCard(Layout.Layout layout, Guid cardId, Guid sectionId, GridRect position)
+    public void PlaceCard(Layout.HeuteLayout layout, Guid cardId, Guid sectionId, GridRect position)
     {
         if (!HasCard(cardId))
         {
@@ -134,7 +135,7 @@ public class Board
         return card;
     }
 
-    private void EnsureFitsInSection(Layout.Layout layout, Guid sectionId, GridRect position)
+    private void EnsureFitsInSection(Layout.HeuteLayout layout, Guid sectionId, GridRect position)
     {
         ArgumentNullException.ThrowIfNull(layout);
 
