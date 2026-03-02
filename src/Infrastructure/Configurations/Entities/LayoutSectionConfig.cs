@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using HeuteApp.Infrastructure.Models.Entities;
+using HeuteApp.Infrastructure.Models.Layout;
 
 namespace HeuteApp.Infrastructure.Configurations.Entities;
 
