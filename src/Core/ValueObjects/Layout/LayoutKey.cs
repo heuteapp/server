@@ -1,4 +1,4 @@
-namespace HeuteApp.Core.ValueObjects;
+namespace HeuteApp.Core.ValueObjects.Layout;
 
 public sealed record LayoutKey(
     Guid? OwnerId,
