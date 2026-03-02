@@ -37,7 +37,7 @@ public class HeuteLayout
 
     public string Name => m_key.Name;
 
-    public int? Version => m_key.Version;
+    public int Version => m_key.Version;
 
     public IReadOnlyCollection<LayoutSection> Sections => m_sections;
 
