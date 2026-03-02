@@ -5,6 +5,10 @@ namespace HeuteApp.Core.Aggregates.Board;
 
 public class HeuteBoard
 {
+    public static int MaxCardCount => 12;
+
+    //
+
     private readonly List<BoardCard> m_cards = [];
 
     protected virtual BoardCard OnCreateCard(Guid id, BoardCardProps props)
@@ -43,7 +47,7 @@ public class HeuteBoard
 
     public bool IsMaxCardsReached()
     {
-        return Cards.Count >= 12;
+        return Cards.Count >= MaxCardCount;
     }
 
     //
@@ -55,9 +59,6 @@ public class HeuteBoard
 
     internal bool Internal_AddCard(BoardCard card)
     {
-        if(Cards.Count >= 12)
-            throw new InvalidOperationException("Board cannot have more than 12 cards");
-
         ArgumentNullException.ThrowIfNull(card);
 
         if (m_cards.Any(c => c.Id == card.Id))
