@@ -1,5 +1,5 @@
 using HeuteApp.Core.Aggregates.Board;
-using HeuteApp.Infrastructure.Models.Aggregates;
+using HeuteApp.Infrastructure.Models.Layout;
 
 namespace HeuteApp.Infrastructure.Models.Board;
 
