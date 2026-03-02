@@ -1,6 +1,6 @@
 namespace HeuteApp.Api.Models.Public.Responses.Board;
 
-public sealed record PublicBoardCardResult(
+public sealed record PublicBoardCardResponse(
     string? Title,
     string? SectionName,
     int ColIndex,
