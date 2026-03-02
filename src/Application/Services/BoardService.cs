@@ -1,9 +1,14 @@
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Core.Aggregates.Board;
+using HeuteApp.Core.Services;
 
 namespace HeuteApp.Application.Services;
 
-public class BoardService(IBoardRepository boardRepository, ILayoutRepository layoutRepository, IUnitOfWork unitOfWork)
+public class BoardService(
+    IBoardRepository boardRepository, 
+    ILayoutRepository layoutRepository, 
+    IUnitOfWork unitOfWork,
+    BoardPlacementService placementService)
 {
     public async Task<HeuteBoard?> GetBoardAsync(Guid ownerId, DateOnly date)
     {
@@ -37,8 +42,7 @@ public class BoardService(IBoardRepository boardRepository, ILayoutRepository la
         var layout = await layoutRepository.GetByIdAsync(board.LayoutId)
             ?? throw new Exception("Layout not found.");
 
-        board.AddCard(layout, Guid.NewGuid(), props);
-        
+        placementService.AddCard(board, layout, Guid.NewGuid(), props);
         await unitOfWork.SaveChangesAsync();
     }
 }
