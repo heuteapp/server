@@ -2,11 +2,11 @@ namespace HeuteApp.Application.Models.Layout.Contracts;
 
 public sealed record LayoutLookup
 {
-    public Guid? OwnerId { get; init; }
+    public Guid? OwnerId { get; }
 
-    public string Name { get; init; }
+    public string Name { get; }
 
-    public int? Version { get; init; }
+    public int? Version { get; }
 
     public LayoutLookup(Guid? ownerId, string name, int? version)
     {
