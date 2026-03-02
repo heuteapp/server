@@ -1,4 +1,6 @@
- namespace HeuteApp.Core.Aggregates.Layout;
+using HeuteApp.Core.ValueObjects.Layout;
+
+namespace HeuteApp.Core.Aggregates.Layout;
 
 public class HeuteLayout
 {
@@ -11,31 +13,31 @@ public class HeuteLayout
 
     protected HeuteLayout()
     {
-        
+        Key = null!;
     }
 
-    protected HeuteLayout(Guid id, Guid ownerId, string name, int version)
+    protected HeuteLayout(Guid id, LayoutKey key)
     {
         Id = id;
-        OwnerId = ownerId;
-        Name = name;
-        Version = version;
+        Key = key;
     }
 
     public static HeuteLayout Create(Guid id, Guid ownerId, string name, int version)
     {
-        return new HeuteLayout(id, ownerId, name, version);
+        return new HeuteLayout(id, new LayoutKey(ownerId, name, version));
     }
 
     //
 
     public Guid Id { get; private set; }
 
-    public Guid OwnerId { get; private set; }
+    public LayoutKey Key { get; private set; }
 
-    public string Name { get; private set; } = null!;
+    public Guid? OwnerId => Key.OwnerId;
 
-    public int Version { get; private set; } = 0;
+    public string Name => Key.Name;
+
+    public int? Version => Key.Version;
 
     public IReadOnlyCollection<LayoutSection> Sections => m_sections;
 

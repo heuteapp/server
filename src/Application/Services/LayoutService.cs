@@ -9,7 +9,7 @@ public class LayoutService(ILayoutRepository repository, IUnitOfWork unitOfWork)
 {
     public async Task<HeuteLayoutResult?> GetLayoutAsync(Guid ownerId, string name, int? version)
     {
-        var layout = await repository.GetByNameAsync(ownerId, name, version);
+        var layout = await repository.GetByKeyAsync(new (ownerId, name, version));
         return layout?.ToResult();
     }
 
@@ -22,7 +22,7 @@ public class LayoutService(ILayoutRepository repository, IUnitOfWork unitOfWork)
     public async Task<HeuteLayoutResult> CreateLayoutAsync(Guid ownerId, string name)
     {
         var lastVersion = await repository.GetLastestVersionAsync(ownerId, name);
-        var existing = await repository.GetByNameAsync(ownerId, name, lastVersion);
+        var existing = await repository.GetByKeyAsync(new (ownerId, name, lastVersion));
 
         if (existing != null)
             throw new Exception("Layout already exists for this owner, name, and version.");

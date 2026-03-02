@@ -3,6 +3,8 @@ using HeuteApp.Application.Interfaces;
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Infrastructure.Models.Layout;
+using HeuteApp.Core.ValueObjects.Layout;
+using HeuteApp.Application.Models.Layout.Contracts;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
@@ -17,13 +19,15 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return entity;
     }
 
-    public async Task<HeuteLayout?> GetByNameAsync(Guid ownerId, string name, int? version)
+    public async Task<HeuteLayout?> GetByKeyAsync(LayoutLookup key)
     {
-        var m_version = version ?? await GetLastestVersionAsync(ownerId, name);
+        var ownerId = key.OwnerId;
+        var name = key.Name;
+        var version = key.Version ?? await GetLastestVersionAsync(key.OwnerId, key.Name);
 
         var entity = await context.Layouts
             .Include("m_sections")
-            .FirstOrDefaultAsync(b => b.OwnerId == ownerId && b.Name == name && b.Version == m_version);
+            .FirstOrDefaultAsync(b => b.OwnerId == ownerId && b.Name == name && b.Version == version);
 
         return entity;
     }
@@ -32,17 +36,17 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
     {
         var entities = await context.Layouts
             .Include("m_sections")
-            .Where(b => b.OwnerId == ownerId)
+            .Where(b => b.Key.OwnerId == ownerId)
             .ToListAsync();
 
         return entities;
     }
 
-    public async Task<int?> GetLastestVersionAsync(Guid ownerId, string name)
+    public async Task<int?> GetLastestVersionAsync(Guid? ownerId, string name)
     {
         var entity = await context.Layouts
-            .Where(b => b.OwnerId == ownerId && b.Name == name)
-            .OrderByDescending(b => b.Version)
+            .Where(b => b.Key.OwnerId == ownerId && b.Key.Name == name)
+            .OrderByDescending(b => b.Key.Version)
             .FirstOrDefaultAsync();
 
         return entity?.Version;
