@@ -36,7 +36,7 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
     {
         var entities = await context.Layouts
             .Include("m_sections")
-            .Where(b => b.Key.OwnerId == ownerId)
+            .Where(b => b.OwnerId == ownerId)
             .ToListAsync();
 
         return entities;
@@ -45,8 +45,8 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
     public async Task<int?> GetLastestVersionAsync(Guid? ownerId, string name)
     {
         var entity = await context.Layouts
-            .Where(b => b.Key.OwnerId == ownerId && b.Key.Name == name)
-            .OrderByDescending(b => b.Key.Version)
+            .Where(b => b.OwnerId == ownerId && b.Name == name)
+            .OrderByDescending(b => b.Version)
             .FirstOrDefaultAsync();
 
         return entity?.Version;

@@ -4,6 +4,8 @@ namespace HeuteApp.Core.Aggregates.Layout;
 
 public class HeuteLayout
 {
+    private readonly LayoutKey m_key = null!;
+
     private readonly List<LayoutSection> m_sections = [];
 
     protected virtual LayoutSection OnCreateSection(Guid id, string name, LayoutSectionProps props)
@@ -13,13 +15,13 @@ public class HeuteLayout
 
     protected HeuteLayout()
     {
-        Key = null!;
+        m_key = null!;
     }
 
     protected HeuteLayout(Guid id, LayoutKey key)
     {
         Id = id;
-        Key = key;
+        m_key = key;
     }
 
     public static HeuteLayout Create(Guid id, Guid ownerId, string name, int version)
@@ -31,13 +33,11 @@ public class HeuteLayout
 
     public Guid Id { get; private set; }
 
-    public LayoutKey Key { get; private set; }
+    public Guid? OwnerId => m_key.OwnerId;
 
-    public Guid? OwnerId => Key.OwnerId;
+    public string Name => m_key.Name;
 
-    public string Name => Key.Name;
-
-    public int? Version => Key.Version;
+    public int? Version => m_key.Version;
 
     public IReadOnlyCollection<LayoutSection> Sections => m_sections;
 
