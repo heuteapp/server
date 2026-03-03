@@ -64,7 +64,7 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         var lastVersion = await GetLastestVersionAsync(ownerId, name);
 
         var version = lastVersion.HasValue ? lastVersion.Value + 1 : 1;
-        var layout = HeuteLayoutModel.Create(ownerId, new LayoutDefinition(new LayoutKey(name, version), new LayoutProps([])));
+        var layout = HeuteLayoutModel.Create(new LayoutDefinition(ownerId, new LayoutKey(name, version), new LayoutProps([])));
 
         context.Layouts.Add(layout);
         return layout;

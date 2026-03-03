@@ -12,12 +12,12 @@ public class HeuteLayoutModel : HeuteLayout
 
     protected HeuteLayoutModel() { }
 
-    protected HeuteLayoutModel(Guid ownerId, LayoutDefinition definition) : base(ownerId, definition) { }
+    protected HeuteLayoutModel(LayoutDefinition definition) : base(definition) { }
 
     //
 
-    public static new HeuteLayoutModel Create(Guid ownerId, LayoutDefinition definition)
+    public static new HeuteLayoutModel Create(LayoutDefinition definition)
     {
-        return new HeuteLayoutModel(ownerId, definition);
+        return new HeuteLayoutModel(definition);
     }
 }
