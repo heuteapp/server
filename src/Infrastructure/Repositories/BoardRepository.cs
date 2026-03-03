@@ -21,23 +21,23 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return entity;
     }
 
-    public async Task<HeuteBoard?> GetByDateAsync(string ownerName, DateOnly date)
+    public async Task<HeuteBoard?> GetByDateAsync(Guid ownerId, DateOnly date)
     {
         var entity = await conext.Boards
             .Include("m_cards")
             .Include(c => c.Layout)
             // TODO: This is a temporary workaround until we have proper user management in place.
-            .FirstOrDefaultAsync(b => b.OwnerId == Guid.Empty && b.Date == date);
+            .FirstOrDefaultAsync(b => b.OwnerId == ownerId && b.Date == date);
 
         return entity;
     }
 
-    public Task<HeuteBoard> CreateAsync(string ownerName, DateOnly date, HeuteLayout layout)
+    public Task<HeuteBoard> CreateAsync(Guid ownerId, DateOnly date, HeuteLayout layout)
     {
         if(layout is not HeuteLayoutModel layoutModel)
             throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
 
-        var model = HeuteBoardModel.Create(layoutModel, new BoardDefinition(Guid.Empty, layoutModel.Id, new BoardKey(date), new BoardProps([])));
+        var model = HeuteBoardModel.Create(layoutModel, new BoardDefinition(ownerId, layoutModel.Id, new BoardKey(date), new BoardProps([])));
 
         conext.Boards.Add(model);
         return Task.FromResult<HeuteBoard>(model);
