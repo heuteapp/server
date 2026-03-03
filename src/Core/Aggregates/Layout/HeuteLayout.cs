@@ -24,7 +24,7 @@ public class HeuteLayout
         foreach (var sectionDef in definition.Props.Sections)
         {
             var section = Internal_CreateSection(sectionDef);
-            Internal_AddSection(section);
+            m_sections.Add(section);
         }
     }
 
@@ -47,38 +47,8 @@ public class HeuteLayout
 
     //
 
-    public void AddSection(LayoutSectionDefinition definition)
-    {
-        ArgumentNullException.ThrowIfNull(definition);
-
-        if (m_sections.Count >= 4)
-        {
-            throw new InvalidOperationException("Layout already has maximum number of sections (4).");
-        }
-
-        var section = Internal_CreateSection(definition);
-        Internal_AddSection(section);
-    }
-
-    public bool HasSection(Guid sectionId)
-    {
-        return m_sections.Any(s => s.Id == sectionId);
-    }
-
-    //
-
     internal protected virtual LayoutSection Internal_CreateSection(LayoutSectionDefinition definition)
     {
         return LayoutSection.Create(definition);
-    }
-
-    internal protected virtual void Internal_AddSection(LayoutSection section)
-    {
-        if(m_sections.Any(s => s.Id == section.Id))
-        {
-            throw new InvalidOperationException($"Section with id {section.Id} already exists.");
-        }
-
-        m_sections.Add(section);
     }
 }
