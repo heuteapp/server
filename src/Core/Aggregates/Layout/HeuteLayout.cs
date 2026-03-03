@@ -42,7 +42,7 @@ public class HeuteLayout
 
     public string Name { get; private set; } = null!;
 
-    public int Version {get; private set; }
+    public int Version { get; private set; }
 
     public IReadOnlyCollection<LayoutSection> Sections => m_sections;
 
