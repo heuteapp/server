@@ -26,7 +26,7 @@ public class BoardService(
         if (existing != null)
             throw new Exception("Board already exists for this date.");
 
-        var layout = await layoutRepository.GetByKeyAsync(new (null, layoutName, layoutVersion))
+        var layout = await layoutRepository.GetByKeyAsync(new (Guid.Empty, layoutName, layoutVersion))
             ?? throw new Exception("Layout not found.");
 
         var board = await boardRepository.CreateAsync(Guid.Empty, date, layout);
