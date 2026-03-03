@@ -11,33 +11,33 @@ public class BoardService(
     IUnitOfWork unitOfWork,
     BoardPlacementService placementService)
 {
-    public async Task<HeuteBoard?> GetBoardAsync(Guid ownerId, DateOnly date)
+    public async Task<HeuteBoard?> GetBoardAsync(string ownerName, DateOnly date)
     {
-        return await boardRepository.GetByDateAsync(ownerId, date);
+        return await boardRepository.GetByDateAsync(ownerName, date);
     }
 
-    public async Task<HeuteBoard> CreateBoardAsync(Guid ownerId, string layoutName, int layoutVersion)
+    public async Task<HeuteBoard> CreateBoardAsync(string ownerName, string layoutName, int layoutVersion)
     {
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var existing = await boardRepository
-            .GetByDateAsync(ownerId, date);
+            .GetByDateAsync(ownerName, date);
 
         if (existing != null)
             throw new Exception("Board already exists for this date.");
 
-        var layout = await layoutRepository.GetByKeyAsync(new (ownerId, layoutName, layoutVersion))
+        var layout = await layoutRepository.GetByKeyAsync(new (null, layoutName, layoutVersion))
             ?? throw new Exception("Layout not found.");
 
-        var board = await boardRepository.CreateAsync(Guid.NewGuid(), ownerId, date, layout);
+        var board = await boardRepository.CreateAsync(ownerName, date, layout);
         await unitOfWork.SaveChangesAsync();
 
         return board;
     }
 
-    public async Task AddCardAsync(Guid ownerId, DateOnly date, BoardCardDefinition definition)
+    public async Task AddCardAsync(string ownerName, DateOnly date, BoardCardDefinition definition)
     {
-        var board = await boardRepository.GetByDateAsync(ownerId, date) 
+        var board = await boardRepository.GetByDateAsync(ownerName, date) 
             ?? throw new Exception("Board not found.");
 
         var layout = await layoutRepository.GetByIdAsync(board.LayoutId)
