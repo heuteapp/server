@@ -5,8 +5,6 @@ namespace HeuteApp.Infrastructure.Models.Layout;
 
 public class LayoutSectionModel : LayoutSection
 {
-    protected LayoutSectionModel() { }
-
     protected LayoutSectionModel(HeuteLayoutModel layout, LayoutSectionDefinition definition) : base(definition)
     {        
         Layout = layout;

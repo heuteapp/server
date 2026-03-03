@@ -6,13 +6,7 @@ public class HeuteLayout
 {
     private readonly List<LayoutSection> m_sections = [];
 
-    protected HeuteLayout()
-    {
-        Id = Guid.Empty;
-        OwnerId = Guid.Empty;
-        Name = string.Empty;
-        Version = 0;
-    }
+    private HeuteLayout() { }
 
     protected HeuteLayout(LayoutDefinition definition)
     {
@@ -39,7 +33,7 @@ public class HeuteLayout
 
     public Guid OwnerId { get; private set; }
 
-    public string Name { get; private set; }
+    public string Name { get; private set; } = null!;
 
     public int Version {get; private set; }
 

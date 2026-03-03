@@ -10,8 +10,6 @@ public class HeuteLayoutModel : HeuteLayout
         return LayoutSectionModel.Create(this, definition);
     }
 
-    protected HeuteLayoutModel() { }
-
     protected HeuteLayoutModel(LayoutDefinition definition) : base(definition) { }
 
     //
