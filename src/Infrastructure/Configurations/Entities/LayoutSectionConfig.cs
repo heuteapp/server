@@ -55,6 +55,10 @@ public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionModel>
                 .IsRequired();
         });
 
-        builder.HasIndex(s => s.LayoutId);
+        builder.HasIndex(s => s.Id)
+            .IsUnique();
+
+        builder.HasIndex(s => new { s.LayoutId, s.Name })
+            .IsUnique();
     }
 }
