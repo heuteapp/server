@@ -5,22 +5,22 @@ namespace HeuteApp.Core.Mappers;
 
 public static partial class LayoutMapper
 {
-    public static LayoutSectionProps ToProps(this LayoutSection section)
+    public static LayoutSectionDefinition ToProps(this LayoutSection section)
     {
         ArgumentNullException.ThrowIfNull(section);
 
-        return new LayoutSectionProps(
-            section.Rect,
-            section.Size
+        return new LayoutSectionDefinition(
+            new LayoutSectionKey(section.Name),
+            new LayoutSectionProps(section.Rect, section.Size)
         );
     }
 
     //
 
-    public static LayoutSection ToDomain(this LayoutSectionProps props, Guid id, LayoutSectionKey key)
+    public static LayoutSection ToDomain(this LayoutSectionDefinition definition)
     {
-        ArgumentNullException.ThrowIfNull(props);
+        ArgumentNullException.ThrowIfNull(definition);
 
-        return LayoutSection.Create(id, key, props);
+        return LayoutSection.Create(definition);
     }
 }

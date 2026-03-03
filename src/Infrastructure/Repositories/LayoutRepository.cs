@@ -4,6 +4,7 @@ using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Infrastructure.Models.Layout;
 using HeuteApp.Application.Models.Layout.Contracts;
+using HeuteApp.Core.ValueObjects.Layout;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
@@ -63,7 +64,7 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         var lastVersion = await GetLastestVersionAsync(ownerId, name);
 
         var version = lastVersion.HasValue ? lastVersion.Value + 1 : 1;
-        var layout = HeuteLayoutModel.Create(Guid.NewGuid(), ownerId, new (name, version));
+        var layout = HeuteLayoutModel.Create(ownerId, new LayoutDefinition(new LayoutKey(name, version), new LayoutProps([])));
 
         context.Layouts.Add(layout);
         return layout;

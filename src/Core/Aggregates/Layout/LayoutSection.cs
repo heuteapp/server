@@ -9,18 +9,18 @@ public class LayoutSection
 
     protected LayoutSection() { }
 
-    protected LayoutSection(Guid id, LayoutSectionKey key, LayoutSectionProps props)
+    protected LayoutSection(LayoutSectionDefinition definition)
     {
-        Id = id;
-        m_key = key;
-        Rect = props.Rect;
-        Size = props.Size;
+        Id = Guid.NewGuid();
+        m_key = definition.Key;
+        Rect = definition.Props.Rect;
+        Size = definition.Props.Size;
     }
 
-    public static LayoutSection Create(Guid id, LayoutSectionKey key, LayoutSectionProps props)
+    public static LayoutSection Create(LayoutSectionDefinition definition)
     {
-        ArgumentNullException.ThrowIfNull(props);
-        return new LayoutSection(id, key, props);
+        ArgumentNullException.ThrowIfNull(definition);
+        return new LayoutSection(definition);
     }
 
     //

@@ -5,19 +5,19 @@ namespace HeuteApp.Infrastructure.Models.Layout;
 
 public class HeuteLayoutModel : HeuteLayout
 {
-    protected override LayoutSection Internal_CreateSection(Guid id, LayoutSectionKey key, LayoutSectionProps props)
+    protected override LayoutSection Internal_CreateSection(LayoutSectionDefinition definition)
     {
-        return LayoutSectionModel.Create(this, id, key, props);
+        return LayoutSectionModel.Create(this, definition);
     }
 
     protected HeuteLayoutModel() { }
 
-    protected HeuteLayoutModel(Guid id, Guid ownerId, LayoutKey key) : base(id, ownerId, key) { }
+    protected HeuteLayoutModel(Guid ownerId, LayoutDefinition definition) : base(ownerId, definition) { }
 
     //
 
-    public static new HeuteLayoutModel Create(Guid id, Guid ownerId, LayoutKey key)
+    public static new HeuteLayoutModel Create(Guid ownerId, LayoutDefinition definition)
     {
-        return new HeuteLayoutModel(id, ownerId, key);
+        return new HeuteLayoutModel(ownerId, definition);
     }
 }

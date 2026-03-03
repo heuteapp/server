@@ -7,17 +7,17 @@ public class LayoutSectionModel : LayoutSection
 {
     protected LayoutSectionModel() { }
 
-    protected LayoutSectionModel(HeuteLayoutModel layout, Guid id, LayoutSectionKey key,LayoutSectionProps props) : base(id, key, props)
+    protected LayoutSectionModel(HeuteLayoutModel layout, LayoutSectionDefinition definition) : base(definition)
     {        
         Layout = layout;
         LayoutId = layout.Id;
     }
 
-    public static LayoutSectionModel Create(HeuteLayoutModel layout, Guid id, LayoutSectionKey key, LayoutSectionProps props)
+    public static LayoutSectionModel Create(HeuteLayoutModel layout, LayoutSectionDefinition definition)
     {        
         ArgumentNullException.ThrowIfNull(layout);
-        ArgumentNullException.ThrowIfNull(props);
-        return new LayoutSectionModel(layout, id, key, props);
+        ArgumentNullException.ThrowIfNull(definition);
+        return new LayoutSectionModel(layout, definition);
     }
 
     //

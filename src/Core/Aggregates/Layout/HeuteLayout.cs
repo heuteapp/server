@@ -13,16 +13,22 @@ public class HeuteLayout
         m_key = null!;
     }
 
-    protected HeuteLayout(Guid id, Guid ownerId, LayoutKey key)
+    protected HeuteLayout(Guid ownerId, LayoutDefinition definition)
     {
-        Id = id;
         OwnerId = ownerId;
-        m_key = key;
+        Id = Guid.NewGuid();
+        m_key = definition.Key;
+
+        foreach (var sectionDef in definition.Props.Sections)
+        {
+            var section = Internal_CreateSection(sectionDef);
+            Internal_AddSection(section);
+        }
     }
 
-    public static HeuteLayout Create(Guid id, Guid ownerId, LayoutKey key)
+    public static HeuteLayout Create(Guid ownerId, LayoutDefinition definition)
     {
-        return new HeuteLayout(id, ownerId, key);
+        return new HeuteLayout(ownerId, definition);
     }
 
     //
@@ -39,21 +45,16 @@ public class HeuteLayout
 
     //
 
-    public void AddSection(Guid sectionId, LayoutSectionKey key, LayoutSectionProps props)
+    public void AddSection(LayoutSectionDefinition definition)
     {
-        ArgumentNullException.ThrowIfNull(props);
-
-        if (HasSection(sectionId))
-        {
-            throw new InvalidOperationException($"Section with id {sectionId} already exists.");
-        }
+        ArgumentNullException.ThrowIfNull(definition);
 
         if (m_sections.Count >= 4)
         {
             throw new InvalidOperationException("Layout already has maximum number of sections (4).");
         }
 
-        var section = Internal_CreateSection(sectionId, key, props);
+        var section = Internal_CreateSection(definition);
         Internal_AddSection(section);
     }
 
@@ -64,9 +65,9 @@ public class HeuteLayout
 
     //
 
-    internal protected virtual LayoutSection Internal_CreateSection(Guid id, LayoutSectionKey key, LayoutSectionProps props)
+    internal protected virtual LayoutSection Internal_CreateSection(LayoutSectionDefinition definition)
     {
-        return LayoutSection.Create(id, key, props);
+        return LayoutSection.Create(definition);
     }
 
     internal protected virtual void Internal_AddSection(LayoutSection section)
