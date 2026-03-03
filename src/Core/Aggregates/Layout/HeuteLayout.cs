@@ -6,7 +6,7 @@ public class HeuteLayout
 {
     private readonly List<LayoutSection> m_sections = [];
 
-    private HeuteLayout() { }
+    protected HeuteLayout() { }
 
     protected HeuteLayout(LayoutDefinition definition)
     {

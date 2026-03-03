@@ -5,7 +5,7 @@ namespace HeuteApp.Core.Aggregates.Layout;
 
 public class LayoutSection
 {
-    private LayoutSection() { }
+    protected LayoutSection() { }
 
     protected LayoutSection(LayoutSectionDefinition definition)
     {
