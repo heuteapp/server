@@ -5,9 +5,9 @@ namespace HeuteApp.Infrastructure.Models.Layout;
 
 public class HeuteLayoutModel : HeuteLayout
 {
-    protected override LayoutSection OnCreateSection(Guid id, string name, LayoutSectionProps props)
+    protected override LayoutSection OnCreateSection(Guid id, LayoutSectionKey key, LayoutSectionProps props)
     {
-        return LayoutSectionModel.Create(id, name, this, props);
+        return LayoutSectionModel.Create(this, id, key, props);
     }
 
     protected HeuteLayoutModel() { }

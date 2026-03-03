@@ -8,9 +8,9 @@ public class HeuteLayout
 
     private readonly List<LayoutSection> m_sections = [];
 
-    protected virtual LayoutSection OnCreateSection(Guid id, string name, LayoutSectionProps props)
+    protected virtual LayoutSection OnCreateSection(Guid id, LayoutSectionKey key, LayoutSectionProps props)
     {
-        return LayoutSection.Create(id, name, props);
+        return LayoutSection.Create(id, key, props);
     }
 
     protected HeuteLayout()
@@ -44,7 +44,7 @@ public class HeuteLayout
 
     //
 
-    public void AddSection(Guid sectionId, string name, LayoutSectionProps props)
+    public void AddSection(Guid sectionId, LayoutSectionKey key, LayoutSectionProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
 
@@ -58,7 +58,7 @@ public class HeuteLayout
             throw new InvalidOperationException("Layout already has maximum number of sections (4).");
         }
 
-        DoAddSection(sectionId, name, props);
+        DoAddSection(sectionId, key, props);
     }
 
     public bool HasSection(Guid sectionId)
@@ -68,9 +68,9 @@ public class HeuteLayout
 
     //
 
-    private void DoAddSection(Guid sectionId, string name, LayoutSectionProps props)
+    private void DoAddSection(Guid sectionId, LayoutSectionKey key, LayoutSectionProps props)
     {
-        var section = OnCreateSection(sectionId, name, props);
+        var section = OnCreateSection(sectionId, key, props);
         m_sections.Add(section);
     }
 }

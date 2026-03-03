@@ -1,4 +1,5 @@
 using HeuteApp.Core.Aggregates.Layout;
+using HeuteApp.Core.ValueObjects.Layout;
 
 namespace HeuteApp.Core.Mappers;
 
@@ -16,10 +17,10 @@ public static partial class LayoutMapper
 
     //
 
-    public static LayoutSection ToDomain(this LayoutSectionProps props, Guid id, string name)
+    public static LayoutSection ToDomain(this LayoutSectionProps props, Guid id, LayoutSectionKey key)
     {
         ArgumentNullException.ThrowIfNull(props);
 
-        return LayoutSection.Create(id, name, props);
+        return LayoutSection.Create(id, key, props);
     }
 }

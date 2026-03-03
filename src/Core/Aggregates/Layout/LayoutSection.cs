@@ -1,30 +1,33 @@
 using HeuteApp.Core.ValueObjects;
+using HeuteApp.Core.ValueObjects.Layout;
 
 namespace HeuteApp.Core.Aggregates.Layout;
 
 public class LayoutSection
 {
+    private readonly LayoutSectionKey m_key = null!;
+
     protected LayoutSection() { }
 
-    protected LayoutSection(Guid id, string name, LayoutSectionProps props)
+    protected LayoutSection(Guid id, LayoutSectionKey key, LayoutSectionProps props)
     {
         Id = id;
-        Name = name;
+        m_key = key;
         Rect = props.Rect;
         Size = props.Size;
     }
 
-    public static LayoutSection Create(Guid id, string name, LayoutSectionProps props)
+    public static LayoutSection Create(Guid id, LayoutSectionKey key, LayoutSectionProps props)
     {
         ArgumentNullException.ThrowIfNull(props);
-        return new LayoutSection(id, name, props);
+        return new LayoutSection(id, key, props);
     }
 
     //
 
     public Guid Id { get; private set; }
 
-    public string Name { get; private set; } = null!;
+    public string Name => m_key.Name;
 
     public Rect Rect { get; internal set; } = null!;
 
