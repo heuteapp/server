@@ -1,6 +1,7 @@
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Core.Services;
+using HeuteApp.Core.ValueObjects.Board;
 
 namespace HeuteApp.Application.Services;
 

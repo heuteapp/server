@@ -1,3 +1,5 @@
+using HeuteApp.Core.ValueObjects.Board;
+
 namespace HeuteApp.Core.Aggregates.Board;
 
 public class HeuteBoard

@@ -1,4 +1,4 @@
-using HeuteApp.Core.Aggregates.Board;
+using HeuteApp.Core.ValueObjects.Board;
 using HeuteApp.Infrastructure.Models.Board;
 
 namespace HeuteApp.Infrastructure.Mappers;

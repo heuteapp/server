@@ -1,4 +1,5 @@
 using HeuteApp.Core.ValueObjects;
+using HeuteApp.Core.ValueObjects.Board;
 
 namespace HeuteApp.Core.Aggregates.Board;
 
@@ -73,9 +74,3 @@ public class BoardCard
         IsVerified = true;
     }
 }
-
-public sealed record BoardCardProps(
-    string? Title,
-    Guid? SectionId,
-    GridRect? Position
-);
