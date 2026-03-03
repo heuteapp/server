@@ -14,5 +14,5 @@ public interface ILayoutRepository
 
     Task<int?> GetLastestVersionAsync(Guid? ownerId, string name);
 
-    Task<HeuteLayout> CreateAsync(Guid ownerId, LayoutKey key, LayoutProps props);
+    Task<HeuteLayout> CreateAsync(Guid ownerId, string name, LayoutProps props);
 }

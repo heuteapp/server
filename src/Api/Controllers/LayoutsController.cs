@@ -31,7 +31,7 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateLayout(string ownerName, [FromBody] CreateLayoutRequest request)
     {
-        var layout = await layoutService.CreateLayoutAsync(ownerName, request.Key, request.Props);
+        var layout = await layoutService.CreateLayoutAsync(ownerName, request.Name, request.Props);
 
         return CreatedAtAction(
             nameof(GetLayout), 
