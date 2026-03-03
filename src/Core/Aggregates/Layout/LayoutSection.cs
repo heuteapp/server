@@ -33,8 +33,3 @@ public class LayoutSection
 
     public GridSize Size { get; internal set; } = null!;
 }
-
-public sealed record LayoutSectionProps(
-    Rect Rect,
-    GridSize Size
-);
