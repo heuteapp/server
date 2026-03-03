@@ -1,4 +1,5 @@
 using HeuteApp.Core.Aggregates.Layout;
+using HeuteApp.Core.ValueObjects.Layout;
 
 namespace HeuteApp.Infrastructure.Models.Layout;
 
@@ -11,12 +12,12 @@ public class HeuteLayoutModel : HeuteLayout
 
     protected HeuteLayoutModel() { }
 
-    protected HeuteLayoutModel(Guid id, Guid ownerId, string name, int version) : base(id, ownerId, name, version) { }
+    protected HeuteLayoutModel(Guid id, Guid ownerId, LayoutKey key) : base(id, ownerId, key) { }
 
     //
 
-    public static new HeuteLayoutModel Create(Guid id, Guid ownerId, string name, int version)
+    public static new HeuteLayoutModel Create(Guid id, Guid ownerId, LayoutKey key)
     {
-        return new HeuteLayoutModel(id, ownerId, name, version);
+        return new HeuteLayoutModel(id, ownerId, key);
     }
 }

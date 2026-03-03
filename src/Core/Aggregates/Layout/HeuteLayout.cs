@@ -18,22 +18,23 @@ public class HeuteLayout
         m_key = null!;
     }
 
-    protected HeuteLayout(Guid id, LayoutKey key)
+    protected HeuteLayout(Guid id, Guid ownerId, LayoutKey key)
     {
         Id = id;
+        OwnerId = ownerId;
         m_key = key;
     }
 
-    public static HeuteLayout Create(Guid id, Guid ownerId, string name, int version)
+    public static HeuteLayout Create(Guid id, Guid ownerId, LayoutKey key)
     {
-        return new HeuteLayout(id, new LayoutKey(ownerId, name, version));
+        return new HeuteLayout(id, ownerId, key);
     }
 
     //
 
     public Guid Id { get; private set; }
 
-    public Guid? OwnerId => m_key.OwnerId;
+    public Guid OwnerId { get; private set; }
 
     public string Name => m_key.Name;
 
@@ -52,7 +53,7 @@ public class HeuteLayout
             throw new InvalidOperationException($"Section with id {sectionId} already exists.");
         }
 
-        if(m_sections.Count >= 4)
+        if (m_sections.Count >= 4)
         {
             throw new InvalidOperationException("Layout already has maximum number of sections (4).");
         }
