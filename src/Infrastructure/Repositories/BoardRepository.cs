@@ -5,6 +5,7 @@ using HeuteApp.Application.Interfaces;
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Infrastructure.Models.Layout;
 using HeuteApp.Infrastructure.Models.Board;
+using HeuteApp.Core.ValueObjects.Board;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
@@ -35,7 +36,7 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         if(layout is not HeuteLayoutModel layoutModel)
             throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
 
-        var model = HeuteBoardModel.Create(guid, ownerId, layoutModel, date);
+        var model = HeuteBoardModel.Create(layoutModel, new BoardDefinition(ownerId, layoutModel.Id, new BoardKey(date), new BoardProps([])));
 
         conext.Boards.Add(model);
         return Task.FromResult<HeuteBoard>(model);

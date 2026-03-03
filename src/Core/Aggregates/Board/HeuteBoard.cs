@@ -6,9 +6,9 @@ public class HeuteBoard
 {
     public static int MaxCardCount => 12;
 
-    public static HeuteBoard Create(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    public static HeuteBoard Create(BoardDefinition definition)
     {
-        return new HeuteBoard(id, ownerId, layoutId, date);
+        return new HeuteBoard(definition);
     }
 
     //
@@ -17,12 +17,12 @@ public class HeuteBoard
 
     protected HeuteBoard() { }
 
-    protected HeuteBoard(Guid id, Guid ownerId, Guid layoutId, DateOnly date)
+    protected HeuteBoard(BoardDefinition definition)
     {
-        Id = id;
-        OwnerId = ownerId;
-        LayoutId = layoutId;
-        Date = date;
+        Id = Guid.NewGuid();
+        OwnerId = definition.OwnerId;
+        LayoutId = definition.LayoutId;
+        Date = definition.Key.Date;
     }
 
     internal protected virtual BoardCard Internal_CreateCard(BoardCardDefinition definition)

@@ -13,7 +13,7 @@ public class HeuteBoardModel : HeuteBoard
 
     protected HeuteBoardModel() { }
 
-    protected HeuteBoardModel(Guid id, Guid ownerId, HeuteLayoutModel layout, DateOnly date) : base(id, ownerId, layout.Id, date) 
+    protected HeuteBoardModel(HeuteLayoutModel layout, BoardDefinition definition) : base(definition)
     { 
         Layout = layout;
     }
@@ -24,8 +24,8 @@ public class HeuteBoardModel : HeuteBoard
 
     //
 
-    public static HeuteBoardModel Create(Guid id, Guid ownerId, HeuteLayoutModel layout, DateOnly date)
+    public static HeuteBoardModel Create(HeuteLayoutModel layout, BoardDefinition definition)
     {
-        return new HeuteBoardModel(id, ownerId, layout, date);
+        return new HeuteBoardModel(layout, definition);
     }
 }
