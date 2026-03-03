@@ -16,7 +16,10 @@ public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionModel>
             .ValueGeneratedNever();
 
         builder.Property(s => s.LayoutId)
-               .IsRequired();
+            .IsRequired();
+
+        builder.Property(s => s.Name)
+            .IsRequired();
 
         builder.OwnsOne(s => s.Rect, rect =>
         {
