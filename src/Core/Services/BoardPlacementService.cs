@@ -48,7 +48,7 @@ public class BoardPlacementService
         ArgumentNullException.ThrowIfNull(layout);
         ArgumentNullException.ThrowIfNull(placement);
 
-        var section = layout.Sections.FirstOrDefault(s => s.Name == placement.Section.Name);
+        var section = layout.Sections.FirstOrDefault(s => s.Name == placement.SectionName);
         if (section is null)
             return false;
 
@@ -62,7 +62,7 @@ public class BoardPlacementService
 
         return board.Cards.FirstOrDefault(c =>
             (cardId == null || c.Id != cardId) &&
-            c.Placement?.Section == placement.Section &&
+            c.Placement?.SectionName == placement.SectionName &&
             c.Placement?.Position?.Overlaps(placement.Position) == true);
     }
 

@@ -23,34 +23,32 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
 
         builder.OwnsOne(c => c.Placement, placement =>
         {
-            placement.WithOwner();
-
-            placement.OwnsOne(p => p.Section, section =>
-            {
-                section.Property(s => s.Name)
-                       .HasColumnName("Section_Name")
-                       .IsRequired();
-            });
-
-            placement.OwnsOne(p => p.Position, position =>
-            {
-                position.Property(p => p.Col)
-                        .HasColumnName("Position_Col")
+                placement.Property(p => p.SectionName)
+                        .HasColumnName("Placement_SectionName")
                         .IsRequired();
 
-                position.Property(p => p.Row)
-                        .HasColumnName("Position_Row")
-                        .IsRequired();
+                placement.OwnsOne(p => p.Position, position =>
+                {
+                        position.Property(p => p.Col)
+                                .HasColumnName("Placement_Position_Col")
+                                .IsRequired();
 
-                position.Property(p => p.ColSpan)
-                        .HasColumnName("Position_ColSpan")
-                        .IsRequired();
+                        position.Property(p => p.Row)
+                                .HasColumnName("Placement_Position_Row")
+                                .IsRequired();
 
-                position.Property(p => p.RowSpan)
-                        .HasColumnName("Position_RowSpan")
-                        .IsRequired();
-            });
+                        position.Property(p => p.ColSpan)
+                                .HasColumnName("Placement_Position_ColSpan")
+                                .IsRequired();
+
+                        position.Property(p => p.RowSpan)
+                                .HasColumnName("Placement_Position_RowSpan")
+                                .IsRequired();
+                });
         });
+
+        builder.Navigation(c => c.Placement)
+               .IsRequired(false);
 
         builder.Ignore(c => c.IsVerified);
         builder.Ignore(c => c.HasPlacement);
