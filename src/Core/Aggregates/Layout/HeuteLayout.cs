@@ -18,6 +18,13 @@ public class HeuteLayout
         foreach (var sectionDef in definition.Props.Sections)
         {
             var section = Internal_CreateSection(sectionDef);
+
+            // check for overlapping sections
+            if(m_sections.Any(s => s.Rect.Overlaps(section.Rect)))
+            {
+                throw new InvalidOperationException($"Section {section.Name} overlaps with another section.");
+            }
+
             m_sections.Add(section);
         }
     }
