@@ -29,6 +29,9 @@ public class LayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
               .HasForeignKey(s => s.LayoutId)
               .OnDelete(DeleteBehavior.Cascade);
 
+       builder.HasIndex(l => l.Id)
+              .IsUnique();
+
        builder.HasIndex(l => new { l.OwnerId, l.Name, l.Version })
               .IsUnique();
 
