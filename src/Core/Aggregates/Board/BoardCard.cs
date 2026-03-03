@@ -9,6 +9,7 @@ public class BoardCard
     protected BoardCard(BoardCardDefinition definition)
     {
         Id = Guid.NewGuid();
+        Name = definition.Key.Name;
         Title = definition.Props.Title;
         Placement = definition.Props.Placement;
 
@@ -27,6 +28,8 @@ public class BoardCard
     //
 
     public Guid Id { get; private set; }
+
+    public string Name { get; private set; } = null!;
 
     public string? Title { get; internal set; }
 
