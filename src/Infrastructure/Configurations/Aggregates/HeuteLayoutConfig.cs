@@ -24,7 +24,7 @@ public class LayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
        builder.Property(l => l.Version)
               .IsRequired();
 
-        builder.HasMany<LayoutSectionModel>("m_sections")
+       builder.HasMany(l => (IEnumerable<LayoutSectionModel>)l.Sections)
               .WithOne(s => s.Layout)
               .HasForeignKey(s => s.LayoutId)
               .OnDelete(DeleteBehavior.Cascade);
@@ -32,7 +32,7 @@ public class LayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
        builder.HasIndex(l => new { l.OwnerId, l.Name, l.Version })
               .IsUnique();
 
-       builder.Navigation("m_sections")
+       builder.Navigation(l => l.Sections)
             .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }
