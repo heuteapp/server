@@ -4,20 +4,22 @@ namespace HeuteApp.Core.Aggregates.Layout;
 
 public class HeuteLayout
 {
-    private readonly LayoutKey m_key = null!;
-
     private readonly List<LayoutSection> m_sections = [];
 
     protected HeuteLayout()
     {
-        m_key = null!;
+        Id = Guid.Empty;
+        OwnerId = Guid.Empty;
+        Name = string.Empty;
+        Version = 0;
     }
 
     protected HeuteLayout(LayoutDefinition definition)
     {
         Id = Guid.NewGuid();
         OwnerId = definition.OwnerId;
-        m_key = definition.Key;
+        Name = definition.Key.Name;
+        Version = definition.Key.Version;
 
         foreach (var sectionDef in definition.Props.Sections)
         {
@@ -37,9 +39,9 @@ public class HeuteLayout
 
     public Guid OwnerId { get; private set; }
 
-    public string Name => m_key.Name;
+    public string Name { get; private set; }
 
-    public int Version => m_key.Version;
+    public int Version {get; private set; }
 
     public IReadOnlyCollection<LayoutSection> Sections => m_sections;
 
