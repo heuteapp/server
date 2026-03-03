@@ -5,14 +5,18 @@ namespace HeuteApp.Core.Aggregates.Layout;
 
 public class LayoutSection
 {
-    private readonly LayoutSectionKey m_key = null!;
-
-    protected LayoutSection() { }
+    protected LayoutSection()
+    {
+        Id = Guid.Empty;
+        Name = string.Empty;
+        Rect = null!;
+        Size = null!;
+    }
 
     protected LayoutSection(LayoutSectionDefinition definition)
     {
         Id = Guid.NewGuid();
-        m_key = definition.Key;
+        Name = definition.Key.Name;
         Rect = definition.Props.Rect;
         Size = definition.Props.Size;
     }
@@ -27,9 +31,9 @@ public class LayoutSection
 
     public Guid Id { get; private set; }
 
-    public string Name => m_key.Name;
+    public string Name { get; private set;}
 
-    public Rect Rect { get; internal set; } = null!;
+    public Rect Rect { get; internal set; }
 
-    public GridSize Size { get; internal set; } = null!;
+    public GridSize Size { get; internal set; }
 }
