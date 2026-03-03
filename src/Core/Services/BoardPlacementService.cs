@@ -8,16 +8,16 @@ namespace HeuteApp.Core.Services;
 
 public class BoardPlacementService
 {
-    public BoardCard AddCard(HeuteBoard board, HeuteLayout layout, Guid id, BoardCardProps props)
+    public BoardCard AddCard(HeuteBoard board, HeuteLayout layout, BoardCardDefinition definition)
     {        
         ArgumentNullException.ThrowIfNull(board);
 
         if(board.IsMaxCardsReached())
             throw new InvalidOperationException($"Board cannot have more than {HeuteBoard.MaxCardCount} cards");
 
-        ArgumentNullException.ThrowIfNull(props);
+        ArgumentNullException.ThrowIfNull(definition);
 
-        var card = board.Internal_CreateCard(id, props);
+        var card = board.Internal_CreateCard(definition);
 
         if(card.CanBePlaced)
         {

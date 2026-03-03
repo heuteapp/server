@@ -15,10 +15,10 @@ public static partial class BoardMapper
         );
     }
 
-    public static BoardCard ToDomain(this BoardCardProps props, Guid id)
+    public static BoardCard ToDomain(this BoardCardDefinition definition)
     {
-        ArgumentNullException.ThrowIfNull(props);
+        ArgumentNullException.ThrowIfNull(definition);
 
-        return BoardCard.Create(id, props);
+        return BoardCard.Create(definition);
     }
 }

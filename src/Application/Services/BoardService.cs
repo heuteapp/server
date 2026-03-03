@@ -35,7 +35,7 @@ public class BoardService(
         return board;
     }
 
-    public async Task AddCardAsync(Guid ownerId, DateOnly date, BoardCardProps props)
+    public async Task AddCardAsync(Guid ownerId, DateOnly date, BoardCardDefinition definition)
     {
         var board = await boardRepository.GetByDateAsync(ownerId, date) 
             ?? throw new Exception("Board not found.");
@@ -43,7 +43,7 @@ public class BoardService(
         var layout = await layoutRepository.GetByIdAsync(board.LayoutId)
             ?? throw new Exception("Layout not found.");
 
-        placementService.AddCard(board, layout, Guid.NewGuid(), props);
+        placementService.AddCard(board, layout, definition);
         await unitOfWork.SaveChangesAsync();
     }
 }

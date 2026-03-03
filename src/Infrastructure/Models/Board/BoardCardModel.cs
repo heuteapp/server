@@ -7,16 +7,16 @@ public class BoardCardModel : BoardCard
 {
     protected BoardCardModel() { }
 
-    protected BoardCardModel(Guid id, HeuteBoardModel? board, BoardCardProps props) : base(id, props)
+    protected BoardCardModel(HeuteBoardModel? board, BoardCardDefinition definition) : base(definition)
     {
         BoardId = board?.Id ?? Guid.Empty;
         Board = board;
     }
 
-    public static BoardCardModel Create(Guid id, HeuteBoardModel board, BoardCardProps props)
+    public static BoardCardModel Create(HeuteBoardModel board, BoardCardDefinition definition)
     {
-        ArgumentNullException.ThrowIfNull(props);
-        return new BoardCardModel(id, board, props);
+        ArgumentNullException.ThrowIfNull(definition);
+        return new BoardCardModel(board, definition);
     }
 
     //

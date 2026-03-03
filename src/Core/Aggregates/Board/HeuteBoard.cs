@@ -25,9 +25,9 @@ public class HeuteBoard
         Date = date;
     }
 
-    internal protected virtual BoardCard Internal_CreateCard(Guid id, BoardCardProps props)
+    internal protected virtual BoardCard Internal_CreateCard(BoardCardDefinition definition)
     {
-        return BoardCard.Create(id, props);
+        return BoardCard.Create(definition);
     }
 
     //

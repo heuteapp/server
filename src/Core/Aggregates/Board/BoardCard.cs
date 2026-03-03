@@ -6,11 +6,11 @@ public class BoardCard
 {
     protected BoardCard() { }
 
-    protected BoardCard(Guid id, BoardCardProps props)
+    protected BoardCard(BoardCardDefinition definition)
     {
-        Id = id;
-        Title = props.Title;
-        Placement = props.Placement;
+        Id = Guid.NewGuid();
+        Title = definition.Props.Title;
+        Placement = definition.Props.Placement;
 
         if(Placement == null)
         {
@@ -18,10 +18,10 @@ public class BoardCard
         }
     }
 
-    public static BoardCard Create(Guid id, BoardCardProps props)
+    public static BoardCard Create(BoardCardDefinition definition)
     {
-        ArgumentNullException.ThrowIfNull(props);
-        return new BoardCard(id, props);
+        ArgumentNullException.ThrowIfNull(definition);
+        return new BoardCard(definition);
     }
 
     //

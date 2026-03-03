@@ -6,9 +6,9 @@ namespace HeuteApp.Infrastructure.Models.Board;
 
 public class HeuteBoardModel : HeuteBoard
 {    
-    protected override BoardCard Internal_CreateCard(Guid id, BoardCardProps props)
+    protected override BoardCard Internal_CreateCard(BoardCardDefinition definition)
     {
-        return BoardCardModel.Create(id, this, props);
+        return BoardCardModel.Create(this, definition);
     }
 
     protected HeuteBoardModel() { }
