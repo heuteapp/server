@@ -11,8 +11,7 @@ public static partial class BoardMapper
 
         return new BoardCardProps(
             card.Title,
-            card.SectionId,
-            card.Position
+            card.Placement
         );
     }
 

@@ -1,4 +1,3 @@
-using HeuteApp.Core.ValueObjects;
 using HeuteApp.Core.ValueObjects.Board;
 
 namespace HeuteApp.Core.Aggregates.Board;
@@ -11,13 +10,11 @@ public class BoardCard
     {
         Id = id;
         Title = props.Title;
-        SectionId = props.SectionId;
-        Position = props.Position;
+        Placement = props.Placement;
 
-        if(SectionId == null != (Position == null))
+        if(Placement == null)
         {
-            SectionId = null;
-            Position = null;
+            return;
         }
     }
 
@@ -33,39 +30,29 @@ public class BoardCard
 
     public string? Title { get; internal set; }
 
-    public Guid? SectionId { get; internal set; }
+    public BoardCardPlacement? Placement { get; private set; }
 
-    public GridRect? Position { get; internal set; }
+    public bool HasPlacement => Placement is not null;
 
-    public bool HasPlacement => 
-        SectionId is not null && 
-        Position is not null;
+    public bool CanBePlaced => HasPlacement && !IsVerified;
 
-    public bool CanBePlaced =>
-        HasPlacement &&
-        !IsVerified;
-
-    public bool IsPlaced =>
-        HasPlacement &&
-        IsVerified;
+    public bool IsPlaced => HasPlacement && IsVerified;
 
     public bool IsVerified { get; private set; } = false;
 
     //
 
-    internal void DoPlace(Guid sectionId, GridRect position)
+    internal void DoPlace(BoardCardPlacement placement)
     {
-        ArgumentNullException.ThrowIfNull(position);
+        ArgumentNullException.ThrowIfNull(placement);
 
-        SectionId = sectionId;
-        Position = position;
+        Placement = placement;
         IsVerified = false;
     }
 
     internal void DoUnplace()
     {
-        SectionId = null;
-        Position = null;
+        Placement = null;
         IsVerified = false;
     }
 

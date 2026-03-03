@@ -25,11 +25,7 @@ public static class BoardMapper
         return new BoardCardResult(
             card.Id,
             card.Title,
-            card.SectionId,
-            card.Position?.Col ?? 0,
-            card.Position?.Row ?? 0,
-            card.Position?.ColSpan ?? 0,
-            card.Position?.RowSpan ?? 0
+            card.Placement
         );
     }
 }

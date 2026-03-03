@@ -9,8 +9,7 @@ public static class BoardCardMapper
     {
         return new BoardCardProps(
             model.Title,
-            model.SectionId,
-            model.Position
+            model.Placement
         );
     }
 }

@@ -21,57 +21,60 @@ public class BoardPlacementService
 
         if(card.CanBePlaced)
         {
-            PlaceCard(board, layout, card.Id, card.SectionId!.Value, card.Position!);
+            PlaceCard(board, layout, card.Id, card.Placement!);
         }
 
         board.Internal_AddCard(card);
         return card;
     }
 
-    public void PlaceCard(HeuteBoard board, HeuteLayout layout, Guid cardId, Guid sectionId, GridRect position)
+    public void PlaceCard(HeuteBoard board, HeuteLayout layout, Guid cardId, BoardCardPlacement placement)
     {
         ArgumentNullException.ThrowIfNull(board);
         ArgumentNullException.ThrowIfNull(layout);
+        ArgumentNullException.ThrowIfNull(placement);
 
         var card = board.Cards.FirstOrDefault(c => c.Id == cardId) 
             ?? throw new InvalidOperationException("Card not found");
 
-        EnsureFitsInSection(layout, sectionId, position);
-        EnsureNoOverlap(board, cardId, sectionId, position);
+        EnsureFitsInSection(layout, placement);
+        EnsureNoOverlap(board, cardId, placement);
 
-        card.DoPlace(sectionId, position);
+        card.DoPlace(placement);
     }
 
-    public bool IsFitsInSection(HeuteLayout layout, Guid sectionId, GridRect position)
+    public bool IsFitsInSection(HeuteLayout layout, BoardCardPlacement placement)
     {
         ArgumentNullException.ThrowIfNull(layout);
+        ArgumentNullException.ThrowIfNull(placement);
 
-        var section = layout.Sections.FirstOrDefault(s => s.Id == sectionId);
+        var section = layout.Sections.FirstOrDefault(s => s.Name == placement.Section.Name);
         if (section is null)
             return false;
 
-        return section.Size.Contains(position);
+        return section.Size.Contains(placement.Position);
     }
 
-    public BoardCard? GetOverlappingCard(HeuteBoard board, Guid? cardId, Guid sectionId, GridRect position)
+    public BoardCard? GetOverlappingCard(HeuteBoard board, Guid? cardId, BoardCardPlacement placement)
     {
         ArgumentNullException.ThrowIfNull(board);
+        ArgumentNullException.ThrowIfNull(placement);
 
         return board.Cards.FirstOrDefault(c =>
             (cardId == null || c.Id != cardId) &&
-            c.SectionId == sectionId &&
-            c.Position?.Overlaps(position) == true);
+            c.Placement?.Section == placement.Section &&
+            c.Placement?.Position?.Overlaps(placement.Position) == true);
     }
 
-    public void EnsureFitsInSection(HeuteLayout layout, Guid sectionId, GridRect position)
+    public void EnsureFitsInSection(HeuteLayout layout, BoardCardPlacement placement)
     {
-        if (!IsFitsInSection(layout, sectionId, position))
+        if (!IsFitsInSection(layout, placement))
             throw new InvalidOperationException("Card Position does not fit in section");
     }
 
-    public void EnsureNoOverlap(HeuteBoard board, Guid? cardId, Guid sectionId, GridRect position)
+    public void EnsureNoOverlap(HeuteBoard board, Guid? cardId, BoardCardPlacement placement)
     {
-        var overlappingCard = GetOverlappingCard(board, cardId, sectionId, position);
+        var overlappingCard = GetOverlappingCard(board, cardId, placement);
         if (overlappingCard is not null)
             throw new InvalidOperationException("Card Position overlaps with another card");
     }
