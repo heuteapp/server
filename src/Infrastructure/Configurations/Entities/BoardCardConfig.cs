@@ -27,24 +27,20 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
                         .HasColumnName("Placement_SectionName")
                         .IsRequired();
 
-                placement.OwnsOne(p => p.Position, position =>
-                {
-                        position.Property(p => p.Col)
-                                .HasColumnName("Placement_Position_Col")
-                                .IsRequired();
+                placement.Property(p => p.Col)
+                        .HasColumnName("Placement_Col");
+                
+                placement.Property(p => p.Row)
+                        .HasColumnName("Placement_Row");
 
-                        position.Property(p => p.Row)
-                                .HasColumnName("Placement_Position_Row")
-                                .IsRequired();
+                placement.Property(p => p.ColSpan)
+                        .HasColumnName("Placement_ColSpan");
+                
+                placement.Property(p => p.RowSpan)
+                        .HasColumnName("Placement_RowSpan");
 
-                        position.Property(p => p.ColSpan)
-                                .HasColumnName("Placement_Position_ColSpan")
-                                .IsRequired();
-
-                        position.Property(p => p.RowSpan)
-                                .HasColumnName("Placement_Position_RowSpan")
-                                .IsRequired();
-                });
+                placement.Ignore(p => p.Section);
+                placement.Ignore(p => p.Position);
         });
 
         builder.Navigation(c => c.Placement)
