@@ -6,11 +6,6 @@ public class HeuteBoard
 {
     public static int MaxCardCount => 12;
 
-    public static HeuteBoard Create(BoardDefinition definition)
-    {
-        return new HeuteBoard(definition);
-    }
-
     //
 
     private readonly List<BoardCard> m_cards = [];
@@ -25,9 +20,11 @@ public class HeuteBoard
         Date = definition.Key.Date;
     }
 
-    internal protected virtual BoardCard Internal_CreateCard(BoardCardDefinition definition)
+    //
+
+    public static HeuteBoard Create(BoardDefinition definition)
     {
-        return BoardCard.Create(definition);
+        return new HeuteBoard(definition);
     }
 
     //
@@ -47,6 +44,13 @@ public class HeuteBoard
     public bool IsMaxCardsReached()
     {
         return Cards.Count >= MaxCardCount;
+    }
+
+    //
+
+    internal protected virtual BoardCard Internal_CreateCard(BoardCardDefinition definition)
+    {
+        return BoardCard.Create(definition);
     }
 
     internal bool Internal_AddCard(BoardCard card)
