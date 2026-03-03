@@ -34,8 +34,5 @@ public class LayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
 
        builder.HasIndex(l => new { l.OwnerId, l.Name, l.Version })
               .IsUnique();
-
-       builder.Navigation(l => l.Sections)
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }
