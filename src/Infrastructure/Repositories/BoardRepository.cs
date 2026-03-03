@@ -14,8 +14,8 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
     public async Task<HeuteBoard?> GetByIdAsync(Guid boardId)
     {
         var entity = await conext.Boards
-            .Include("m_cards")
-            .Include(c => c.Layout)
+            .Include(b => b.Layout)
+            .Include(b => b.Cards)
             .FirstOrDefaultAsync(b => b.Id == boardId);
 
         return entity;
@@ -24,8 +24,8 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
     public async Task<HeuteBoard?> GetByDateAsync(Guid ownerId, DateOnly date)
     {
         var entity = await conext.Boards
-            .Include("m_cards")
-            .Include(c => c.Layout)
+            .Include(b => b.Cards)
+            .Include(b => b.Layout)
             // TODO: This is a temporary workaround until we have proper user management in place.
             .FirstOrDefaultAsync(b => b.OwnerId == ownerId && b.Date == date);
 
