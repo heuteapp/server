@@ -12,17 +12,17 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
 {
     public async Task<HeuteLayout?> GetByIdAsync(Guid layoutId)
     {
-        var entity = await context.Layouts
-            .Include("m_sections")
-            .FirstOrDefaultAsync(b => b.Id == layoutId);
+        var layout = await context.Layouts
+            .Include(l => l.Sections)
+            .FirstOrDefaultAsync(l => l.Id == layoutId);
 
-        return entity;
+        return layout;
     }
 
     public async Task<HeuteLayout?> GetByKeyAsync(LayoutLookup key)
     {
         var query = context.Layouts
-            .Include("m_sections")
+            .Include(l => l.Sections)
             .Where(l =>
                 l.OwnerId == key.OwnerId &&
                 l.Name == key.Name);
@@ -41,22 +41,22 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
 
     public async Task<IEnumerable<HeuteLayout>> GetByOwnerAsync(Guid ownerId)
     {
-        var entities = await context.Layouts
-            .Include("m_sections")
-            .Where(b => b.OwnerId == ownerId)
+        var layout = await context.Layouts
+            .Include(l => l.Sections)
+            .Where(l => l.OwnerId == ownerId)
             .ToListAsync();
 
-        return entities;
+        return layout;
     }
 
     public async Task<int?> GetLastestVersionAsync(Guid? ownerId, string name)
     {
-        var entity = await context.Layouts
-            .Where(b => b.OwnerId == ownerId && b.Name == name)
-            .OrderByDescending(b => b.Version)
+        var layout = await context.Layouts
+            .Where(l => l.OwnerId == ownerId && l.Name == name)
+            .OrderByDescending(l => l.Version)
             .FirstOrDefaultAsync();
 
-        return entity?.Version;
+        return layout?.Version;
     }
 
     public async Task<HeuteLayout> CreateAsync(Guid ownerId, string name)
