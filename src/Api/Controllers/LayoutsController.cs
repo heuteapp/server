@@ -1,5 +1,5 @@
 using HeuteApp.Api.Mappers.Layout;
-using HeuteApp.Api.Models.Request;
+using HeuteApp.Api.Models.Public.Request;
 using HeuteApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 

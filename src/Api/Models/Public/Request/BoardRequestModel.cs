@@ -1,3 +1,5 @@
-namespace HeuteApp.Api.Models.Request;
+using HeuteApp.Core.ValueObjects.Layout;
 
-public record CreateBoardRequest(string LayoutName, int LayoutVersion);
+namespace HeuteApp.Api.Models.Public.Request;
+
+public record CreateBoardRequest(LayoutKey Layout);

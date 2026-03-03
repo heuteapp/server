@@ -1,4 +1,4 @@
-using HeuteApp.Api.Models.Request;
+using HeuteApp.Api.Models.Public.Request;
 using HeuteApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +22,7 @@ public class BoardsController(BoardService boardService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateBoard(string ownerName, [FromBody] CreateBoardRequest request)
     {
-        var board = await boardService.CreateBoardAsync(ownerName, request.LayoutName, request.LayoutVersion);
+        var board = await boardService.CreateBoardAsync(ownerName, request.Layout.Name, request.Layout.Version);
 
         return Ok(board);
     }
