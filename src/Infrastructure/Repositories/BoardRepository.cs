@@ -32,12 +32,12 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return entity;
     }
 
-    public Task<HeuteBoard> CreateAsync(Guid ownerId, DateOnly date, HeuteLayout layout)
+    public Task<HeuteBoard> CreateAsync(Guid ownerId, HeuteLayout layout, BoardKey key, BoardProps props)
     {
         if(layout is not HeuteLayoutModel layoutModel)
             throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
 
-        var model = HeuteBoardModel.Create(layoutModel, new BoardDefinition(ownerId, layoutModel.Id, new BoardKey(date), new BoardProps([])));
+        var model = HeuteBoardModel.Create(layoutModel, new BoardDefinition(ownerId, layoutModel.Id, key, props));
 
         conext.Boards.Add(model);
         return Task.FromResult<HeuteBoard>(model);

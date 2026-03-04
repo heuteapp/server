@@ -2,6 +2,7 @@ using HeuteApp.Application.Interfaces;
 using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Core.Services;
 using HeuteApp.Core.ValueObjects.Board;
+using HeuteApp.Core.ValueObjects.Layout;
 
 namespace HeuteApp.Application.Services;
 
@@ -16,7 +17,7 @@ public class BoardService(
         return await boardRepository.GetByDateAsync(Guid.Empty, date);
     }
 
-    public async Task<HeuteBoard> CreateBoardAsync(string ownerName, string layoutName, int layoutVersion)
+    public async Task<HeuteBoard> CreateBoardAsync(string ownerName, LayoutKey layoutKey, BoardKey boardKey, BoardProps props)
     {
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -26,10 +27,10 @@ public class BoardService(
         if (existing != null)
             throw new Exception("Board already exists for this date.");
 
-        var layout = await layoutRepository.GetByKeyAsync(new (Guid.Empty, layoutName, layoutVersion))
+        var layout = await layoutRepository.GetByKeyAsync(new (Guid.Empty, layoutKey.Name, layoutKey.Version))
             ?? throw new Exception("Layout not found.");
 
-        var board = await boardRepository.CreateAsync(Guid.Empty, date, layout);
+        var board = await boardRepository.CreateAsync(Guid.Empty, layout, boardKey, props);
         await unitOfWork.SaveChangesAsync();
 
         return board;
