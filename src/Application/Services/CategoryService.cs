@@ -6,9 +6,13 @@ namespace HeuteApp.Application.Services;
 
 public class CategoryService(ICategoryRepository repository, IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteCategory?> GetCategoryByNameAsync(string ownerName, string name)
+    public async Task<HeuteCategory> GetCategoryByNameAsync(string ownerName, string name)
     {
         var category = await repository.GetByKeyAsync(Guid.Empty, new (name));
+
+        if(category == null)
+            throw new Exception($"Category not found for owner '{ownerName}' and name '{name}'.");
+
         return category;
     }
 
@@ -17,7 +21,7 @@ public class CategoryService(ICategoryRepository repository, IUnitOfWork unitOfW
         var existing = await repository.GetByKeyAsync(Guid.Empty, key);
 
         if (existing != null)
-            throw new Exception("Category already exists for this owner and name.");
+            throw new Exception($"Category already exists for owner '{ownerName}' and name '{key.Name}'.");
 
         var category = await repository.CreateAsync(Guid.Empty, key, props);
 
