@@ -8,7 +8,7 @@ public interface ICategoryRepository
 {    
     Task<HeuteCategory?> GetByIdAsync(Guid categoryId);
 
-    Task<HeuteCategory?> GetByKeyAsync(Guid ownerId, CategoryKey key);
+    Task<HeuteCategory?> GetByKeyAsync(CategoryOwnership ownership, CategoryKey key);
 
     Task<HeuteCategory> CreateAsync(HeuteUser owner, CategoryDefinition definition);
 }

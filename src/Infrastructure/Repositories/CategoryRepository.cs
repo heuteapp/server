@@ -19,10 +19,10 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         return category;
     }
 
-    public async Task<HeuteCategory?> GetByKeyAsync(Guid ownerId, CategoryKey key)
+    public async Task<HeuteCategory?> GetByKeyAsync(CategoryOwnership ownership, CategoryKey key)
     {
         var category = await context.Categories
-            .FirstOrDefaultAsync(c => c.OwnerId == ownerId && c.Name == key.Name);
+            .FirstOrDefaultAsync(c => c.OwnerId == ownership.OwnerId && c.Name == key.Name);
 
         return category;
     }

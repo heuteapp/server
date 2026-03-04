@@ -20,7 +20,7 @@ public class BoardService(
         var user = await userRepository.GetByKeyAsync(new (ownerName))
             ?? throw new Exception($"User '{ownerName}' not found.");
 
-        var category = await categoryRepository.GetByKeyAsync(user.Id, new (categoryName))
+        var category = await categoryRepository.GetByKeyAsync(new(user.Id), new (categoryName))
             ?? throw new Exception("Category not found.");
 
         return await boardRepository.GetByKeyAsync(new (user.Id, category.Id), new (date));
@@ -33,7 +33,7 @@ public class BoardService(
         var owner = await userRepository.GetByKeyAsync(new (ownerName))
             ?? throw new Exception($"User '{ownerName}' not found.");
 
-        var category = await categoryRepository.GetByKeyAsync(owner.Id, categoryKey)
+        var category = await categoryRepository.GetByKeyAsync(new(owner.Id), categoryKey)
             ?? throw new Exception("Category not found.");
 
         var layout = await layoutRepository.GetByKeyAsync(new (owner.Id, layoutKey.Name, layoutKey.Version))
@@ -56,7 +56,7 @@ public class BoardService(
         var user = await userRepository.GetByKeyAsync(new (ownerName))
             ?? throw new Exception($"User '{ownerName}' not found.");
 
-        var category = await categoryRepository.GetByKeyAsync(user.Id, new (categoryName))
+        var category = await categoryRepository.GetByKeyAsync(new(user.Id), new (categoryName))
             ?? throw new Exception("Category not found.");
 
         var board = await boardRepository.GetByKeyAsync(new (user.Id, category.Id), new (date))
