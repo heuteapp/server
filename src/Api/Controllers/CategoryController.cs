@@ -22,7 +22,7 @@ public class CategoryController(CategoryService categoryService) : ControllerBas
     [HttpPost]
     public async Task<IActionResult> CreateCategory(string ownerName, [FromBody] CreateCategoryRequest request)
     {
-        var category = await categoryService.CreateCategoryAsync(ownerName, request.Key, request.Props);
+        var category = await categoryService.CreateCategoryAsync(ownerName, request.Definition);
 
         return Ok(category);
     }
