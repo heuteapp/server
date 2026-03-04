@@ -15,6 +15,9 @@ public class HeuteCategoryConfig : IEntityTypeConfiguration<HeuteCategoryModel>
         builder.Property(c => c.Id)
             .ValueGeneratedNever();
 
+        builder.Property(c => c.OwnerId)
+            .IsRequired();
+
         builder.Property(b => b.Name)
             .IsRequired();
     }
