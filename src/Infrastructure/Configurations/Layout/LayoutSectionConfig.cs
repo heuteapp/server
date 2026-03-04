@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using HeuteApp.Infrastructure.Models.Layout;
 
-namespace HeuteApp.Infrastructure.Configurations.Entities;
+namespace HeuteApp.Infrastructure.Configurations.Layout;
 
 public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionModel>
 {
