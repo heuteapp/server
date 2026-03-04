@@ -20,5 +20,10 @@ public class HeuteCategoryConfig : IEntityTypeConfiguration<HeuteCategoryModel>
 
         builder.Property(b => b.Name)
             .IsRequired();
+
+        builder.HasOne(c => c.Owner)
+            .WithMany()
+            .HasForeignKey(c => c.OwnerId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
