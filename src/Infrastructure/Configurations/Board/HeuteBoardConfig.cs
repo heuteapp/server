@@ -21,6 +21,9 @@ public class BoardConfig : IEntityTypeConfiguration<HeuteBoardModel>
         builder.Property(b => b.LayoutId)
             .IsRequired();
 
+        builder.Property(b => b.Category)
+            .IsRequired();
+
         builder.Property(b => b.Date)
             .IsRequired();
 
