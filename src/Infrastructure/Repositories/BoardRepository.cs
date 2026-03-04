@@ -25,13 +25,13 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return entity;
     }
 
-    public async Task<HeuteBoard?> GetByKeyAsync(BoardReference reference, BoardKey key)
+    public async Task<HeuteBoard?> GetByKeyAsync(BoardOwnership ownership, BoardKey key)
     {
         var entity = await conext.Boards
             .Include(b => b.Cards)
             .Include(b => b.Layout)
             // TODO: This is a temporary workaround until we have proper user management in place.
-            .FirstOrDefaultAsync(b => b.OwnerId == reference.OwnerId && b.CategoryId == reference.CategoryId && b.Date == key.Date);
+            .FirstOrDefaultAsync(b => b.OwnerId == ownership.OwnerId && b.CategoryId == ownership.CategoryId && b.Date == key.Date);
 
         return entity;
     }

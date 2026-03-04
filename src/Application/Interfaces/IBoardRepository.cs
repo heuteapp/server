@@ -10,7 +10,7 @@ public interface IBoardRepository
 {    
     Task<HeuteBoard?> GetByIdAsync(Guid boardId);
 
-    Task<HeuteBoard?> GetByKeyAsync(BoardReference reference, BoardKey key);
+    Task<HeuteBoard?> GetByKeyAsync(BoardOwnership ownership, BoardKey key);
 
     Task<HeuteBoard> CreateAsync(HeuteUser user, HeuteCategory category, HeuteLayout layout, BoardDefinition definition);
 }
