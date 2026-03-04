@@ -1,3 +1,4 @@
+using HeuteApp.Core.ValueObjects;
 using HeuteApp.Core.ValueObjects.Layout;
 
 namespace HeuteApp.Core.Aggregates.Layout;
@@ -14,6 +15,7 @@ public class HeuteLayout
         OwnerId = definition.OwnerId;
         Name = definition.Key.Name;
         Version = definition.Key.Version;
+        Size = definition.Props.Size;
 
         foreach (var sectionDef in definition.Props.Sections)
         {
@@ -43,6 +45,8 @@ public class HeuteLayout
     public string Name { get; private set; } = null!;
 
     public int Version { get; private set; }
+
+    public GridSize Size { get; private set; } = null!;
 
     public IReadOnlyCollection<LayoutSection> Sections => m_sections;
 
