@@ -26,11 +26,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILayoutRepository, LayoutRepository>();
-builder.Services.AddScoped<BoardPlacementService, BoardPlacementService>();
-builder.Services.AddScoped<BoardService, BoardService>();
-builder.Services.AddScoped<LayoutService, LayoutService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+builder.Services.AddScoped<BoardPlacementService>();
+
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<LayoutService>();
+builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<BoardService>();
 
 var app = builder.Build();
 
