@@ -6,6 +6,8 @@ using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Infrastructure.Models.Layout;
 using HeuteApp.Infrastructure.Models.Board;
 using HeuteApp.Core.ValueObjects.Board;
+using HeuteApp.Core.Aggregates.User;
+using HeuteApp.Infrastructure.Models.User;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
@@ -32,12 +34,15 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return entity;
     }
 
-    public Task<HeuteBoard> CreateAsync(Guid ownerId, HeuteLayout layout, BoardKey key, BoardProps props)
+    public Task<HeuteBoard> CreateAsync(HeuteUser user, HeuteLayout layout, BoardKey key, BoardProps props)
     {
+        if(user is not HeuteUserModel userModel)
+            throw new ArgumentException("Expected HeuteUserModel", nameof(user));
+
         if(layout is not HeuteLayoutModel layoutModel)
             throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
 
-        var model = HeuteBoardModel.Create(layoutModel, new BoardDefinition(key, props));
+        var model = HeuteBoardModel.Create(userModel, layoutModel, new BoardDefinition(key, props));
 
         conext.Boards.Add(model);
         return Task.FromResult<HeuteBoard>(model);
