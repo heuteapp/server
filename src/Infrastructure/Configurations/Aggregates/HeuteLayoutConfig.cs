@@ -24,6 +24,17 @@ public class LayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
        builder.Property(l => l.Version)
               .IsRequired();
 
+       builder.OwnsOne(l => l.Size, size =>
+       {
+           size.Property(s => s.ColCount)
+              .HasColumnName("Size_ColCount")
+              .IsRequired();
+
+           size.Property(s => s.RowCount)
+              .HasColumnName("Size_RowCount")
+              .IsRequired();
+       });
+
        builder.HasMany(l => (IEnumerable<LayoutSectionModel>)l.Sections)
               .WithOne(s => s.Layout)
               .HasForeignKey(s => s.LayoutId)
