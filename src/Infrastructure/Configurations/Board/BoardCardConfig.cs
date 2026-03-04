@@ -52,5 +52,11 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
         builder.Ignore(c => c.IsPlaced);
 
         builder.HasIndex(c => c.BoardId);
+
+        
+        builder.HasOne(c => c.Board)
+            .WithMany(b => (IEnumerable<BoardCardModel>)b.Cards)
+            .HasForeignKey(c => c.BoardId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
