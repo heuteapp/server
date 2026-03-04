@@ -20,12 +20,7 @@ public static class LayoutResponseMapper
     {
         return new PublicLayoutSectionResponse(
             section.Name,
-            section.X,
-            section.Y,
-            section.Width,
-            section.Height,
-            section.ColCount,
-            section.RowCount
+            section.Area
         );
     }
 }

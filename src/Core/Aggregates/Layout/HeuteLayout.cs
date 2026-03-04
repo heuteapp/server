@@ -20,7 +20,7 @@ public class HeuteLayout
             var section = Internal_CreateSection(sectionDef);
 
             // check for overlapping sections
-            if(m_sections.Any(s => s.Rect.Overlaps(section.Rect)))
+            if(m_sections.Any(s => s.Area.Overlaps(section.Area)))
             {
                 throw new InvalidOperationException($"Section {section.Name} overlaps with another section.");
             }

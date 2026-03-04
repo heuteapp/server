@@ -52,7 +52,7 @@ public class BoardPlacementService
         if (section is null)
             return false;
 
-        return section.Size.Contains(placement.Position);
+        return section.Area.Contains(placement.Position);
     }
 
     public BoardCard? GetOverlappingCard(HeuteBoard board, Guid? cardId, BoardCardPlacement placement)

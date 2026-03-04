@@ -25,12 +25,7 @@ public static class LayoutMapper
         return new LayoutSectionResult(
             section.Id,
             section.Name,
-            section.Rect.X,
-            section.Rect.Y,
-            section.Rect.Width,
-            section.Rect.Height,
-            section.Size.ColCount,
-            section.Size.RowCount
+            section.Area
         );
     }
 }

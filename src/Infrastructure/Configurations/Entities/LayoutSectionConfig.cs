@@ -21,37 +21,24 @@ public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionModel>
         builder.Property(s => s.Name)
             .IsRequired();
 
-        builder.OwnsOne(s => s.Rect, rect =>
+        builder.OwnsOne(s => s.Area, area =>
         {
-            rect.WithOwner();
+            area.WithOwner();
 
-            rect.Property(r => r.X)
-                .HasColumnName("Rect_X")
+            area.Property(r => r.Col)
+                .HasColumnName("Area_Col")
                 .IsRequired();
 
-            rect.Property(r => r.Y)
-                .HasColumnName("Rect_Y")
+            area.Property(r => r.Row)
+                .HasColumnName("Area_Row")
                 .IsRequired();
 
-            rect.Property(r => r.Width)
-                .HasColumnName("Rect_Width")
+            area.Property(r => r.ColSpan)
+                .HasColumnName("Area_ColSpan")
                 .IsRequired();
 
-            rect.Property(r => r.Height)
-                .HasColumnName("Rect_Height")
-                .IsRequired();
-        });
-
-        builder.OwnsOne(s => s.Size, size =>
-        {
-            size.WithOwner();
-
-            size.Property(s => s.ColCount)
-                .HasColumnName("Size_ColCount")
-                .IsRequired();
-
-            size.Property(s => s.RowCount)
-                .HasColumnName("Size_RowCount")
+            area.Property(r => r.RowSpan)
+                .HasColumnName("Area_RowSpan")
                 .IsRequired();
         });
 
