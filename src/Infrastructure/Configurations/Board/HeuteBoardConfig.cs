@@ -27,15 +27,25 @@ public class HeuteBoardConfig : IEntityTypeConfiguration<HeuteBoardModel>
         builder.Property(b => b.Date)
             .IsRequired();
 
-        builder.HasMany(b => (IEnumerable<BoardCardModel>)b.Cards)
-            .WithOne(c => c.Board)
-            .HasForeignKey(c => c.BoardId)
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(b => b.Owner)
+            .WithMany()
+            .HasForeignKey(b => b.OwnerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(b => b.Category)
+            .WithMany()
+            .HasForeignKey(b => b.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(b => b.Layout)
             .WithMany()
             .HasForeignKey(b => b.LayoutId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.HasMany(b => (IEnumerable<BoardCardModel>)b.Cards)
+            .WithOne(c => c.Board)
+            .HasForeignKey(c => c.BoardId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(b => b.Id)
             .IsUnique();
