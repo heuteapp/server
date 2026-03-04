@@ -4,7 +4,7 @@ using HeuteApp.Infrastructure.Models.Board;
 
 namespace HeuteApp.Infrastructure.Configurations.Board;
 
-public class BoardConfig : IEntityTypeConfiguration<HeuteBoardModel>
+public class HeuteBoardConfig : IEntityTypeConfiguration<HeuteBoardModel>
 {
     public void Configure(EntityTypeBuilder<HeuteBoardModel> builder)
     {

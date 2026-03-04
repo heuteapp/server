@@ -4,7 +4,7 @@ using HeuteApp.Infrastructure.Models.Layout;
 
 namespace HeuteApp.Infrastructure.Configurations.Layout;
 
-public class LayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
+public class HeuteLayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
 {
     public void Configure(EntityTypeBuilder<HeuteLayoutModel> builder)
     {
