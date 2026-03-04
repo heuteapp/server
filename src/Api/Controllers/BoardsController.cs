@@ -8,13 +8,13 @@ namespace HeuteApp.Api.Controllers;
 [Route("user/{ownerName}/boards")]
 public class BoardsController(BoardService boardService) : ControllerBase
 {
-    [HttpGet("{date}")]
-    public async Task<IActionResult> GetBoard(string ownerName, DateOnly date)
+    [HttpGet("{category}/{date}")]
+    public async Task<IActionResult> GetBoard(string ownerName, string category, DateOnly date)
     {
-        var board = await boardService.GetBoardAsync(ownerName, date);
+        var board = await boardService.GetBoardAsync(ownerName, category, date);
 
         if(board == null)
-            return NotFound("Board not found for the given date.");
+            return NotFound("Board not found for the given category and date.");
 
         return Ok(board);
     }

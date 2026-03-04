@@ -17,6 +17,7 @@ public class HeuteBoard
         Id = Guid.NewGuid();
         OwnerId = definition.OwnerId;
         LayoutId = definition.LayoutId;
+        Category = definition.Key.Category;
         Date = definition.Key.Date;
     }
 
@@ -34,6 +35,8 @@ public class HeuteBoard
     public Guid OwnerId { get; private set; }
 
     public Guid LayoutId { get; private set; }
+
+    public string Category { get; private set; } = null!;
 
     public DateOnly Date { get; private set; }
 
