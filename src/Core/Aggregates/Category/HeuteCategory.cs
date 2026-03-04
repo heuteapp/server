@@ -9,6 +9,7 @@ public class HeuteCategory
     protected HeuteCategory(CategoryDefinition definition)
     {
         Id = Guid.NewGuid();
+        OwnerId = definition.OwnerId;
         Name = definition.Key.Name;
     }
 
@@ -22,5 +23,7 @@ public class HeuteCategory
 
     public Guid Id { get; private set; }
 
-    public string Name { get; private set;} = null!;
+    public Guid OwnerId { get; internal set; }
+
+    public string Name { get; private set; } = null!;
 }
