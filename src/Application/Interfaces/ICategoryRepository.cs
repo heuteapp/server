@@ -7,7 +7,7 @@ public interface ICategoryRepository
 {    
     Task<HeuteCategory?> GetByIdAsync(Guid categoryId);
 
-    Task<HeuteCategory?> GetByNameAsync(Guid ownerId, string name);
+    Task<HeuteCategory?> GetByKeyAsync(Guid ownerId, CategoryKey key);
 
     Task<HeuteCategory> CreateAsync(Guid ownerId, CategoryKey key, CategoryProps props);
 }
