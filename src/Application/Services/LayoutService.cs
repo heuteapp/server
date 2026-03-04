@@ -10,9 +10,12 @@ public class LayoutService(
     ILayoutRepository repository, 
     IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteLayoutResult?> GetLayoutAsync(Guid? ownerId, string name, int? version)
+    public async Task<HeuteLayoutResult?> GetLayoutAsync(string ownerName, string name, int? version)
     {
-        var layout = await repository.GetByKeyAsync(new (ownerId, name, version));
+        var owner = await userRepository.GetByKeyAsync(new (ownerName)) 
+            ?? throw new Exception($"Owner not found for name '{ownerName}'.");
+
+        var layout = await repository.GetByKeyAsync(new (owner.Id, name, version));
         return layout?.ToResult();
     }
 

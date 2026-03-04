@@ -12,7 +12,7 @@ public class LayoutsController(LayoutService layoutService) : ControllerBase
     [HttpGet("{name}")]
     public async Task<IActionResult> GetLayout(string ownerName, string name, [FromQuery] int? version)
     {
-        var layout = await layoutService.GetLayoutAsync(Guid.Empty, name, version);
+        var layout = await layoutService.GetLayoutAsync(ownerName, name, version);
 
         if(layout == null)
             return NotFound("Layout not found for the given name and version.");
