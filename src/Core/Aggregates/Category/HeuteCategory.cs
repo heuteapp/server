@@ -1,4 +1,4 @@
-using HeuteApp.Core.ValueObjects.Board;
+using HeuteApp.Core.ValueObjects.Category;
 
 namespace HeuteApp.Core.Aggregates.Category;
 
@@ -6,13 +6,13 @@ public class BoardCategory
 {
     protected BoardCategory() { }
 
-    protected BoardCategory(BoardCategoryDefinition definition)
+    protected BoardCategory(CategoryDefinition definition)
     {
         Id = Guid.NewGuid();
         Name = definition.Key.Name;
     }
 
-    public static BoardCategory Create(BoardCategoryDefinition definition)
+    public static BoardCategory Create(CategoryDefinition definition)
     {
         ArgumentNullException.ThrowIfNull(definition);
         return new BoardCategory(definition);
