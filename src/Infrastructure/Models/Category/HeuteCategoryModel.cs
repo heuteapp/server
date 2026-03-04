@@ -8,9 +8,14 @@ public class HeuteCategoryModel : HeuteCategory
 {
     protected HeuteCategoryModel() { }
 
-    protected HeuteCategoryModel(HeuteUserModel owner, CategoryDefinition definition) : base(new (owner.Id), definition) { }
+    protected HeuteCategoryModel(HeuteUserModel owner, CategoryDefinition definition) : base(new (owner.Id), definition) 
+    {
+        Owner = owner;
+    }
 
     //
+
+    public HeuteUserModel Owner { get; private set; } = null!;
 
     public static HeuteCategoryModel Create(HeuteUserModel owner, CategoryDefinition definition)
     {
