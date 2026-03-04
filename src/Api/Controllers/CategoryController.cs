@@ -12,10 +12,6 @@ public class CategoryController(CategoryService categoryService) : ControllerBas
     public async Task<IActionResult> GetCategory(string ownerName, string name)
     {
         var category = await categoryService.GetCategoryByKeyAsync(ownerName, new (name));
-
-        if(category == null)
-            return NotFound("Category not found for the given name.");
-
         return Ok(category);
     }
 
@@ -23,7 +19,6 @@ public class CategoryController(CategoryService categoryService) : ControllerBas
     public async Task<IActionResult> CreateCategory(string ownerName, [FromBody] CreateCategoryRequest request)
     {
         var category = await categoryService.CreateCategoryAsync(ownerName, request.Definition);
-
         return Ok(category);
     }
 }
