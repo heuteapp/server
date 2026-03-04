@@ -35,10 +35,10 @@ public class HeuteLayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
               .IsRequired();
        });
 
-       builder.HasMany(l => (IEnumerable<LayoutSectionModel>)l.Sections)
-              .WithOne(s => s.Layout)
-              .HasForeignKey(s => s.LayoutId)
-              .OnDelete(DeleteBehavior.Cascade);
+       builder.HasOne(l => l.Owner)
+              .WithMany()
+              .HasForeignKey(l => l.OwnerId)
+              .OnDelete(DeleteBehavior.Restrict);
 
        builder.HasIndex(l => new { l.OwnerId, l.Name, l.Version })
               .IsUnique();

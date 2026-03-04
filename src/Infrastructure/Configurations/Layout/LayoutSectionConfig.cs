@@ -42,6 +42,11 @@ public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionModel>
                 .IsRequired();
         });
 
+        builder.HasOne(s => s.Layout)
+            .WithMany(l => (IEnumerable<LayoutSectionModel>)l.Sections)
+            .HasForeignKey(s => s.LayoutId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasIndex(s => new { s.LayoutId, s.Name })
             .IsUnique();
     }
