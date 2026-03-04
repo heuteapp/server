@@ -1,5 +1,5 @@
 namespace HeuteApp.Core.ValueObjects.Category;
 
-public sealed record CategoryReference(
+public sealed record CategoryOwnership(
     Guid OwnerId
 );
