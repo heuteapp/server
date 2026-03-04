@@ -12,20 +12,20 @@ public class HeuteBoard
 
     protected HeuteBoard() { }
 
-    protected HeuteBoard(BoardDefinition definition)
+    protected HeuteBoard(BoardReference reference, BoardDefinition definition)
     {
         Id = Guid.NewGuid();
-        OwnerId = definition.OwnerId;
-        LayoutId = definition.LayoutId;
+        OwnerId = reference.OwnerId;
+        LayoutId = reference.LayoutId;
         Category = definition.Key.Category;
         Date = definition.Key.Date;
     }
 
     //
 
-    public static HeuteBoard Create(BoardDefinition definition)
+    public static HeuteBoard Create(BoardReference reference, BoardDefinition definition)
     {
-        return new HeuteBoard(definition);
+        return new HeuteBoard(reference, definition);
     }
 
     //

@@ -37,7 +37,7 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         if(layout is not HeuteLayoutModel layoutModel)
             throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
 
-        var model = HeuteBoardModel.Create(layoutModel, new BoardDefinition(ownerId, layoutModel.Id, key, props));
+        var model = HeuteBoardModel.Create(layoutModel, new BoardDefinition(key, props));
 
         conext.Boards.Add(model);
         return Task.FromResult<HeuteBoard>(model);

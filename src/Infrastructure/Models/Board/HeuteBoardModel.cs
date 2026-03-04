@@ -13,7 +13,7 @@ public class HeuteBoardModel : HeuteBoard
 
     protected HeuteBoardModel() { }
 
-    protected HeuteBoardModel(HeuteLayoutModel layout, BoardDefinition definition) : base(definition)
+    protected HeuteBoardModel(HeuteLayoutModel layout, BoardDefinition definition) : base(new(Guid.Empty, layout.Id), definition)
     { 
         Layout = layout;
     }
