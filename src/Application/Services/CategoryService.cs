@@ -6,13 +6,11 @@ namespace HeuteApp.Application.Services;
 
 public class CategoryService(ICategoryRepository repository, IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteCategory> GetCategoryByNameAsync(string ownerName, string name)
+    public async Task<HeuteCategory> GetCategoryByKeyAsync(string ownerName, CategoryKey key)
     {
-        var category = await repository.GetByKeyAsync(Guid.Empty, new (name));
-
-        if(category == null)
-            throw new Exception($"Category not found for owner '{ownerName}' and name '{name}'.");
-
+        var category = await repository.GetByKeyAsync(Guid.Empty, key) 
+            ?? throw new Exception($"Category not found for owner '{ownerName}' and key '{key}'.");
+            
         return category;
     }
 
