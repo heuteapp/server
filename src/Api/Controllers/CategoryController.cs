@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HeuteApp.Api.Controllers;
 
 [ApiController]
-[Route("user/{ownerName}/categories")]
+[Route("users/{ownerName}/categories")]
 public class CategoryController(CategoryService categoryService) : ControllerBase
 {
     [HttpGet("{name}")]

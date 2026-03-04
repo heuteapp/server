@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HeuteApp.Api.Controllers;
 
 [ApiController]
-[Route("user/{ownerName}/layouts")]
+[Route("users/{ownerName}/layouts")]
 public class LayoutsController(LayoutService layoutService) : ControllerBase
 {
     [HttpGet("{name}")]
