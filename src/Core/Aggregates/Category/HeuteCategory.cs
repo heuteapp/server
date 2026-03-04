@@ -2,20 +2,20 @@ using HeuteApp.Core.ValueObjects.Category;
 
 namespace HeuteApp.Core.Aggregates.Category;
 
-public class BoardCategory
+public class HeuteCategory
 {
-    protected BoardCategory() { }
+    protected HeuteCategory() { }
 
-    protected BoardCategory(CategoryDefinition definition)
+    protected HeuteCategory(CategoryDefinition definition)
     {
         Id = Guid.NewGuid();
         Name = definition.Key.Name;
     }
 
-    public static BoardCategory Create(CategoryDefinition definition)
+    public static HeuteCategory Create(CategoryDefinition definition)
     {
         ArgumentNullException.ThrowIfNull(definition);
-        return new BoardCategory(definition);
+        return new HeuteCategory(definition);
     }
 
     //
