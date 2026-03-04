@@ -1,6 +1,6 @@
 using HeuteApp.Core.ValueObjects.Board;
 
-namespace HeuteApp.Core.Aggregates.Board;
+namespace HeuteApp.Core.Aggregates.Category;
 
 public class BoardCategory
 {
