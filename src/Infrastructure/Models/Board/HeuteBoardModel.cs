@@ -1,5 +1,6 @@
 using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Core.ValueObjects.Board;
+using HeuteApp.Infrastructure.Models.Category;
 using HeuteApp.Infrastructure.Models.Layout;
 using HeuteApp.Infrastructure.Models.User;
 
@@ -14,22 +15,25 @@ public class HeuteBoardModel : HeuteBoard
 
     protected HeuteBoardModel() { }
 
-    protected HeuteBoardModel(HeuteUserModel user, HeuteLayoutModel layout, BoardDefinition definition) : base(new(user.Id, layout.Id), definition)
+    protected HeuteBoardModel(HeuteUserModel owner,  HeuteCategoryModel category, HeuteLayoutModel layout, BoardDefinition definition) : base(new(owner.Id, category.Id), layout.Id, definition)
     { 
-        User = user;
+        Owner = owner;
+        Category = category;
         Layout = layout;
     }
 
     //
 
-    public HeuteUserModel User { get; private set; } = null!;
+    public HeuteUserModel Owner { get; private set; } = null!;
+
+    public HeuteCategoryModel Category { get; private set; } = null!;
 
     public HeuteLayoutModel Layout { get; private set; } = null!;
 
     //
 
-    public static HeuteBoardModel Create(HeuteUserModel user, HeuteLayoutModel layout, BoardDefinition definition)
+    public static HeuteBoardModel Create(HeuteUserModel owner, HeuteCategoryModel category, HeuteLayoutModel layout, BoardDefinition definition)
     {
-        return new HeuteBoardModel(user, layout, definition);
+        return new HeuteBoardModel(owner, category, layout, definition);
     }
 }

@@ -8,6 +8,8 @@ using HeuteApp.Infrastructure.Models.Board;
 using HeuteApp.Core.ValueObjects.Board;
 using HeuteApp.Core.Aggregates.User;
 using HeuteApp.Infrastructure.Models.User;
+using HeuteApp.Core.Aggregates.Category;
+using HeuteApp.Infrastructure.Models.Category;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
@@ -23,26 +25,29 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         return entity;
     }
 
-    public async Task<HeuteBoard?> GetByDateAsync(Guid ownerId, string category, DateOnly date)
+    public async Task<HeuteBoard?> GetByKeyAsync(BoardReference reference, BoardKey key)
     {
         var entity = await conext.Boards
             .Include(b => b.Cards)
             .Include(b => b.Layout)
             // TODO: This is a temporary workaround until we have proper user management in place.
-            .FirstOrDefaultAsync(b => b.OwnerId == ownerId && b.Category == category && b.Date == date);
+            .FirstOrDefaultAsync(b => b.OwnerId == reference.OwnerId && b.CategoryId == reference.CategoryId && b.Date == key.Date);
 
         return entity;
     }
 
-    public Task<HeuteBoard> CreateAsync(HeuteUser user, HeuteLayout layout, BoardKey key, BoardProps props)
+    public Task<HeuteBoard> CreateAsync(HeuteUser user, HeuteCategory category, HeuteLayout layout, BoardDefinition definition)
     {
         if(user is not HeuteUserModel userModel)
             throw new ArgumentException("Expected HeuteUserModel", nameof(user));
 
+        if(category is not HeuteCategoryModel categoryModel)
+            throw new ArgumentException("Expected HeuteCategoryModel", nameof(category));
+
         if(layout is not HeuteLayoutModel layoutModel)
             throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
 
-        var model = HeuteBoardModel.Create(userModel, layoutModel, new BoardDefinition(key, props));
+        var model = HeuteBoardModel.Create(userModel, categoryModel, layoutModel, definition);
 
         conext.Boards.Add(model);
         return Task.FromResult<HeuteBoard>(model);

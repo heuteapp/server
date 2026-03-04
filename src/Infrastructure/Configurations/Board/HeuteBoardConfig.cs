@@ -21,7 +21,7 @@ public class HeuteBoardConfig : IEntityTypeConfiguration<HeuteBoardModel>
         builder.Property(b => b.LayoutId)
             .IsRequired();
 
-        builder.Property(b => b.Category)
+        builder.Property(b => b.CategoryId)
             .IsRequired();
 
         builder.Property(b => b.Date)
