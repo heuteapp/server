@@ -5,6 +5,8 @@ using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Infrastructure.Models.Layout;
 using HeuteApp.Application.Models.Layout.Contracts;
 using HeuteApp.Core.ValueObjects.Layout;
+using HeuteApp.Core.Aggregates.User;
+using HeuteApp.Infrastructure.Models.User;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
@@ -59,12 +61,15 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return layout?.Version;
     }
 
-    public async Task<HeuteLayout> CreateAsync(Guid ownerId, string name, LayoutProps props)
+    public async Task<HeuteLayout> CreateAsync(HeuteUser owner, string name, LayoutProps props)
     {
-        var lastVersion = await GetLastestVersionAsync(ownerId, name);
+        if(owner is not HeuteUserModel ownerModel)
+            throw new ArgumentException("Expected HeuteUserModel", nameof(owner));
+
+        var lastVersion = await GetLastestVersionAsync(owner.Id, name);
 
         var version = lastVersion.HasValue ? lastVersion.Value + 1 : 1;
-        var layout = HeuteLayoutModel.Create(new LayoutDefinition(ownerId, new LayoutKey(name, version), props));
+        var layout = HeuteLayoutModel.Create(ownerModel, new LayoutDefinition(new (name, version), props));
 
         context.Layouts.Add(layout);
         return layout;

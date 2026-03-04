@@ -1,5 +1,6 @@
 using HeuteApp.Application.Models.Layout.Contracts;
 using HeuteApp.Core.Aggregates.Layout;
+using HeuteApp.Core.Aggregates.User;
 using HeuteApp.Core.ValueObjects.Layout;
 
 namespace HeuteApp.Application.Interfaces;
@@ -14,5 +15,5 @@ public interface ILayoutRepository
 
     Task<int?> GetLastestVersionAsync(Guid? ownerId, string name);
 
-    Task<HeuteLayout> CreateAsync(Guid ownerId, string name, LayoutProps props);
+    Task<HeuteLayout> CreateAsync(HeuteUser user, string name, LayoutProps props);
 }

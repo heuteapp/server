@@ -5,7 +5,10 @@ using HeuteApp.Core.ValueObjects.Layout;
 
 namespace HeuteApp.Application.Services;
 
-public class LayoutService(ILayoutRepository repository, IUnitOfWork unitOfWork)
+public class LayoutService(
+    IUserRepository userRepository,
+    ILayoutRepository repository, 
+    IUnitOfWork unitOfWork)
 {
     public async Task<HeuteLayoutResult?> GetLayoutAsync(Guid? ownerId, string name, int? version)
     {
@@ -14,20 +17,26 @@ public class LayoutService(ILayoutRepository repository, IUnitOfWork unitOfWork)
     }
 
     public async Task<IEnumerable<HeuteLayoutResult>> GetLayoutsAsync(string ownerName)
-    {
-        var layouts = await repository.GetByOwnerAsync(Guid.Empty);
+    {        
+        var owner = await userRepository.GetByKeyAsync(new (ownerName)) 
+            ?? throw new Exception($"Owner not found for name '{ownerName}'.");
+
+        var layouts = await repository.GetByOwnerAsync(owner.Id);
         return layouts.Select(l => l.ToResult());
     }
 
     public async Task<HeuteLayoutResult> CreateLayoutAsync(string ownerName, string name, LayoutProps props)
     {
-        var lastVersion = await repository.GetLastestVersionAsync(Guid.Empty, name);
-        var existing = await repository.GetByKeyAsync(new (Guid.Empty, name, lastVersion));
+        var owner = await userRepository.GetByKeyAsync(new (ownerName)) 
+            ?? throw new Exception($"Owner not found for name '{ownerName}'.");
+
+        var lastVersion = await repository.GetLastestVersionAsync(owner.Id, name);
+        var existing = await repository.GetByKeyAsync(new (owner.Id, name, lastVersion));
 
         if (existing != null)
             throw new Exception("Layout already exists for this owner, name, and version.");
 
-        var layout = await repository.CreateAsync(Guid.Empty, name, props);
+        var layout = await repository.CreateAsync(owner, name, props);
         await unitOfWork.SaveChangesAsync();
 
         return layout.ToResult();

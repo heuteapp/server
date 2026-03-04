@@ -9,10 +9,10 @@ public class HeuteLayout
 
     protected HeuteLayout() { }
 
-    protected HeuteLayout(LayoutDefinition definition)
+    protected HeuteLayout(LayoutOwnership ownership, LayoutDefinition definition)
     {
         Id = Guid.NewGuid();
-        OwnerId = definition.OwnerId;
+        OwnerId = ownership.OwnerId;
         Name = definition.Key.Name;
         Version = definition.Key.Version;
         Size = definition.Props.Size;
@@ -31,9 +31,9 @@ public class HeuteLayout
         }
     }
 
-    public static HeuteLayout Create(LayoutDefinition definition)
+    public static HeuteLayout Create(LayoutOwnership ownership, LayoutDefinition definition)
     {
-        return new HeuteLayout(definition);
+        return new HeuteLayout(ownership, definition);
     }
 
     //
