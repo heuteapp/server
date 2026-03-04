@@ -13,7 +13,14 @@ public class HeuteLayoutModel : HeuteLayout
 
     protected HeuteLayoutModel() { }
 
-    protected HeuteLayoutModel(HeuteUserModel owner, LayoutDefinition definition) : base(new LayoutOwnership(owner.Id), definition) { }
+    protected HeuteLayoutModel(HeuteUserModel owner, LayoutDefinition definition) : base(new LayoutOwnership(owner.Id), definition) 
+    {
+        Owner = owner;
+    }
+
+    //
+
+    public HeuteUserModel Owner { get; private set; } = null!;
 
     //
 
