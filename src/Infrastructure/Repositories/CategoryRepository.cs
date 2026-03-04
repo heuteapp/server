@@ -1,0 +1,35 @@
+using HeuteApp.Core.Aggregates.Category;
+using HeuteApp.Core.ValueObjects.Category;
+using HeuteApp.Application.Interfaces;
+using HeuteApp.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using HeuteApp.Infrastructure.Models.Category;
+
+namespace HeuteApp.Infrastructure.Repositories;
+
+public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
+{
+    public async Task<HeuteCategory?> GetByIdAsync(Guid categoryId)
+    {
+        var category = await context.Categories
+            .FirstOrDefaultAsync(c => c.Id == categoryId);
+
+        return category;
+    }
+
+    public async Task<HeuteCategory?> GetByKeyAsync(Guid ownerId, CategoryKey key)
+    {
+        var category = await context.Categories
+            .FirstOrDefaultAsync(c => c.OwnerId == ownerId && c.Name == key.Name);
+
+        return category;
+    }
+
+    public async Task<HeuteCategory> CreateAsync(Guid ownerId, CategoryKey key, CategoryProps props)
+    {
+        var category = HeuteCategoryModel.Create(new (ownerId, key, props));
+
+        context.Categories.Add(category);
+        return category;
+    }
+}
