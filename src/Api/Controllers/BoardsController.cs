@@ -19,6 +19,21 @@ public class BoardsController(BoardService boardService) : ControllerBase
         return Ok(board);
     }
 
+    [HttpPost("{category}/{date}/add-card")]
+    public async Task<IActionResult> AddCard(string ownerName, string category, DateOnly date, [FromBody] AddCardRequest request)
+    {
+        await boardService.AddCardAsync(ownerName, category, date, new (
+            new(Guid.NewGuid().ToString()),
+            new(null, new(
+                new (request.SectionName),
+                new (request.ColIndex, request.RowIndex, request.ColSpan, request.RowSpan)
+            ))
+
+        ));
+
+        return Ok();
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateBoard(string ownerName, [FromBody] CreateBoardRequest request)
     {
@@ -27,3 +42,11 @@ public class BoardsController(BoardService boardService) : ControllerBase
         return Ok(board);
     }
 }
+
+public record AddCardRequest (
+    string SectionName,
+    int ColIndex,
+    int RowIndex,
+    int ColSpan,
+    int RowSpan
+);
