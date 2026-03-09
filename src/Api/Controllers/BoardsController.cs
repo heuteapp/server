@@ -24,7 +24,7 @@ public class BoardsController(BoardService boardService) : ControllerBase
     {
         await boardService.AddCardAsync(ownerName, category, date, new (
             new(Guid.NewGuid().ToString()),
-            new(null, new(
+            new("test", new(
                 new (request.SectionName),
                 new (request.ColIndex, request.RowIndex, request.ColSpan, request.RowSpan)
             ))
