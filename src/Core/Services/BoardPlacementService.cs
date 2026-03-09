@@ -21,7 +21,11 @@ public class BoardPlacementService
 
         if(card.CanBePlaced)
         {
-            PlaceCard(board, layout, card.Id, card.Placement!);
+            var cardId = card.Id;
+            var placement = card.Placement!;
+
+            EnsureFitsInSection(layout, placement);
+            EnsureNoOverlap(board, cardId, placement);
         }
 
         board.Internal_AddCard(card);
