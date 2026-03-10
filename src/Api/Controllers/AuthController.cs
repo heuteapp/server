@@ -1,38 +1,31 @@
-using System.Text;
 using HeuteApp.Application.Services;
 using HeuteApp.Core.ValueObjects.Profile;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace HeuteApp.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
-public class AuthController(ProfileService profileService, HttpClient httpClient, IConfiguration configuration) : ControllerBase
+public class AuthController(ProfileService profileService, IConfiguration configuration) : ControllerBase
 {
+    private readonly Supabase.Client supabaseClient = new(
+        configuration["Supabase:Url"]!,
+        configuration["Supabase:ServiceKey"]!
+    );
 
     [HttpPost("signup")]
     public async Task<IActionResult> Signup([FromBody] SignupRequest request)
     {
-        var payload = new { email = request.Email, password = request.Password };
-        var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
-        content.Headers.Add("apikey", configuration["Supabase:AnonKey"]);
-
-        var response = await httpClient.PostAsync(configuration["Supabase:Url"] + "/auth/v1/signup", content);
-        if (!response.IsSuccessStatusCode)
-            return BadRequest("Signup failed at Supabase.");
-
-        var json = await response.Content.ReadAsStringAsync();
-        var result = JsonConvert.DeserializeObject<SupabaseSignupResponse>(json);
-
-        if (result == null || result.User == null || result.Session == null)
+        // 1️⃣ Supabase signup
+        var session = await supabaseClient.Auth.SignUp(request.Email, request.Password, new() { });
+        if (session?.User == null)
             return BadRequest("Supabase signup failed or returned invalid data.");
 
-        string userId = result.User.Id;
+        string userId = session.User.Id!;
 
         // 2️⃣ Profile oluştur
         var profile = await profileService.CreateProfileAsync(
-            new ProfileOwnership(Guid.Parse(userId)), 
+            new ProfileOwnership(Guid.Parse(userId)),
             new ProfileDefinition(
                 new ProfileKey(request.Name),
                 new ProfileProps()
@@ -43,8 +36,8 @@ public class AuthController(ProfileService profileService, HttpClient httpClient
         return Ok(new
         {
             profile,
-            result.Session.AccessToken,
-            result.Session.RefreshToken
+            session.AccessToken,
+            session.RefreshToken
         });
     }
 
@@ -52,20 +45,11 @@ public class AuthController(ProfileService profileService, HttpClient httpClient
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         // 1️⃣ Supabase login
-        var payload = new { email = request.Name, password = request.Password };
-        var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
-        content.Headers.Add("apikey", configuration["Supabase:AnonKey"]);
-
-        var response = await httpClient.PostAsync(configuration["Supabase:Url"] + "/auth/v1/token?grant_type=password", content);
-        if (!response.IsSuccessStatusCode)
-            return Unauthorized("Login failed at Supabase.");
-
-        var json = await response.Content.ReadAsStringAsync();
-        var result = JsonConvert.DeserializeObject<SupabaseLoginResponse>(json);
-
-        if (result == null || result.User == null || result.Session == null)
+        var session = await supabaseClient.Auth.SignIn(request.Name, request.Password);
+        if (session?.User == null)
             return Unauthorized("Supabase login failed or returned invalid data.");
 
+        // 2️⃣ Profile getir
         var profile = await profileService.GetProfileByKeyAsync(new ProfileKey(request.Name));
         if (profile == null)
             return NotFound("Profile not found for this user.");
@@ -73,39 +57,12 @@ public class AuthController(ProfileService profileService, HttpClient httpClient
         return Ok(new
         {
             profile,
-            result.Session.AccessToken,
-            result.Session.RefreshToken
+            session.AccessToken,
+            session.RefreshToken
         });
     }
 }
 
-public record SignupRequest(
-    [property: JsonProperty("email")] string Email,
-    [property: JsonProperty("password")] string Password,
-    [property: JsonProperty("name")] string Name
-);
+public record SignupRequest(string Email, string Password, string Name);
 
-public record SupabaseSignupResponse(
-    [property: JsonProperty("user")] SupabaseUser User,
-    [property: JsonProperty("session")] SupabaseSession Session
-);
-
-public record SupabaseUser(
-    [property: JsonProperty("id")] string Id,
-    [property: JsonProperty("email")] string Email
-);
-
-public record SupabaseSession(
-    [property: JsonProperty("access_token")] string AccessToken,
-    [property: JsonProperty("refresh_token")] string RefreshToken
-);
-
-public record LoginRequest(
-    [property: JsonProperty("name")] string Name,
-    [property: JsonProperty("password")] string Password
-);
-
-public record SupabaseLoginResponse(
-    [property: JsonProperty("user")] SupabaseUser User,
-    [property: JsonProperty("session")] SupabaseSession Session
-);
+public record LoginRequest(string Name, string Password);
