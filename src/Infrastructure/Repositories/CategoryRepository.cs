@@ -4,8 +4,8 @@ using HeuteApp.Application.Interfaces;
 using HeuteApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using HeuteApp.Infrastructure.Models.Category;
-using HeuteApp.Core.Aggregates.User;
-using HeuteApp.Infrastructure.Models.User;
+using HeuteApp.Core.Aggregates.Profile;
+using HeuteApp.Infrastructure.Models.Profile;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
@@ -27,10 +27,10 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         return category;
     }
 
-    public async Task<HeuteCategory> CreateAsync(HeuteUser owner, CategoryDefinition definition)
+    public async Task<HeuteCategory> CreateAsync(HeuteProfile owner, CategoryDefinition definition)
     {
-        if(owner is not HeuteUserModel ownerModel)
-            throw new ArgumentException("Owner must be a HeuteUserModel", nameof(owner));
+        if(owner is not HeuteProfileModel ownerModel)
+            throw new ArgumentException("Owner must be a HeuteProfileModel", nameof(owner));
 
         var category = HeuteCategoryModel.Create(ownerModel, definition);
 

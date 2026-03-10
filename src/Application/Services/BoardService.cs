@@ -8,7 +8,7 @@ using HeuteApp.Core.ValueObjects.Layout;
 namespace HeuteApp.Application.Services;
 
 public class BoardService(
-    IUserRepository userRepository,
+    IProfileRepository userRepository,
     ICategoryRepository categoryRepository,
     ILayoutRepository layoutRepository, 
     IBoardRepository boardRepository, 

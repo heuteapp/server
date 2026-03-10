@@ -6,7 +6,7 @@ using HeuteApp.Core.ValueObjects.Layout;
 namespace HeuteApp.Application.Services;
 
 public class LayoutService(
-    IUserRepository userRepository,
+    IProfileRepository userRepository,
     ILayoutRepository repository, 
     IUnitOfWork unitOfWork)
 {

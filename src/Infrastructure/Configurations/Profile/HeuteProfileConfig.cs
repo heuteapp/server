@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using HeuteApp.Infrastructure.Models.User;
+using HeuteApp.Infrastructure.Models.Profile;
 
-namespace HeuteApp.Infrastructure.Configurations.User;
+namespace HeuteApp.Infrastructure.Configurations.Profile;
 
-public class HeuteUserConfig : IEntityTypeConfiguration<HeuteUserModel>
+public class HeuteProfileConfig : IEntityTypeConfiguration<HeuteProfileModel>
 {
-    public void Configure(EntityTypeBuilder<HeuteUserModel> builder)
+    public void Configure(EntityTypeBuilder<HeuteProfileModel> builder)
     {
         builder.ToTable("users");
 

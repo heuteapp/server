@@ -4,25 +4,25 @@ using Microsoft.AspNetCore.Mvc;
 namespace HeuteApp.Api.Controllers;
 
 [ApiController]
-[Route("users")]
-public class UsersController(UserService userService) : ControllerBase
+[Route("profiles")]
+public class ProfilesController(ProfileService profileService) : ControllerBase
 {
     [HttpGet("{name}")]
-    public async Task<IActionResult> GetUser(string name)
+    public async Task<IActionResult> GetProfile(string name)
     {
-        var user = await userService.GetUserByKeyAsync(new (name));
+        var profile = await profileService.GetProfileByKeyAsync(new (name));
 
-        if(user == null)
-            return NotFound("User not found for the given name.");
+        if(profile == null)
+            return NotFound("Profile not found for the given name.");
 
-        return Ok(user);
+        return Ok(profile);
     }
 
     [HttpPost()]
-    public async Task<IActionResult> CreateUser([FromBody] string name)
+    public async Task<IActionResult> CreateProfile([FromBody] string name)
     {
-        var user = await userService.CreateUserAsync(new (name), new ());
+        var profile = await profileService.CreateProfileAsync(new (name), new ());
 
-        return Ok(user);
+        return Ok(profile);
     }
 }

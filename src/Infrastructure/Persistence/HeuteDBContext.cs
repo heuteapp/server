@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Core.Aggregates.Board;
-using HeuteApp.Infrastructure.Models.User;
+using HeuteApp.Infrastructure.Models.Profile;
 using HeuteApp.Infrastructure.Models.Layout;
 using HeuteApp.Infrastructure.Models.Category;
 using HeuteApp.Infrastructure.Models.Board;
@@ -10,7 +10,7 @@ namespace HeuteApp.Infrastructure.Persistence;
 
 public class HeuteDbContext(DbContextOptions<HeuteDbContext> options) : DbContext(options)
 {    
-    public DbSet<HeuteUserModel> Users => Set<HeuteUserModel>();
+    public DbSet<HeuteProfileModel> Profiles => Set<HeuteProfileModel>();
     
     public DbSet<HeuteLayoutModel> Layouts => Set<HeuteLayoutModel>();
 

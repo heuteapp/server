@@ -5,7 +5,7 @@ using HeuteApp.Core.ValueObjects.Category;
 namespace HeuteApp.Application.Services;
 
 public class CategoryService(
-    IUserRepository userRepository,
+    IProfileRepository userRepository,
     ICategoryRepository repository, 
     IUnitOfWork unitOfWork)
 {

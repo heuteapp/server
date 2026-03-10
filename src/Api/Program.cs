@@ -26,13 +26,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<ILayoutRepository, LayoutRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<BoardPlacementService>();
 
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ProfileService>();
 builder.Services.AddScoped<LayoutService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<BoardService>();

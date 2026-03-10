@@ -1,5 +1,5 @@
 using HeuteApp.Core.Aggregates.Category;
-using HeuteApp.Core.Aggregates.User;
+using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Core.ValueObjects.Category;
 
 namespace HeuteApp.Application.Interfaces;
@@ -10,5 +10,5 @@ public interface ICategoryRepository
 
     Task<HeuteCategory?> GetByKeyAsync(CategoryOwnership ownership, CategoryKey key);
 
-    Task<HeuteCategory> CreateAsync(HeuteUser owner, CategoryDefinition definition);
+    Task<HeuteCategory> CreateAsync(HeuteProfile owner, CategoryDefinition definition);
 }

@@ -5,8 +5,8 @@ using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Infrastructure.Models.Layout;
 using HeuteApp.Application.Models.Layout.Contracts;
 using HeuteApp.Core.ValueObjects.Layout;
-using HeuteApp.Core.Aggregates.User;
-using HeuteApp.Infrastructure.Models.User;
+using HeuteApp.Core.Aggregates.Profile;
+using HeuteApp.Infrastructure.Models.Profile;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
@@ -61,10 +61,10 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return layout?.Version;
     }
 
-    public async Task<HeuteLayout> CreateAsync(HeuteUser owner, string name, LayoutProps props)
+    public async Task<HeuteLayout> CreateAsync(HeuteProfile owner, string name, LayoutProps props)
     {
-        if(owner is not HeuteUserModel ownerModel)
-            throw new ArgumentException("Expected HeuteUserModel", nameof(owner));
+        if(owner is not HeuteProfileModel ownerModel)
+            throw new ArgumentException("Expected HeuteProfileModel", nameof(owner));
 
         var lastVersion = await GetLastestVersionAsync(owner.Id, name);
 

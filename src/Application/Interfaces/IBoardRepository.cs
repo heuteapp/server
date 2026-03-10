@@ -1,7 +1,7 @@
 using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Core.Aggregates.Category;
 using HeuteApp.Core.Aggregates.Layout;
-using HeuteApp.Core.Aggregates.User;
+using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Core.ValueObjects.Board;
 
 namespace HeuteApp.Application.Interfaces;
@@ -12,5 +12,5 @@ public interface IBoardRepository
 
     Task<HeuteBoard?> GetByKeyAsync(BoardOwnership ownership, BoardKey key);
 
-    Task<HeuteBoard> CreateAsync(HeuteUser user, HeuteCategory category, HeuteLayout layout, BoardDefinition definition);
+    Task<HeuteBoard> CreateAsync(HeuteProfile user, HeuteCategory category, HeuteLayout layout, BoardDefinition definition);
 }
