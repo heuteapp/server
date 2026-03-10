@@ -7,12 +7,12 @@ public class HeuteProfileModel : HeuteProfile
 {
     protected HeuteProfileModel() { }
 
-    protected HeuteProfileModel(ProfileDefinition definition) : base(definition) { }
+    protected HeuteProfileModel(ProfileOwnership ownership, ProfileDefinition definition) : base(ownership, definition) { }
 
     //
 
-    public static new HeuteProfileModel Create(ProfileDefinition definition)
+    public static new HeuteProfileModel Create(ProfileOwnership ownership, ProfileDefinition definition)
     {
-        return new HeuteProfileModel(definition);
+        return new HeuteProfileModel(ownership, definition);
     }
 }

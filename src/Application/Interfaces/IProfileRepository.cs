@@ -9,5 +9,5 @@ public interface IProfileRepository
 
     Task<HeuteProfile?> GetByKeyAsync(ProfileKey key);
 
-    Task<HeuteProfile> CreateAsync(ProfileKey key, ProfileProps props);
+    Task<HeuteProfile> CreateAsync(ProfileOwnership ownership, ProfileDefinition definition);
 }

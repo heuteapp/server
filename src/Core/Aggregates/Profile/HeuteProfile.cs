@@ -6,16 +6,16 @@ public class HeuteProfile
 {
     protected HeuteProfile() { }
 
-    protected HeuteProfile(ProfileDefinition definition)
+    protected HeuteProfile(ProfileOwnership ownership, ProfileDefinition definition)
     {
-        Id = Guid.NewGuid();
+        Id = ownership.Id;
         Name = definition.Key.Name;
     }
 
-    public static HeuteProfile Create(ProfileDefinition definition)
+    public static HeuteProfile Create(ProfileOwnership ownership, ProfileDefinition definition)
     {
         ArgumentNullException.ThrowIfNull(definition);
-        return new HeuteProfile(definition);
+        return new HeuteProfile(ownership, definition);
     }
 
     //

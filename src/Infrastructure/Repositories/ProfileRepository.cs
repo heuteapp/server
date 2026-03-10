@@ -25,9 +25,9 @@ public class ProfileRepository(HeuteDbContext context) : IProfileRepository
         return user;
     }
 
-    public async Task<HeuteProfile> CreateAsync(ProfileKey key, ProfileProps props)
+    public async Task<HeuteProfile> CreateAsync(ProfileOwnership ownership, ProfileDefinition definition)
     {
-        var user = HeuteProfileModel.Create(new (key, props));
+        var user = HeuteProfileModel.Create(ownership, definition);
 
         context.Profiles.Add(user);
         return user;

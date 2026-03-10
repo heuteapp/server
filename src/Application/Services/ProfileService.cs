@@ -8,22 +8,22 @@ public class ProfileService(IProfileRepository repository, IUnitOfWork unitOfWor
 {
     public async Task<HeuteProfile> GetProfileByKeyAsync(ProfileKey key)
     {
-        var user = await repository.GetByKeyAsync(key) 
+        var profile = await repository.GetByKeyAsync(key) 
             ?? throw new Exception($"Profile not found for key '{key}'.");
             
-        return user;
+        return profile;
     }
 
-    public async Task<HeuteProfile> CreateProfileAsync(ProfileKey key, ProfileProps props)
+    public async Task<HeuteProfile> CreateProfileAsync(ProfileOwnership ownership, ProfileDefinition definition)
     {
-        var existing = await repository.GetByKeyAsync(key);
+        var existing = await repository.GetByKeyAsync(definition.Key);
 
         if (existing != null)
-            throw new Exception($"Profile already exists for key '{key}'.");
+            throw new Exception($"Profile already exists for key '{definition.Key}'.");
 
-        var user = await repository.CreateAsync(key, props);
+        var profile = await repository.CreateAsync(ownership, definition);
 
         await unitOfWork.SaveChangesAsync();
-        return user;
+        return profile;
     }
 }
