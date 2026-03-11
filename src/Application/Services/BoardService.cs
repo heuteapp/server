@@ -46,4 +46,18 @@ public class BoardService(
 
         return board;
     }
+
+    public async Task<bool> SyncBoardAsync(Guid ownerId, CategoryKey categoryKey, BoardKey boardKey, BoardProps syncProps)
+    {
+        var category = await categoryRepository.GetByKeyAsync(new(ownerId), categoryKey)
+            ?? throw new Exception("Category not found.");
+
+        var board = await boardRepository.GetByKeyAsync(new (ownerId, category.Id), boardKey)
+            ?? throw new Exception("Board not found.");
+
+        //board.Sync(syncProps);
+        //await unitOfWork.SaveChangesAsync();
+
+        return true;
+    }
 }
