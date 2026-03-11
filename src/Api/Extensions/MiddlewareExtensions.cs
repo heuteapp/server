@@ -6,6 +6,6 @@ public static class MiddlewareExtensions
 {
     public static void UseAppMiddlewares(this WebApplication app)
     {
-        app.UseMiddleware<JwtMiddleware>();
+        app.UseMiddleware<AuthMiddleware>();
     }
 }
