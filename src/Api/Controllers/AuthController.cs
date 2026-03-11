@@ -39,14 +39,14 @@ public class AuthController(
 
     [HttpPost("signin")]
     public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
-    {
-        var session = await supabaseProvider.Client.Auth.SignIn(request.Name, request.Password);
-        if (session?.User == null)
-            return Unauthorized("Supabase login failed or returned invalid data.");
-
+    {        
         var profile = await profileService.GetProfileByNameAsync(request.Name);
         if (profile == null)
             return NotFound("Profile not found for this user.");
+
+        var session = await supabaseProvider.Client.Auth.SignIn(profile.Email, request.Password);
+        if (session?.User == null)
+            return Unauthorized("Supabase login failed or returned invalid data.");
 
         return Ok(new
         {
