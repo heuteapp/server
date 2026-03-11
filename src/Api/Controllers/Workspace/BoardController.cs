@@ -7,13 +7,19 @@ namespace HeuteApp.Api.Controllers.Workspace;
 [ApiController]
 [Route("workspace/board")]
 public class BoardController(
-    //UserContext context, BoardService boardService
+    UserContext userContext, BoardService boardService
 ) : ControllerBase
 {
-   /* [HttpGet]
-    public async Task<IActionResult> GetTodaysBoard()
+    [HttpGet("{categoryName}")]
+    public async Task<IActionResult> GetTodaysBoard(string categoryName)
     {
-        var boards = await boardService.GetBoardAsync();
+        if(!userContext.UserId.HasValue){
+            return Unauthorized("Unauthorized: No user context found. Please ensure you are authenticated.");
+        }
+
+        Guid userId = userContext.UserId.Value;
+
+        var boards = await boardService.GetBoardAsync(userId, categoryName, DateOnly.FromDateTime(DateTime.UtcNow));
         return Ok(boards);
-    }*/
+    }
 }
