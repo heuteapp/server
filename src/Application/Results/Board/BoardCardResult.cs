@@ -4,5 +4,5 @@ namespace HeuteApp.Application.Results.Board;
 
 public sealed record BoardCardResult(
     Guid Id,
-    string? Title,
+    BoardCardContent? Content,
     BoardCardPlacement? Placement);

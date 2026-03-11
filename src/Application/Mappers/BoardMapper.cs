@@ -24,7 +24,7 @@ public static class BoardMapper
 
         return new BoardCardResult(
             card.Id,
-            card.Title,
+            card.Content,
             card.Placement
         );
     }

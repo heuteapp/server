@@ -18,8 +18,12 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
         builder.Property(c => c.BoardId)
                .IsRequired();
 
-        builder.Property(c => c.Title)
-               .IsRequired();
+        builder.OwnsOne(c => c.Content, content =>
+        {
+                content.Property(p => p.Title)
+                        .HasColumnName("Content_Title")
+                        .IsRequired();
+        });
 
         builder.OwnsOne(c => c.Placement, placement =>
         {

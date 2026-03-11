@@ -10,7 +10,7 @@ public static partial class BoardMapper
         ArgumentNullException.ThrowIfNull(card);
 
         return new BoardCardProps(
-            card.Title,
+            card.Content,
             card.Placement
         );
     }

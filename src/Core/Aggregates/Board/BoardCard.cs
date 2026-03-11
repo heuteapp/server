@@ -10,7 +10,7 @@ public class BoardCard
     {
         Id = Guid.NewGuid();
         Name = definition.Key.Name;
-        Title = definition.Props.Title;
+        Content = definition.Props.Content;
         Placement = definition.Props.Placement;
 
         if(Placement == null)
@@ -31,7 +31,7 @@ public class BoardCard
 
     public string Name { get; private set; } = null!;
 
-    public string? Title { get; internal set; }
+    public BoardCardContent Content { get; internal set; } = null!;
 
     public BoardCardPlacement? Placement { get; private set; }
 

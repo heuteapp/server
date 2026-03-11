@@ -1,6 +1,6 @@
 namespace HeuteApp.Core.ValueObjects.Board;
 
 public sealed record BoardCardProps(
-    string? Title,
+    BoardCardContent Content,
     BoardCardPlacement? Placement
 );

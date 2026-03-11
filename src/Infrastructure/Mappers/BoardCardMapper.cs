@@ -8,7 +8,7 @@ public static class BoardCardMapper
     public static BoardCardProps ToProps(this BoardCardModel model)
     {
         return new BoardCardProps(
-            model.Title,
+            model.Content,
             model.Placement
         );
     }
