@@ -12,7 +12,8 @@ public class BoardService(
     ICategoryRepository categoryRepository,
     ILayoutRepository layoutRepository, 
     IBoardRepository boardRepository, 
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    BoardPlacementService boardPlacementService)
 {
     public async Task<HeuteBoard?> GetBoardAsync(Guid ownerId, CategoryKey categoryKey, DateOnly date)
     {
@@ -55,8 +56,14 @@ public class BoardService(
         var board = await boardRepository.GetByKeyAsync(new (ownerId, category.Id), boardKey)
             ?? throw new Exception("Board not found.");
 
-        //board.Sync(syncProps);
-        //await unitOfWork.SaveChangesAsync();
+        var layout = await layoutRepository.GetByIdAsync(board.LayoutId)
+            ?? throw new Exception("Layout not found.");
+
+        if(board != null)
+        {
+            boardPlacementService.SyncBoard(board, layout, syncProps);
+            await unitOfWork.SaveChangesAsync();
+        }
 
         return true;
     }

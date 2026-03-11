@@ -1,5 +1,4 @@
 #pragma warning disable CA1822
-using HeuteApp.Core.ValueObjects;
 using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Core.ValueObjects.Board;
@@ -8,6 +7,32 @@ namespace HeuteApp.Core.Services;
 
 public class BoardPlacementService
 {
+    public void SyncBoard(HeuteBoard board, HeuteLayout layout, BoardProps syncProps)
+    {
+        ArgumentNullException.ThrowIfNull(board);
+        ArgumentNullException.ThrowIfNull(layout);
+        ArgumentNullException.ThrowIfNull(syncProps);
+
+        // Remove cards that are not in syncProps and DEFINITON DOES NOT HAVE ID  JUST HAVE NAME
+        var cardsToRemove = board.Cards.Where(c => !syncProps.Cards.Any(sc => sc.Name == c.Name)).ToList();
+        foreach (var card in cardsToRemove)
+        {
+            board.Internal_RemoveCard(card.Id);
+        }
+
+        // Add or update cards from syncProps
+        foreach (var syncCard in syncProps.Cards)
+        {            
+            var existingCard = board.Cards.FirstOrDefault(c => c.Name == syncCard.Name);
+            if (existingCard == null)
+            {
+                // Add new card
+                var newCard = board.Internal_CreateCard(new BoardCardDefinition(new(syncCard.Name), new(syncCard.Content, syncCard.Placement)));
+                board.Internal_AddCard(newCard);
+            }
+        }
+    }
+
     public BoardCard AddCard(HeuteBoard board, HeuteLayout layout, BoardCardDefinition definition)
     {        
         ArgumentNullException.ThrowIfNull(board);
