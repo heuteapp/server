@@ -66,9 +66,14 @@ public class AuthController(
     public async Task<IActionResult> Refresh()
     {
         var refreshToken = Request.Cookies["refreshToken"];
-        if (string.IsNullOrEmpty(refreshToken)) return Unauthorized();
+        var accessToken = Request.Headers["Authorization"]
+            .FirstOrDefault()?
+            .Split(" ")
+            .Last();
 
-        var session = await supabaseProvider.Client.Auth.RefreshSession();
+        if (string.IsNullOrEmpty(refreshToken)) return BadRequest();
+        var session = await supabaseProvider.Client.Auth.SetSession(accessToken!, refreshToken, true);
+
         if (session?.AccessToken == null) return Unauthorized();
 
         return Ok(new
