@@ -6,6 +6,8 @@ using HeuteApp.Infrastructure.Repositories;
 using Npgsql;
 using HeuteApp.Core.Services;
 using HeuteApp.Api.Services.Singletons;
+using HeuteApp.Api.Services.Contexts;
+using HeuteApp.Api.Services.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<SupabaseProvider>();
 
 builder.Services.AddScoped<HttpClient>();
+
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
@@ -57,6 +60,9 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 app.UseCors("AllowFrontend");
+
+builder.Services.AddScoped<UserContext>();
+app.UseMiddleware<JwtMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
