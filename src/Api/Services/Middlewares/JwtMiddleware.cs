@@ -31,7 +31,7 @@ public sealed class JwtMiddleware(RequestDelegate next, IConfiguration config)
                 var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
                 if (userIdClaim != null && Guid.TryParse(userIdClaim, out var userId))
                 {
-                    userContext.SetId(userId);
+                    userContext.SetUser(userId);
                 }
             }
             catch {}

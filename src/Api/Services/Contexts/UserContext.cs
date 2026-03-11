@@ -2,10 +2,10 @@ namespace HeuteApp.Api.Services.Contexts;
 
 public sealed class UserContext
 {
-    public Guid? CurrentId { get; private set; } = null;
+    public Guid? UserId { get; private set; }
 
-    public void SetId(Guid id)
+    public void SetUser(Guid id)
     {
-        CurrentId = id;
+        UserId = id;
     }
 }
