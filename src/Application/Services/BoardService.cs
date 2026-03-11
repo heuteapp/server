@@ -14,15 +14,15 @@ public class BoardService(
     IBoardRepository boardRepository, 
     IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteBoard?> GetBoardAsync(Guid ownerId, string categoryName, DateOnly date)
+    public async Task<HeuteBoard?> GetBoardAsync(Guid ownerId, CategoryKey categoryKey, DateOnly date)
     {
-        var category = await categoryRepository.GetByKeyAsync(new(ownerId), new (categoryName))
+        var category = await categoryRepository.GetByKeyAsync(new(ownerId), categoryKey)
             ?? throw new Exception("Category not found.");
 
         return await boardRepository.GetByKeyAsync(new (ownerId, category.Id), new (date));
     }
 
-    public async Task<HeuteBoard> CreateBoardAsync(Guid ownerId, CategoryKey categoryKey, LayoutKey layoutKey, BoardDefinition definition)
+    public async Task<HeuteBoard> CreateBoardAsync(Guid ownerId, CategoryKey categoryKey, LayoutKey layoutKey, BoardKey Key)
     {
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -41,7 +41,7 @@ public class BoardService(
         if (existing != null)
             throw new Exception("Board already exists for this date.");
 
-        var board = await boardRepository.CreateAsync(owner, category, layout, definition);
+        var board = await boardRepository.CreateAsync(owner, category, layout, new(Key, BoardProps.Empty));
         await unitOfWork.SaveChangesAsync();
 
         return board;
