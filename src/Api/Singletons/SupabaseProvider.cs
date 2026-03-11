@@ -1,6 +1,6 @@
 namespace HeuteApp.Api.Singletons;
 
-public sealed class SupabaseClient(IConfiguration configuration)
+public sealed class SupabaseProvider(IConfiguration configuration)
 {
     public Supabase.Client Client { get; } = new Supabase.Client(
         configuration["Supabase:Url"]!,

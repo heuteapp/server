@@ -5,6 +5,7 @@ using HeuteApp.Application.Interfaces;
 using HeuteApp.Infrastructure.Repositories;
 using Npgsql;
 using HeuteApp.Core.Services;
+using HeuteApp.Api.Singletons;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,8 @@ builder.Services.AddDbContext<HeuteDbContext>(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<SupabaseProvider>();
 
 builder.Services.AddScoped<HttpClient>();
 
