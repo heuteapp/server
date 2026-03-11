@@ -12,8 +12,7 @@ public class BoardService(
     ICategoryRepository categoryRepository,
     ILayoutRepository layoutRepository, 
     IBoardRepository boardRepository, 
-    IUnitOfWork unitOfWork,
-    BoardPlacementService placementService)
+    IUnitOfWork unitOfWork)
 {
     public async Task<HeuteBoard?> GetBoardAsync(Guid ownerId, string categoryName, DateOnly date)
     {
@@ -46,23 +45,5 @@ public class BoardService(
         await unitOfWork.SaveChangesAsync();
 
         return board;
-    }
-
-    public async Task AddCardAsync(Guid ownerId, string categoryName, DateOnly date, BoardCardDefinition definition)
-    {
-        var user = await profileRepository.GetByIdAsync(ownerId)
-            ?? throw new Exception($"User with ID '{ownerId}' not found.");
-
-        var category = await categoryRepository.GetByKeyAsync(new(user.Id), new (categoryName))
-            ?? throw new Exception("Category not found.");
-
-        var board = await boardRepository.GetByKeyAsync(new (user.Id, category.Id), new (date))
-            ?? throw new Exception("Board not found.");
-
-        var layout = await layoutRepository.GetByIdAsync(board.LayoutId)
-            ?? throw new Exception("Layout not found.");
-
-        placementService.AddCard(board, layout, definition);
-        await unitOfWork.SaveChangesAsync();
     }
 }
