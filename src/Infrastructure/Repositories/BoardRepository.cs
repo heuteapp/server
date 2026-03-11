@@ -30,16 +30,15 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         var entity = await conext.Boards
             .Include(b => b.Cards)
             .Include(b => b.Layout)
-            // TODO: This is a temporary workaround until we have proper user management in place.
             .FirstOrDefaultAsync(b => b.OwnerId == ownership.OwnerId && b.CategoryId == ownership.CategoryId && b.Date == key.Date);
 
         return entity;
     }
 
-    public Task<HeuteBoard> CreateAsync(HeuteProfile user, HeuteCategory category, HeuteLayout layout, BoardDefinition definition)
+    public Task<HeuteBoard> CreateAsync(HeuteProfile profile, HeuteCategory category, HeuteLayout layout, BoardDefinition definition)
     {
-        if(user is not HeuteProfileModel userModel)
-            throw new ArgumentException("Expected HeuteProfileModel", nameof(user));
+        if(profile is not HeuteProfileModel profileModel)
+            throw new ArgumentException("Expected HeuteProfileModel", nameof(profile));
 
         if(category is not HeuteCategoryModel categoryModel)
             throw new ArgumentException("Expected HeuteCategoryModel", nameof(category));
@@ -47,7 +46,7 @@ public class BoardRepository(HeuteDbContext conext) : IBoardRepository
         if(layout is not HeuteLayoutModel layoutModel)
             throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
 
-        var model = HeuteBoardModel.Create(userModel, categoryModel, layoutModel, definition);
+        var model = HeuteBoardModel.Create(profileModel, categoryModel, layoutModel, definition);
 
         conext.Boards.Add(model);
         return Task.FromResult<HeuteBoard>(model);

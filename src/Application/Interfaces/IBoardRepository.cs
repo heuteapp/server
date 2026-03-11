@@ -12,5 +12,5 @@ public interface IBoardRepository
 
     Task<HeuteBoard?> GetByKeyAsync(BoardOwnership ownership, BoardKey key);
 
-    Task<HeuteBoard> CreateAsync(HeuteProfile user, HeuteCategory category, HeuteLayout layout, BoardDefinition definition);
+    Task<HeuteBoard> CreateAsync(HeuteProfile profile, HeuteCategory category, HeuteLayout layout, BoardDefinition definition);
 }
