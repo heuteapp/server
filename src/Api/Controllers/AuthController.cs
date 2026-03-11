@@ -1,6 +1,7 @@
 using HeuteApp.Application.Services;
 using HeuteApp.Core.ValueObjects.Profile;
 using Microsoft.AspNetCore.Mvc;
+using HeuteApp.Api.Models.Public.Request;
 
 namespace HeuteApp.Api.Controllers;
 
@@ -14,16 +15,14 @@ public class AuthController(ProfileService profileService, IConfiguration config
     );
 
     [HttpPost("signup")]
-    public async Task<IActionResult> Signup([FromBody] SignupRequest request)
+    public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
     {
-        // 1️⃣ Supabase signup
         var session = await supabaseClient.Auth.SignUp(request.Email, request.Password, new() { });
         if (session?.User == null)
             return BadRequest("Supabase signup failed or returned invalid data.");
 
         string userId = session.User.Id!;
 
-        // 2️⃣ Profile oluştur
         var profile = await profileService.CreateProfileAsync(
             new ProfileDefinition(
                 Guid.Parse(userId),
@@ -37,21 +36,17 @@ public class AuthController(ProfileService profileService, IConfiguration config
         // 3️⃣ Response
         return Ok(new
         {
-            profile,
-            session.AccessToken,
-            session.RefreshToken
+            profile
         });
     }
 
-    [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    [HttpPost("signin")]
+    public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
     {
-        // 1️⃣ Supabase login
         var session = await supabaseClient.Auth.SignIn(request.Name, request.Password);
         if (session?.User == null)
             return Unauthorized("Supabase login failed or returned invalid data.");
 
-        // 2️⃣ Profile getir
         var profile = await profileService.GetProfileByNameAsync(request.Name);
         if (profile == null)
             return NotFound("Profile not found for this user.");
@@ -64,7 +59,3 @@ public class AuthController(ProfileService profileService, IConfiguration config
         });
     }
 }
-
-public record SignupRequest(string Email, string Password, string Name);
-
-public record LoginRequest(string Name, string Password);
