@@ -15,10 +15,23 @@ public static class CorsExtensions
                         .AllowAnyMethod();
                 });
         });
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowWebsite",
+                policy =>
+                {
+                    policy
+                        .WithOrigins("http://www.heuteapp.net")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+        });
     }
 
     public static void UseAppCors(this WebApplication app)
     {
         app.UseCors("AllowFrontend");
+        app.UseCors("AllowWebsite");
     }
 }
