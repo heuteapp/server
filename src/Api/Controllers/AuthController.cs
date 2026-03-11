@@ -30,7 +30,6 @@ public class AuthController(
             )
         );
 
-        // 3️⃣ Response
         return Ok(new
         {
             profile
