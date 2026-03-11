@@ -12,7 +12,8 @@ public static class CorsExtensions
                     policy
                         .WithOrigins("http://localhost:3000", "https://heuteapp.net", "https://www.heuteapp.net")
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
         });
     }
