@@ -8,7 +8,7 @@ public class HeuteProfileConfig : IEntityTypeConfiguration<HeuteProfileModel>
 {
     public void Configure(EntityTypeBuilder<HeuteProfileModel> builder)
     {
-        builder.ToTable("users");
+        builder.ToTable("profiles");
 
         builder.HasKey(b => b.Id);
 
@@ -16,6 +16,9 @@ public class HeuteProfileConfig : IEntityTypeConfiguration<HeuteProfileModel>
             .ValueGeneratedNever();
 
         builder.Property(b => b.Name)
+            .IsRequired();
+
+        builder.Property(b => b.Email)
             .IsRequired();
     }
 }
