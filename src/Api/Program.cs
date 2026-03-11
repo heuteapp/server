@@ -16,8 +16,11 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseAppCors();
-app.UseAppMiddlewares();
+
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseAppMiddlewares();
 
 if(app.Environment.IsDevelopment())
 {
