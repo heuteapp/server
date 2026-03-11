@@ -11,10 +11,9 @@ public class ProfileService(IProfileRepository repository, IUnitOfWork unitOfWor
         return await repository.GetByIdAsync(profileId);
     }
 
-    public async Task<HeuteProfile> GetProfileByNameAsync(string name)
+    public async Task<HeuteProfile?> GetProfileByNameAsync(string name)
     {
-        var profile = await repository.GetByNameAsync(name)
-            ?? throw new Exception($"Profile not found for name '{name}'.");
+        var profile = await repository.GetByNameAsync(name);
             
         return profile;
     }
