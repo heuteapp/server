@@ -6,6 +6,11 @@ namespace HeuteApp.Application.Services;
 
 public class ProfileService(IProfileRepository repository, IUnitOfWork unitOfWork)
 {
+    public async Task<HeuteProfile?> GetProfileByIdAsync(Guid profileId)
+    {
+        return await repository.GetByIdAsync(profileId);
+    }
+
     public async Task<HeuteProfile> GetProfileByNameAsync(string name)
     {
         var profile = await repository.GetByNameAsync(name)
