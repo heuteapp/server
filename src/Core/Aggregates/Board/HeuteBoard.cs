@@ -18,7 +18,7 @@ public class HeuteBoard
         OwnerId = ownership.OwnerId;
         CategoryId = ownership.CategoryId;
         LayoutId = reference.LayoutId;
-        Date = definition.Key.Date;
+        Date = definition.Date;
     }
 
     //
