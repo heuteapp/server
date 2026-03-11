@@ -15,23 +15,20 @@ public class BoardService(
     IUnitOfWork unitOfWork,
     BoardPlacementService placementService)
 {
-    public async Task<HeuteBoard?> GetBoardAsync(string ownerName, string categoryName, DateOnly date)
+    public async Task<HeuteBoard?> GetBoardAsync(Guid ownerId, string categoryName, DateOnly date)
     {
-        var user = await profileRepository.GetByNameAsync(ownerName)
-            ?? throw new Exception($"User '{ownerName}' not found.");
-
-        var category = await categoryRepository.GetByKeyAsync(new(user.Id), new (categoryName))
+        var category = await categoryRepository.GetByKeyAsync(new(ownerId), new (categoryName))
             ?? throw new Exception("Category not found.");
 
-        return await boardRepository.GetByKeyAsync(new (user.Id, category.Id), new (date));
+        return await boardRepository.GetByKeyAsync(new (ownerId, category.Id), new (date));
     }
 
-    public async Task<HeuteBoard> CreateBoardAsync(string ownerName, CategoryKey categoryKey, LayoutKey layoutKey, BoardDefinition definition)
+    public async Task<HeuteBoard> CreateBoardAsync(Guid ownerId, CategoryKey categoryKey, LayoutKey layoutKey, BoardDefinition definition)
     {
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var owner = await profileRepository.GetByNameAsync(ownerName)
-            ?? throw new Exception($"User '{ownerName}' not found.");
+        var owner = await profileRepository.GetByIdAsync(ownerId)
+            ?? throw new Exception($"User with ID '{ownerId}' not found.");
 
         var category = await categoryRepository.GetByKeyAsync(new(owner.Id), categoryKey)
             ?? throw new Exception("Category not found.");
@@ -51,10 +48,10 @@ public class BoardService(
         return board;
     }
 
-    public async Task AddCardAsync(string ownerName, string categoryName, DateOnly date, BoardCardDefinition definition)
+    public async Task AddCardAsync(Guid ownerId, string categoryName, DateOnly date, BoardCardDefinition definition)
     {
-        var user = await profileRepository.GetByNameAsync(ownerName)
-            ?? throw new Exception($"User '{ownerName}' not found.");
+        var user = await profileRepository.GetByIdAsync(ownerId)
+            ?? throw new Exception($"User with ID '{ownerId}' not found.");
 
         var category = await categoryRepository.GetByKeyAsync(new(user.Id), new (categoryName))
             ?? throw new Exception("Category not found.");
