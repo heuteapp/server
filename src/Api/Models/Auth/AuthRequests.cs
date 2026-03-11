@@ -1,4 +1,4 @@
-namespace HeuteApp.Api.Models.Public.Request;
+namespace HeuteApp.Api.Models.Auth;
 
 public record SignupRequest(
     string Name, 
