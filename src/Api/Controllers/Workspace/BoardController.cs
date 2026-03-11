@@ -1,3 +1,4 @@
+using HeuteApp.Api.Models.Workspace.Board;
 using HeuteApp.Api.Services.Contexts;
 using HeuteApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,32 @@ public class BoardController(
 
         Guid userId = userContext.UserId.Value;
 
-        var boards = await boardService.GetBoardAsync(userId, categoryName, DateOnly.FromDateTime(DateTime.UtcNow));
-        return Ok(boards);
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        var board = await boardService.GetBoardAsync(userId, new(categoryName), date)
+            ?? await boardService.CreateBoardAsync(userId, new(categoryName), new("two", 1), new(date));
+
+        return Ok(board);
+    }
+
+    [HttpPost("{categoryName}/sync")]
+    public async Task<IActionResult> SyncBoard(string categoryName, [FromBody] SyncBoardRequest request)
+    {
+        if(!userContext.UserId.HasValue){
+            return Unauthorized("Unauthorized: No user context found. Please ensure you are authenticated.");
+        }
+
+        Guid userId = userContext.UserId.Value;
+
+        var result = await boardService.SyncBoardAsync(userId, new(categoryName), new (DateOnly.FromDateTime(DateTime.UtcNow)), request.Props);
+        
+        if(result)
+        {
+            return Ok();
+        }
+        else
+        {
+            return BadRequest();
+        }
     }
 }
