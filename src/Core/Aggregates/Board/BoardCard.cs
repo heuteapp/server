@@ -9,9 +9,9 @@ public class BoardCard
     protected BoardCard(BoardCardDefinition definition)
     {
         Id = Guid.NewGuid();
-        Name = definition.Key.Name;
-        Content = definition.Props.Content;
-        Placement = definition.Props.Placement;
+        Name = definition.Name;
+        Content = definition.Content;
+        Placement = definition.Placement;
 
         if(Placement == null)
         {
