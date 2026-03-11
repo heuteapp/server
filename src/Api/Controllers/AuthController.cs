@@ -47,6 +47,14 @@ public class AuthController(
         if (session?.User == null)
             return Unauthorized("Supabase login failed or returned invalid data.");
 
+        Response.Cookies.Append("refreshToken", session.RefreshToken!, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTimeOffset.UtcNow.AddDays(30)
+        });
+
         return Ok(new
         {
             profile,
