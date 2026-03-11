@@ -25,10 +25,12 @@ public class AuthController(ProfileService profileService, IConfiguration config
 
         // 2️⃣ Profile oluştur
         var profile = await profileService.CreateProfileAsync(
-            new ProfileOwnership(Guid.Parse(userId)),
             new ProfileDefinition(
-                new ProfileKey(request.Name),
-                new ProfileProps()
+                Guid.Parse(userId),
+                new ProfileProps(
+                    request.Name,
+                    request.Email
+                )
             )
         );
 
@@ -50,7 +52,7 @@ public class AuthController(ProfileService profileService, IConfiguration config
             return Unauthorized("Supabase login failed or returned invalid data.");
 
         // 2️⃣ Profile getir
-        var profile = await profileService.GetProfileByKeyAsync(new ProfileKey(request.Name));
+        var profile = await profileService.GetProfileByNameAsync(request.Name);
         if (profile == null)
             return NotFound("Profile not found for this user.");
 

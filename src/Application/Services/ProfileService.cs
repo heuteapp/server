@@ -6,22 +6,22 @@ namespace HeuteApp.Application.Services;
 
 public class ProfileService(IProfileRepository repository, IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteProfile> GetProfileByKeyAsync(ProfileKey key)
+    public async Task<HeuteProfile> GetProfileByNameAsync(string name)
     {
-        var profile = await repository.GetByKeyAsync(key) 
-            ?? throw new Exception($"Profile not found for key '{key}'.");
+        var profile = await repository.GetByNameAsync(name)
+            ?? throw new Exception($"Profile not found for name '{name}'.");
             
         return profile;
     }
 
-    public async Task<HeuteProfile> CreateProfileAsync(ProfileOwnership ownership, ProfileDefinition definition)
+    public async Task<HeuteProfile> CreateProfileAsync(ProfileDefinition definition)
     {
-        var existing = await repository.GetByKeyAsync(definition.Key);
+        var existing = await repository.GetByNameAsync(definition.Props.Name);
 
         if (existing != null)
-            throw new Exception($"Profile already exists for key '{definition.Key}'.");
+            throw new Exception($"Profile already exists for name '{definition.Props.Name}'.");
 
-        var profile = await repository.CreateAsync(ownership, definition);
+        var profile = await repository.CreateAsync(definition);
 
         await unitOfWork.SaveChangesAsync();
         return profile;

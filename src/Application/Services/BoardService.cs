@@ -8,7 +8,7 @@ using HeuteApp.Core.ValueObjects.Layout;
 namespace HeuteApp.Application.Services;
 
 public class BoardService(
-    IProfileRepository userRepository,
+    IProfileRepository profileRepository,
     ICategoryRepository categoryRepository,
     ILayoutRepository layoutRepository, 
     IBoardRepository boardRepository, 
@@ -17,7 +17,7 @@ public class BoardService(
 {
     public async Task<HeuteBoard?> GetBoardAsync(string ownerName, string categoryName, DateOnly date)
     {
-        var user = await userRepository.GetByKeyAsync(new (ownerName))
+        var user = await profileRepository.GetByNameAsync(ownerName)
             ?? throw new Exception($"User '{ownerName}' not found.");
 
         var category = await categoryRepository.GetByKeyAsync(new(user.Id), new (categoryName))
@@ -30,7 +30,7 @@ public class BoardService(
     {
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var owner = await userRepository.GetByKeyAsync(new (ownerName))
+        var owner = await profileRepository.GetByNameAsync(ownerName)
             ?? throw new Exception($"User '{ownerName}' not found.");
 
         var category = await categoryRepository.GetByKeyAsync(new(owner.Id), categoryKey)
@@ -53,7 +53,7 @@ public class BoardService(
 
     public async Task AddCardAsync(string ownerName, string categoryName, DateOnly date, BoardCardDefinition definition)
     {
-        var user = await userRepository.GetByKeyAsync(new (ownerName))
+        var user = await profileRepository.GetByNameAsync(ownerName)
             ?? throw new Exception($"User '{ownerName}' not found.");
 
         var category = await categoryRepository.GetByKeyAsync(new(user.Id), new (categoryName))

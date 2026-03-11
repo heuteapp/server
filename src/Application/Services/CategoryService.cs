@@ -5,13 +5,13 @@ using HeuteApp.Core.ValueObjects.Category;
 namespace HeuteApp.Application.Services;
 
 public class CategoryService(
-    IProfileRepository userRepository,
+    IProfileRepository profileRepository,
     ICategoryRepository repository, 
     IUnitOfWork unitOfWork)
 {
     public async Task<HeuteCategory> GetCategoryByKeyAsync(string ownerName, CategoryKey key)
     {
-        var owner = await userRepository.GetByKeyAsync(new (ownerName)) 
+        var owner = await profileRepository.GetByNameAsync(ownerName)
             ?? throw new Exception($"Owner not found for name '{ownerName}'.");
 
         var category = await repository.GetByKeyAsync(new (owner.Id), key) 
@@ -22,7 +22,7 @@ public class CategoryService(
 
     public async Task<HeuteCategory> CreateCategoryAsync(string ownerName, CategoryDefinition definition)
     {
-        var owner = await userRepository.GetByKeyAsync(new (ownerName)) 
+        var owner = await profileRepository.GetByNameAsync(ownerName)
             ?? throw new Exception($"Owner not found for name '{ownerName}'.");
 
         var existing = await repository.GetByKeyAsync(new (owner.Id), definition.Key);

@@ -17,17 +17,17 @@ public class ProfileRepository(HeuteDbContext context) : IProfileRepository
         return user;
     }
 
-    public async Task<HeuteProfile?> GetByKeyAsync(ProfileKey key)
+    public async Task<HeuteProfile?> GetByNameAsync(string name)
     {
         var user = await context.Profiles
-            .FirstOrDefaultAsync(c => c.Name == key.Name);
+            .FirstOrDefaultAsync(c => c.Name == name);
 
         return user;
     }
 
-    public async Task<HeuteProfile> CreateAsync(ProfileOwnership ownership, ProfileDefinition definition)
+    public async Task<HeuteProfile> CreateAsync(ProfileDefinition definition)
     {
-        var user = HeuteProfileModel.Create(ownership, definition);
+        var user = HeuteProfileModel.Create(definition);
 
         context.Profiles.Add(user);
         return user;

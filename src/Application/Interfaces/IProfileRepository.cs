@@ -7,7 +7,7 @@ public interface IProfileRepository
 {    
     Task<HeuteProfile?> GetByIdAsync(Guid userId);
 
-    Task<HeuteProfile?> GetByKeyAsync(ProfileKey key);
+    Task<HeuteProfile?> GetByNameAsync(string name);
 
-    Task<HeuteProfile> CreateAsync(ProfileOwnership ownership, ProfileDefinition definition);
+    Task<HeuteProfile> CreateAsync(ProfileDefinition definition);
 }

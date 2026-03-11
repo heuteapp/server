@@ -6,13 +6,13 @@ using HeuteApp.Core.ValueObjects.Layout;
 namespace HeuteApp.Application.Services;
 
 public class LayoutService(
-    IProfileRepository userRepository,
+    IProfileRepository profileRepository,
     ILayoutRepository repository, 
     IUnitOfWork unitOfWork)
 {
     public async Task<HeuteLayoutResult?> GetLayoutAsync(string ownerName, string name, int? version)
     {
-        var owner = await userRepository.GetByKeyAsync(new (ownerName)) 
+        var owner = await profileRepository.GetByNameAsync(ownerName)
             ?? throw new Exception($"Owner not found for name '{ownerName}'.");
 
         var layout = await repository.GetByKeyAsync(new (owner.Id, name, version));
@@ -21,7 +21,7 @@ public class LayoutService(
 
     public async Task<IEnumerable<HeuteLayoutResult>> GetLayoutsAsync(string ownerName)
     {        
-        var owner = await userRepository.GetByKeyAsync(new (ownerName)) 
+        var owner = await profileRepository.GetByNameAsync(ownerName)
             ?? throw new Exception($"Owner not found for name '{ownerName}'.");
 
         var layouts = await repository.GetByOwnerAsync(owner.Id);
@@ -30,7 +30,7 @@ public class LayoutService(
 
     public async Task<HeuteLayoutResult> CreateLayoutAsync(string ownerName, string name, LayoutProps props)
     {
-        var owner = await userRepository.GetByKeyAsync(new (ownerName)) 
+        var owner = await profileRepository.GetByNameAsync(ownerName)
             ?? throw new Exception($"Owner not found for name '{ownerName}'.");
 
         var lastVersion = await repository.GetLastestVersionAsync(owner.Id, name);

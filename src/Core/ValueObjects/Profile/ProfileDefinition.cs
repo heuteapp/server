@@ -1,6 +1,6 @@
 namespace HeuteApp.Core.ValueObjects.Profile;
 
 public sealed record ProfileDefinition(
-    ProfileKey Key,
+    Guid Id,
     ProfileProps Props
 );
