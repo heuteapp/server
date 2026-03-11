@@ -2,22 +2,19 @@ using HeuteApp.Application.Services;
 using HeuteApp.Core.ValueObjects.Profile;
 using Microsoft.AspNetCore.Mvc;
 using HeuteApp.Api.Models.Public.Request;
+using HeuteApp.Api.Singletons;
 
 namespace HeuteApp.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
-public class AuthController(ProfileService profileService, IConfiguration configuration) : ControllerBase
+public class AuthController(
+    ProfileService profileService, SupabaseProvider supabaseProvider) : ControllerBase
 {
-    private readonly Supabase.Client supabaseClient = new(
-        configuration["Supabase:Url"]!,
-        configuration["Supabase:ServiceKey"]!
-    );
-
     [HttpPost("signup")]
     public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
     {
-        var session = await supabaseClient.Auth.SignUp(request.Email, request.Password, new() { });
+        var session = await supabaseProvider.Client.Auth.SignUp(request.Email, request.Password, new() { });
         if (session?.User == null)
             return BadRequest("Supabase signup failed or returned invalid data.");
 
@@ -43,7 +40,7 @@ public class AuthController(ProfileService profileService, IConfiguration config
     [HttpPost("signin")]
     public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
     {
-        var session = await supabaseClient.Auth.SignIn(request.Name, request.Password);
+        var session = await supabaseProvider.Client.Auth.SignIn(request.Name, request.Password);
         if (session?.User == null)
             return Unauthorized("Supabase login failed or returned invalid data.");
 
