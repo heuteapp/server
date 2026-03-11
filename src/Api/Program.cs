@@ -5,7 +5,7 @@ using HeuteApp.Application.Interfaces;
 using HeuteApp.Infrastructure.Repositories;
 using Npgsql;
 using HeuteApp.Core.Services;
-using HeuteApp.Api.Singletons;
+using HeuteApp.Api.Services.Singletons;
 
 var builder = WebApplication.CreateBuilder(args);
 

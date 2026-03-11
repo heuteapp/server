@@ -2,7 +2,7 @@ using HeuteApp.Application.Services;
 using HeuteApp.Core.ValueObjects.Profile;
 using Microsoft.AspNetCore.Mvc;
 using HeuteApp.Api.Models.Public.Request;
-using HeuteApp.Api.Singletons;
+using HeuteApp.Api.Services.Singletons;
 
 namespace HeuteApp.Api.Controllers;
 

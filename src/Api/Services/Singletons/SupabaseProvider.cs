@@ -1,4 +1,4 @@
-namespace HeuteApp.Api.Singletons;
+namespace HeuteApp.Api.Services.Singletons;
 
 public sealed class SupabaseProvider(IConfiguration configuration)
 {
