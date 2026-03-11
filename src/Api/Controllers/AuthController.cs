@@ -58,8 +58,23 @@ public class AuthController(
         return Ok(new
         {
             profile,
-            session.AccessToken,
-            session.RefreshToken
+            session.AccessToken
+        });
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh()
+    {
+        var refreshToken = Request.Cookies["refreshToken"];
+        if (string.IsNullOrEmpty(refreshToken)) return Unauthorized();
+
+        var session = await supabaseProvider.Client.Auth.RefreshSession();
+        if (session?.AccessToken == null) return Unauthorized();
+
+        return Ok(new
+        {
+            accessToken = session.AccessToken,
+            profile = await profileService.GetProfileByIdAsync(Guid.Parse(session.User!.Id!))
         });
     }
 }
