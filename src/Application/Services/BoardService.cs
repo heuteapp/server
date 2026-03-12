@@ -1,5 +1,6 @@
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Core.Aggregates.Board;
+using HeuteApp.Core.Events.Abstractions;
 using HeuteApp.Core.Events.Dispatchers;
 using HeuteApp.Core.ValueObjects.Board;
 using HeuteApp.Core.ValueObjects.Category;
@@ -48,12 +49,14 @@ public class BoardService(
         return board;
     }
 
-    public async Task<bool> ProcessBoardEventsAsync(Guid ownerId, CategoryKey categoryKey, BoardKey key, IEnumerable<Core.Events.Abstractions.BoardEvent> events)
+    public async Task<bool> ProcessBoardEventsAsync(Guid ownerId, CategoryKey categoryKey, IEnumerable<BoardEvent> events)
     {
         var category = await categoryRepository.GetByKeyAsync(new(ownerId), categoryKey)
             ?? throw new Exception("Category not found.");
 
-        var board = await boardRepository.GetByKeyAsync(new(ownerId, category.Id), key)
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        var board = await boardRepository.GetByKeyAsync(new(ownerId, category.Id), new(date))
             ?? throw new Exception("Board not found.");
 
         var layout = await layoutRepository.GetByIdAsync(board.LayoutId)
