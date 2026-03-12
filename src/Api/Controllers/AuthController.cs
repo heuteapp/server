@@ -1,8 +1,8 @@
 using HeuteApp.Application.Services;
 using HeuteApp.Core.ValueObjects.Profile;
 using Microsoft.AspNetCore.Mvc;
-using HeuteApp.Api.Models.Auth;
 using HeuteApp.Api.Services.Singletons;
+using HeuteApp.Api.Models.Requests.Auth;
 
 namespace HeuteApp.Api.Controllers;
 
