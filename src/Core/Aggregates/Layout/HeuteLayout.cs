@@ -15,7 +15,7 @@ public class HeuteLayout
         OwnerId = ownership.OwnerId;
         Name = definition.Key.Name;
         Version = definition.Key.Version;
-        Size = definition.Props.Size;
+        Dimensions = definition.Props.Dimensions;
 
         foreach (var sectionDef in definition.Props.Sections)
         {
@@ -46,7 +46,7 @@ public class HeuteLayout
 
     public int Version { get; private set; }
 
-    public GridSize Size { get; private set; } = null!;
+    public GridDimensions Dimensions { get; private set; } = null!;
 
     public IReadOnlyCollection<LayoutSection> Sections => m_sections;
 

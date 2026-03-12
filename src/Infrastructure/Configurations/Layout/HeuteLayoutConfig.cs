@@ -24,14 +24,14 @@ public class HeuteLayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
        builder.Property(l => l.Version)
               .IsRequired();
 
-       builder.OwnsOne(l => l.Size, size =>
+       builder.OwnsOne(l => l.Dimensions, size =>
        {
            size.Property(s => s.ColCount)
-              .HasColumnName("Size_ColCount")
+              .HasColumnName("Dimensions_ColCount")
               .IsRequired();
 
            size.Property(s => s.RowCount)
-              .HasColumnName("Size_RowCount")
+              .HasColumnName("Dimensions_RowCount")
               .IsRequired();
        });
 
