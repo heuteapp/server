@@ -10,28 +10,22 @@ public class LayoutService(
     ILayoutRepository repository, 
     IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteLayoutResult?> GetLayoutAsync(string ownerName, string name, int? version)
+    public async Task<HeuteLayoutResult?> GetLayoutAsync(Guid ownerId, string name, int? version)
     {
-        var owner = await profileRepository.GetByNameAsync(ownerName)
-            ?? throw new Exception($"Owner not found for name '{ownerName}'.");
-
-        var layout = await repository.GetByKeyAsync(new (owner.Id, name, version));
+        var layout = await repository.GetByKeyAsync(new (ownerId, name, version));
         return layout?.ToResult();
     }
 
-    public async Task<IEnumerable<HeuteLayoutResult>> GetLayoutsAsync(string ownerName)
+    public async Task<IEnumerable<HeuteLayoutResult>> GetLayoutsAsync(Guid ownerId)
     {        
-        var owner = await profileRepository.GetByNameAsync(ownerName)
-            ?? throw new Exception($"Owner not found for name '{ownerName}'.");
-
-        var layouts = await repository.GetByOwnerAsync(owner.Id);
+        var layouts = await repository.GetByOwnerAsync(ownerId);
         return layouts.Select(l => l.ToResult());
     }
 
-    public async Task<HeuteLayoutResult> CreateLayoutAsync(string ownerName, string name, LayoutProps props)
+    public async Task<HeuteLayoutResult> CreateLayoutAsync(Guid ownerId, string name, LayoutProps props)
     {
-        var owner = await profileRepository.GetByNameAsync(ownerName)
-            ?? throw new Exception($"Owner not found for name '{ownerName}'.");
+        var owner = await profileRepository.GetByIdAsync(ownerId)
+            ?? throw new Exception($"Owner not found for ID '{ownerId}'.");
 
         var lastVersion = await repository.GetLastestVersionAsync(owner.Id, name);
         var existing = await repository.GetByKeyAsync(new (owner.Id, name, lastVersion));
