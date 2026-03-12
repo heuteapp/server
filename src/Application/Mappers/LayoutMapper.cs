@@ -14,6 +14,7 @@ public static class LayoutMapper
             layout.OwnerId,
             layout.Name,
             layout.Version,
+            layout.Dimensions,
             [..layout.Sections.Select(ToResult)]
         );
     }

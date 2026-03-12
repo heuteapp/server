@@ -1,3 +1,5 @@
+using HeuteApp.Core.ValueObjects;
+
 namespace HeuteApp.Application.Results.Layout;
 
 public record HeuteLayoutResult(
@@ -5,5 +7,5 @@ public record HeuteLayoutResult(
     Guid? OwnerId,
     string Name,
     int Version,
+    GridDimensions Dimensions,
     IReadOnlyList<LayoutSectionResult> Sections);
-    
