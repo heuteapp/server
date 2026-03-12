@@ -27,25 +27,4 @@ public class BoardController(
 
         return Ok(board);
     }
-
-    [HttpPost("{categoryName}/sync")]
-    public async Task<IActionResult> SyncBoard(string categoryName, [FromBody] SyncBoardRequest request)
-    {
-        if(!userContext.UserId.HasValue){
-            return Unauthorized("Unauthorized: No user context found. Please ensure you are authenticated.");
-        }
-
-        Guid userId = userContext.UserId.Value;
-
-        var result = await boardService.SyncBoardAsync(userId, new(categoryName), new (DateOnly.FromDateTime(DateTime.UtcNow)), request.Props);
-        
-        if(result)
-        {
-            return Ok();
-        }
-        else
-        {
-            return BadRequest();
-        }
-    }
 }
