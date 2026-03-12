@@ -1,5 +1,3 @@
-using HeuteApp.Core.Aggregates.Board;
-using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Core.Enums.Events;
 using HeuteApp.Core.Interfaces.Events;
 
