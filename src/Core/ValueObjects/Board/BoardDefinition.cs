@@ -1,7 +1,13 @@
 namespace HeuteApp.Core.ValueObjects.Board;
 
 public record BoardDefinition
-{
+{   
+    public DateOnly Date { get; }
+
+    //
+
+    private BoardDefinition() { }
+
     public BoardDefinition(
         DateOnly date)
     {
@@ -14,8 +20,4 @@ public record BoardDefinition
     {
         Date = Key.Date;
     }
-
-    //
-
-    public DateOnly Date { get; }
 }
