@@ -10,15 +10,15 @@ public record BoardCardDefinition
 
     public string Title { get; private set; } = null!;
 
-    public string SectionName { get; private set; } = null!;
+    public string? SectionName { get; private set; } = null;
 
-    public int ColIndex { get; private set; } = -1;
+    public int? ColIndex { get; private set; } = null;
 
-    public int RowIndex { get; private set; } = -1;
+    public int? RowIndex { get; private set; } = null;
 
-    public int ColSpan { get; private set; } = 0;
+    public int? ColSpan { get; private set; } = null;
 
-    public int RowSpan { get; private set; } = 0;
+    public int? RowSpan { get; private set; } = null;
 
     //
 
@@ -50,5 +50,12 @@ public record BoardCardDefinition
 
     public BoardCardKey Key => new(Name);
 
-    public BoardCardProps Props => new(Title, SectionName, ColIndex, RowIndex, ColSpan, RowSpan);
+    public BoardCardProps Props => new(Content, Placement);
+
+    public BoardCardContent Content => new(Title);
+
+    public BoardCardPlacement? Placement => 
+        SectionName is not null && ColIndex is not null && RowIndex is not null && ColSpan is not null && RowSpan is not null
+        ? new BoardCardPlacement(SectionName, ColIndex.Value, RowIndex.Value, ColSpan.Value, RowSpan.Value)
+        : null;
 }
