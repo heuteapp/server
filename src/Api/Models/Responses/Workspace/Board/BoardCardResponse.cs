@@ -1,6 +1,7 @@
 namespace HeuteApp.Api.Models.Responses.Workspace.Board;
 
 public record BoardCardResponse(
+    string Name,
     string? Title,
     string? SectionName,
     int? ColIndex,

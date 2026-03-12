@@ -23,6 +23,7 @@ public static class BoardModelMapper
 
     public static BoardCardResponse ToResponse(this BoardCardResult card)
         => new(
+            Name: card.Name,
             Title: card.Content?.Title,
             SectionName: card.Placement?.SectionName,
             ColIndex: card.Placement?.ColIndex,
