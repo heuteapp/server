@@ -1,4 +1,6 @@
 using HeuteApp.Application.Interfaces;
+using HeuteApp.Application.Mappers;
+using HeuteApp.Application.Results.Board;
 using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Core.Events.Abstractions;
 using HeuteApp.Core.Events.Dispatchers;
@@ -16,15 +18,17 @@ public class BoardService(
     IUnitOfWork unitOfWork,
     BoardEventDispatcher boardEventDispatcher)
 {
-    public async Task<HeuteBoard?> GetBoardAsync(Guid ownerId, CategoryKey categoryKey, DateOnly date)
+    public async Task<BoardResult?> GetBoardAsync(Guid ownerId, CategoryKey categoryKey, DateOnly date)
     {
         var category = await categoryRepository.GetByKeyAsync(new(ownerId), categoryKey)
             ?? throw new Exception("Category not found.");
 
-        return await boardRepository.GetByKeyAsync(new (ownerId, category.Id), new (date));
+        var board = await boardRepository.GetByKeyAsync(new (ownerId, category.Id), new (date));
+
+        return board?.ToResult();
     }
 
-    public async Task<HeuteBoard> CreateBoardAsync(Guid ownerId, CategoryKey categoryKey, LayoutKey layoutKey, BoardKey Key)
+    public async Task<BoardResult> CreateBoardAsync(Guid ownerId, CategoryKey categoryKey, LayoutKey layoutKey, BoardKey Key)
     {
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -46,7 +50,7 @@ public class BoardService(
         var board = await boardRepository.CreateAsync(owner, category, layout, new(Key, BoardProps.Empty));
         await unitOfWork.SaveChangesAsync();
 
-        return board;
+        return board.ToResult();
     }
 
     public async Task<bool> ProcessBoardEventsAsync(Guid ownerId, CategoryKey categoryKey, IEnumerable<BoardEvent> events)
