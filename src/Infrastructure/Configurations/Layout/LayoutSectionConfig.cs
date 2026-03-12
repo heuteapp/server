@@ -25,11 +25,11 @@ public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionModel>
         {
             area.WithOwner();
 
-            area.Property(r => r.Col)
+            area.Property(r => r.ColIndex)
                 .HasColumnName("Area_Col")
                 .IsRequired();
 
-            area.Property(r => r.Row)
+            area.Property(r => r.RowIndex)
                 .HasColumnName("Area_Row")
                 .IsRequired();
 

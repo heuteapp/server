@@ -27,8 +27,8 @@ public sealed record BoardCardPlacement
     public BoardCardPlacement(LayoutSectionKey section, GridRect position)
     {
         SectionName = section.Name;
-        Col = position.Col;
-        Row = position.Row;
+        Col = position.ColIndex;
+        Row = position.RowIndex;
         ColSpan = position.ColSpan;
         RowSpan = position.RowSpan;
     }

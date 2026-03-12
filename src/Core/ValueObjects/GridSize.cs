@@ -7,9 +7,9 @@ public sealed record GridSize(
     public bool Contains(GridRect rect)
     {
         return
-            rect.Col >= 1 &&
-            rect.Row >= 1 &&
-            rect.Col + rect.ColSpan - 1 <= ColCount &&
-            rect.Row + rect.RowSpan - 1 <= RowCount;
+            rect.ColIndex >= 1 &&
+            rect.RowIndex >= 1 &&
+            rect.ColIndex + rect.ColSpan - 1 <= ColCount &&
+            rect.RowIndex + rect.RowSpan - 1 <= RowCount;
     }
 }
