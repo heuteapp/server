@@ -5,14 +5,15 @@ namespace HeuteApp.Application.Mappers;
 
 public static class BoardMapper
 {
-    public static HeuteBoardResult ToResult(this HeuteBoard board)
+    public static BoardResult ToResult(this HeuteBoard board)
     {
         ArgumentNullException.ThrowIfNull(board);
 
-        return new HeuteBoardResult(
+        return new BoardResult(
             board.Id,
             board.OwnerId,
             board.LayoutId,
+            board.CategoryId,
             board.Date,
             [..board.Cards.Select(ToResult)]
         );
@@ -24,6 +25,7 @@ public static class BoardMapper
 
         return new BoardCardResult(
             card.Id,
+            card.Name,
             card.Content,
             card.Placement
         );
