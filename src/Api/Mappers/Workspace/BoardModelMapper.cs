@@ -14,7 +14,7 @@ public static class BoardModelMapper
             RowIndex: card.Placement?.RowIndex,
             ColSpan: card.Placement?.ColSpan,
             RowSpan: card.Placement?.RowSpan
-        ));
+        )).ToList();
 
         return new BoardResponse(cards);
     }
