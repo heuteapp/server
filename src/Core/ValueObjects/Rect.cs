@@ -1,26 +1,20 @@
 namespace HeuteApp.Core.ValueObjects;
 
-public sealed record Rect(
-    int X,
-    int Y,
-    int Width,
-    int Height)
-{
-    public bool Overlaps(Rect other)
+public sealed record Rect
+{    
+    public int X { get; }
+
+    public int Y { get; }
+
+    public int Width { get; }
+
+    public int Height { get; }
+
+    public Rect(int x, int y, int width, int height)
     {
-        return
-            X < other.X + other.Width &&
-            X + Width > other.X &&
-            Y < other.Y + other.Height &&
-            Y + Height > other.Y;
-    }
-    
-    public bool Contains(Rect other)
-    {
-        return
-            other.X >= X &&
-            other.Y >= Y &&
-            other.X + other.Width <= X + Width &&
-            other.Y + other.Height <= Y + Height;
+        X = x;
+        Y = y;
+        Width = width;
+        Height = height;
     }
 }
