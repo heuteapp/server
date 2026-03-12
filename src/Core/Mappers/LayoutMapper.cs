@@ -11,7 +11,7 @@ public static partial class LayoutMapper
 
         return new LayoutSectionDefinition(
             new LayoutSectionKey(section.Name),
-            new LayoutSectionProps(section.Area)
+            new LayoutSectionProps(section.Position)
         );
     }
 

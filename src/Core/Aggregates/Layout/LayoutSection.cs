@@ -10,8 +10,8 @@ public class LayoutSection
     protected LayoutSection(LayoutSectionDefinition definition)
     {
         Id = Guid.NewGuid();
-        Name = definition.Key.Name;
-        Area = definition.Props.Area;
+        Name = definition.Name;
+        Position = definition.Position;
     }
 
     public static LayoutSection Create(LayoutSectionDefinition definition)
@@ -26,5 +26,5 @@ public class LayoutSection
 
     public string Name { get; private set;} = null!;
 
-    public GridRect Area { get; internal set; } = null!;
+    public GridRect Position { get; internal set; } = null!;
 }

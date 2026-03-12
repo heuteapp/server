@@ -21,24 +21,24 @@ public class LayoutSectionConfig : IEntityTypeConfiguration<LayoutSectionModel>
         builder.Property(s => s.Name)
             .IsRequired();
 
-        builder.OwnsOne(s => s.Area, area =>
+        builder.OwnsOne(s => s.Position, position =>
         {
-            area.WithOwner();
+            position.WithOwner();
 
-            area.Property(r => r.ColIndex)
-                .HasColumnName("Area_Col")
+            position.Property(r => r.ColIndex)
+                .HasColumnName("Position_ColIndex")
                 .IsRequired();
 
-            area.Property(r => r.RowIndex)
-                .HasColumnName("Area_Row")
+            position.Property(r => r.RowIndex)
+                .HasColumnName("Position_RowIndex")
                 .IsRequired();
 
-            area.Property(r => r.ColSpan)
-                .HasColumnName("Area_ColSpan")
+            position.Property(r => r.ColSpan)
+                .HasColumnName("Position_ColSpan")
                 .IsRequired();
 
-            area.Property(r => r.RowSpan)
-                .HasColumnName("Area_RowSpan")
+            position.Property(r => r.RowSpan)
+                .HasColumnName("Position_RowSpan")
                 .IsRequired();
         });
 

@@ -25,7 +25,7 @@ public static class LayoutMapper
         return new LayoutSectionResult(
             section.Id,
             section.Name,
-            section.Area
+            section.Position
         );
     }
 }
