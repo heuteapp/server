@@ -1,6 +1,7 @@
+using HeuteApp.Core.Events.Abstractions;
 using HeuteApp.Core.ValueObjects.Board;
 
-namespace HeuteApp.Api.Models.Workspace.Board.Events;
+namespace HeuteApp.Core.Events.Domain.Board;
 
 public record CardCreatedEvent(
     DateTimeOffset OccurredAt,

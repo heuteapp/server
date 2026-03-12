@@ -1,4 +1,4 @@
-namespace HeuteApp.Api.Models.Workspace.Board.Events;
+namespace HeuteApp.Core.Events.Abstractions;
 
 public abstract record BoardEvent(
     DateTimeOffset OccurredAt
