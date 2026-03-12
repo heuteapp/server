@@ -1,4 +1,4 @@
-using HeuteApp.Api.Models.Workspace.Board;
+using HeuteApp.Api.Models.Requests.Workspace.Board;
 using HeuteApp.Api.Services.Contexts;
 using HeuteApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
