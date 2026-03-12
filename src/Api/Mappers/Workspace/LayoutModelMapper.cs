@@ -1,4 +1,5 @@
 using HeuteApp.Api.Models.Responses.Workspace.Layout;
+using HeuteApp.Application.Results.Layout;
 using HeuteApp.Core.ValueObjects.Layout;
 using System.Linq;
 
@@ -6,18 +7,18 @@ namespace HeuteApp.Api.Mappers.Workspace;
 
 public static class LayoutMapper
 {
-    public static LayoutResponse ToResponse(this LayoutProps layout)
+    public static LayoutResponse ToResponse(this LayoutResult layout)
         => new(
-            ColCount: layout.ColCount,
-            RowCount: layout.RowCount,
+            ColCount: layout.Dimensions.ColCount,
+            RowCount: layout.Dimensions.RowCount,
             Sections: [.. layout.Sections.Select(s => s.ToResponse())]
         );
 
-    public static LayoutSectionResponse ToResponse(this LayoutSectionDefinition section)
+    public static LayoutSectionResponse ToResponse(this LayoutSectionResult section)
         => new(
-            ColIndex: section.ColIndex,
-            RowIndex: section.RowIndex,
-            ColSpan: section.ColSpan,
-            RowSpan: section.RowSpan
+            ColIndex: section.Position.ColIndex,
+            RowIndex: section.Position.RowIndex,
+            ColSpan: section.Position.ColSpan,
+            RowSpan: section.Position.RowSpan
         );
 }
