@@ -3,9 +3,9 @@ namespace HeuteApp.Core.ValueObjects.Board;
 public record BoardDefinition
 {
     public BoardDefinition(
-        DateOnly Date)
+        DateOnly date)
     {
-        this.Date = Date;
+        Date = date;
     }
 
     public BoardDefinition(
