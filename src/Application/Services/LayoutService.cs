@@ -10,19 +10,19 @@ public class LayoutService(
     ILayoutRepository repository, 
     IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteLayoutResult?> GetLayoutAsync(Guid ownerId, string name, int? version)
+    public async Task<LayoutResult?> GetLayoutAsync(Guid ownerId, string name, int? version)
     {
         var layout = await repository.GetByKeyAsync(new (ownerId, name, version));
         return layout?.ToResult();
     }
 
-    public async Task<IEnumerable<HeuteLayoutResult>> GetLayoutsAsync(Guid ownerId)
+    public async Task<IEnumerable<LayoutResult>> GetLayoutsAsync(Guid ownerId)
     {        
         var layouts = await repository.GetByOwnerAsync(ownerId);
         return layouts.Select(l => l.ToResult());
     }
 
-    public async Task<HeuteLayoutResult> CreateLayoutAsync(Guid ownerId, string name, LayoutProps props)
+    public async Task<LayoutResult> CreateLayoutAsync(Guid ownerId, string name, LayoutProps props)
     {
         var owner = await profileRepository.GetByIdAsync(ownerId)
             ?? throw new Exception($"Owner not found for ID '{ownerId}'.");

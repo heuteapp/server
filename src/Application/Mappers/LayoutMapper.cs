@@ -5,11 +5,11 @@ namespace HeuteApp.Application.Mappers;
 
 public static class LayoutMapper
 {
-    public static HeuteLayoutResult ToResult(this HeuteLayout layout)
+    public static LayoutResult ToResult(this HeuteLayout layout)
     {
         ArgumentNullException.ThrowIfNull(layout);
         
-        return new HeuteLayoutResult(
+        return new LayoutResult(
             layout.Id,
             layout.OwnerId,
             layout.Name,
