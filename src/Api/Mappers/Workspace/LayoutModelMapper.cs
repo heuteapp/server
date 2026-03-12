@@ -16,6 +16,7 @@ public static class LayoutMapper
 
     public static LayoutSectionResponse ToResponse(this LayoutSectionResult section)
         => new(
+            Name: section.Name,
             ColIndex: section.Position.ColIndex,
             RowIndex: section.Position.RowIndex,
             ColSpan: section.Position.ColSpan,
