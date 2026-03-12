@@ -1,3 +1,4 @@
+using HeuteApp.Api.Mappers.Workspace;
 using HeuteApp.Api.Models.Requests.Workspace.Board;
 using HeuteApp.Api.Services.Contexts;
 using HeuteApp.Application.Services;
@@ -26,7 +27,7 @@ public class BoardController(
         var board = await boardService.GetBoardAsync(userId, new(categoryName), date)
             ?? await boardService.CreateBoardAsync(userId, new(categoryName), new("two", 1), new(date));
 
-        return Ok(board);
+        return Ok(board.ToResponse());
     }
 
     [HttpPost("{categoryName}/events")]
