@@ -1,4 +1,4 @@
-using HeuteApp.Core.Events.Abstractions;
+using HeuteApp.Api.Models.Events.Abstractions;
 
 namespace HeuteApp.Api.Models.Requests.Workspace.Board;
 
