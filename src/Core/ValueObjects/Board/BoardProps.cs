@@ -1,8 +1,11 @@
 namespace HeuteApp.Core.ValueObjects.Board;
 
-public sealed record BoardProps(
-    IReadOnlyCollection<BoardCardDefinition> Cards
-)
+public sealed record BoardProps
 {
-    public static readonly BoardProps Empty = new([]);
+    public static BoardProps Empty => new();
+
+    public BoardProps()
+    {
+        
+    }
 }

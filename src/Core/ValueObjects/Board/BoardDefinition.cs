@@ -3,11 +3,9 @@ namespace HeuteApp.Core.ValueObjects.Board;
 public record BoardDefinition
 {
     public BoardDefinition(
-        DateOnly Date,
-        IReadOnlyCollection<BoardCardDefinition> Cards)
+        DateOnly Date)
     {
         this.Date = Date;
-        this.Cards = Cards;
     }
 
     public BoardDefinition(
@@ -15,12 +13,9 @@ public record BoardDefinition
         BoardProps Props)
     {
         Date = Key.Date;
-        Cards = Props.Cards;
     }
 
     //
 
     public DateOnly Date { get; }
-
-    public IReadOnlyCollection<BoardCardDefinition> Cards { get; }
 }

@@ -13,7 +13,7 @@ public class BoardPlacementService
         ArgumentNullException.ThrowIfNull(layout);
         ArgumentNullException.ThrowIfNull(syncProps);
 
-        // Remove cards that are not in syncProps and DEFINITON DOES NOT HAVE ID  JUST HAVE NAME
+        /*// Remove cards that are not in syncProps and DEFINITON DOES NOT HAVE ID  JUST HAVE NAME
         var cardsToRemove = board.Cards.Where(c => !syncProps.Cards.Any(sc => sc.Name == c.Name)).ToList();
         foreach (var card in cardsToRemove)
         {
@@ -30,7 +30,7 @@ public class BoardPlacementService
                 var newCard = board.Internal_CreateCard(new BoardCardDefinition(new(syncCard.Name), new(syncCard.Content, syncCard.Placement)));
                 board.Internal_AddCard(newCard);
             }
-        }
+        }*/
     }
 
     public BoardCard AddCard(HeuteBoard board, HeuteLayout layout, BoardCardDefinition definition)
