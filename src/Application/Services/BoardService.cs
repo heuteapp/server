@@ -1,6 +1,6 @@
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Core.Aggregates.Board;
-using HeuteApp.Core.Services;
+using HeuteApp.Core.Events.Dispatchers;
 using HeuteApp.Core.ValueObjects.Board;
 using HeuteApp.Core.ValueObjects.Category;
 using HeuteApp.Core.ValueObjects.Layout;
@@ -13,7 +13,7 @@ public class BoardService(
     ILayoutRepository layoutRepository, 
     IBoardRepository boardRepository, 
     IUnitOfWork unitOfWork,
-    BoardPlacementService boardPlacementService)
+    BoardEventDispatcher boardEventDispatcher)
 {
     public async Task<HeuteBoard?> GetBoardAsync(Guid ownerId, CategoryKey categoryKey, DateOnly date)
     {
@@ -48,23 +48,22 @@ public class BoardService(
         return board;
     }
 
-    public async Task<bool> SyncBoardAsync(Guid ownerId, CategoryKey categoryKey, BoardKey boardKey, BoardProps syncProps)
+    public async Task<bool> ProcessBoardEventsAsync(Guid ownerId, CategoryKey categoryKey, BoardKey key, IEnumerable<Core.Events.Abstractions.BoardEvent> events)
     {
         var category = await categoryRepository.GetByKeyAsync(new(ownerId), categoryKey)
             ?? throw new Exception("Category not found.");
 
-        var board = await boardRepository.GetByKeyAsync(new (ownerId, category.Id), boardKey)
+        var board = await boardRepository.GetByKeyAsync(new(ownerId, category.Id), key)
             ?? throw new Exception("Board not found.");
 
         var layout = await layoutRepository.GetByIdAsync(board.LayoutId)
             ?? throw new Exception("Layout not found.");
 
-        if(board != null)
-        {
-            boardPlacementService.SyncBoard(board, layout, syncProps);
-            await unitOfWork.SaveChangesAsync();
-        }
+        var context = new Core.Events.Contexts.BoardEventContext(board, layout);
 
+        boardEventDispatcher.Dispatch(context, [..events]);
+
+        await unitOfWork.SaveChangesAsync();
         return true;
     }
 }

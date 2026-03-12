@@ -7,7 +7,5 @@ namespace HeuteApp.Core.Events.Abstractions;
 
 public abstract record BoardEvent(
     DateTimeOffset OccurredAt,
-    HeuteBoard Board,
-    HeuteLayout Layout,
     BoardEventType Type
 ) : IDomainEvent;
