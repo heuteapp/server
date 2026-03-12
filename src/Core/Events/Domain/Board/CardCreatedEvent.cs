@@ -1,9 +1,13 @@
-using HeuteApp.Core.Events.Abstractions;
 using HeuteApp.Core.ValueObjects.Board;
+using HeuteApp.Core.Aggregates.Board;
+using HeuteApp.Core.Aggregates.Layout;
+using HeuteApp.Core.Events.Abstractions;
 
 namespace HeuteApp.Core.Events.Domain.Board;
 
 public record CardCreatedEvent(
     DateTimeOffset OccurredAt,
-    BoardCardProps Props
-) : BoardEvent(OccurredAt, BoardEventType.CardCreated);
+    HeuteBoard Board,
+    HeuteLayout Layout,
+    BoardCardDefinition Definition
+) : BoardEvent(OccurredAt, Board, Layout, BoardEventType.CardCreated);
