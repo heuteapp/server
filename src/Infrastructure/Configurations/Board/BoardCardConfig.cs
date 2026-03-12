@@ -31,11 +31,11 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
                         .HasColumnName("Placement_SectionName")
                         .IsRequired();
 
-                placement.Property(p => p.Col)
-                        .HasColumnName("Placement_Col");
+                placement.Property(p => p.ColIndex)
+                        .HasColumnName("Placement_ColIndex");
                 
-                placement.Property(p => p.Row)
-                        .HasColumnName("Placement_Row");
+                placement.Property(p => p.RowIndex)
+                        .HasColumnName("Placement_RowIndex");
 
                 placement.Property(p => p.ColSpan)
                         .HasColumnName("Placement_ColSpan");

@@ -2,13 +2,17 @@ namespace HeuteApp.Core.ValueObjects;
 
 public sealed record GridSize
 {
-    public int ColSpan { get; }
-    
-    public int RowSpan { get; }
+    public int ColSpan { get; } = 0;
 
-    public GridSize(int colSpan, int rowSpan)
+    public int RowSpan { get; } = 0;
+
+    //
+
+    private GridSize() { }
+
+    public GridSize(int ColSpan, int RowSpan)
     {
-        ColSpan = colSpan;
-        RowSpan = rowSpan;
+        this.ColSpan = ColSpan;
+        this.RowSpan = RowSpan;
     }
 }
