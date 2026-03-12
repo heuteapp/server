@@ -2,9 +2,17 @@ namespace HeuteApp.Core.ValueObjects.Layout;
 
 public sealed record LayoutKey
 {
-    public string Name { get; }
+    public static LayoutKey Empty => new();
+
+    //
+
+    public string Name { get; } = null!;
     
-    public int Version { get; }
+    public int Version { get; } = 0;
+
+    //
+
+    private LayoutKey() { }
 
     public LayoutKey(string name, int version)
     {
