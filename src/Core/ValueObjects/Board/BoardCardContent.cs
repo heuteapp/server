@@ -2,6 +2,10 @@ namespace HeuteApp.Core.ValueObjects.Board;
 
 public record BoardCardContent
 {
+    public static BoardCardContent Empty => new();
+
+    //
+
     public string Title { get; init; } = null!;
 
     //

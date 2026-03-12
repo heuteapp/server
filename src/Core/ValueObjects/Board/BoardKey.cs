@@ -2,7 +2,11 @@ namespace HeuteApp.Core.ValueObjects.Board;
 
 public sealed record BoardKey
 {    
-    public DateOnly Date { get; }
+    public static BoardKey Empty => new();
+
+    //
+
+    public DateOnly Date { get; } = DateOnly.MinValue!;
 
     //
 

@@ -2,19 +2,23 @@ namespace HeuteApp.Core.ValueObjects.Board;
 
 public record BoardCardDefinition
 {
+    public static BoardCardDefinition Empty => new();
+
+    //
+
     public string Name { get; private set; } = null!;
 
     public string Title { get; private set; } = null!;
 
     public string SectionName { get; private set; } = null!;
 
-    public int ColIndex { get; private set; }
+    public int ColIndex { get; private set; } = -1;
 
-    public int RowIndex { get; private set; }
+    public int RowIndex { get; private set; } = -1;
 
-    public int ColSpan { get; private set; }
+    public int ColSpan { get; private set; } = 0;
 
-    public int RowSpan { get; private set; }
+    public int RowSpan { get; private set; } = 0;
 
     //
 

@@ -4,6 +4,10 @@ namespace HeuteApp.Core.ValueObjects.Board;
 
 public sealed record BoardCardPlacement
 {        
+    public static BoardCardPlacement Empty => new();
+
+    //
+
     public string SectionName { get; private set; } = null!;
 
     public int ColIndex { get; private set; } = -1;
