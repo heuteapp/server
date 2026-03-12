@@ -10,6 +10,12 @@ public class LayoutService(
     ILayoutRepository repository, 
     IUnitOfWork unitOfWork)
 {
+    public async Task<LayoutResult?> GetLayoutByIdAsync(Guid layoutId)
+    {
+        var layout = await repository.GetByIdAsync(layoutId);
+        return layout?.ToResult();
+    }
+
     public async Task<LayoutResult?> GetLayoutAsync(Guid ownerId, string name, int? version)
     {
         var layout = await repository.GetByKeyAsync(new (ownerId, name, version));
