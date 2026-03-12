@@ -2,7 +2,7 @@ namespace HeuteApp.Core.ValueObjects.Board;
 
 public sealed record BoardReference
 {    
-    public Guid LayoutId { get; } = Guid.Empty;
+    public Guid LayoutId { get; private set; } = Guid.Empty;
 
     //
 

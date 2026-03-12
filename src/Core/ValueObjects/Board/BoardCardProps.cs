@@ -6,7 +6,7 @@ public sealed record BoardCardProps
 
     //
 
-    public string Title { get; private set; } = null!;
+    public string? Title { get; private set; } = null!;
 
     public string? SectionName { get; private set; } = null;
 

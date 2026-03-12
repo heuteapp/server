@@ -6,13 +6,13 @@ public record BoardCardContent
 
     //
 
-    public string Title { get; init; } = null!;
+    public string? Title { get; private set; } = null;
 
     //
 
     private BoardCardContent() { }
 
-    public BoardCardContent(string title)
+    public BoardCardContent(string? title)
     {
         Title = title;
     }

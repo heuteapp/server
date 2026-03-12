@@ -8,7 +8,7 @@ public sealed record BoardCardPlacement
 
     //
 
-    public string SectionName { get; private set; } = null!;
+    public string SectionName { get; private set; } = string.Empty;
 
     public int ColIndex { get; private set; } = -1;
 

@@ -8,7 +8,7 @@ public record BoardCardDefinition
 
     public string Name { get; private set; } = null!;
 
-    public string Title { get; private set; } = null!;
+    public string? Title { get; private set; } = null!;
 
     public string? SectionName { get; private set; } = null;
 
@@ -24,7 +24,7 @@ public record BoardCardDefinition
 
     private BoardCardDefinition() { }
 
-    public BoardCardDefinition(string name, string title, string sectionName, int colIndex, int rowIndex, int colSpan, int rowSpan)
+    public BoardCardDefinition(string name, string? title, string sectionName, int colIndex, int rowIndex, int colSpan, int rowSpan)
     {
         Name = name;
         Title = title;

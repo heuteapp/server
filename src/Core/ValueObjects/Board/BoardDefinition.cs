@@ -6,7 +6,7 @@ public record BoardDefinition
 
     //
 
-    public DateOnly Date { get; } = DateOnly.MinValue;
+    public DateOnly Date { get; private set; } = DateOnly.MinValue;
 
     //
 

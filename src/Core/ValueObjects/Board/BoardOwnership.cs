@@ -6,9 +6,9 @@ public sealed record BoardOwnership
 
     //
 
-    public Guid OwnerId { get; } = Guid.Empty;
+    public Guid OwnerId { get; private set; } = Guid.Empty;
 
-    public Guid CategoryId { get; } = Guid.Empty;
+    public Guid CategoryId { get; private set; } = Guid.Empty;
 
     //
 
