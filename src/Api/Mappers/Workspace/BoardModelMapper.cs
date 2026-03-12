@@ -15,6 +15,7 @@ public static class BoardModelMapper
             ?? throw new Exception("Layout not found.");
 
         return new BoardResponse(
+            Date: board.Date,
             Layout: layout.ToResponse(),
             Cards: [.. board.Cards.Select(ToResponse)]
         );
