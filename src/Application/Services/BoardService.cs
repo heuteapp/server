@@ -57,7 +57,7 @@ public class BoardService(
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var board = await boardRepository.GetByKeyAsync(new(ownerId, category.Id), new(date))
-            ?? throw new Exception("Board not found.");
+            ?? throw new Exception("Board not found for today. Please create today's board before posting events.");
 
         var layout = await layoutRepository.GetByIdAsync(board.LayoutId)
             ?? throw new Exception("Layout not found.");
