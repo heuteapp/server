@@ -1,4 +1,4 @@
-using HeuteApp.Api.Models.Requests.Workspace.Board;
+using HeuteApp.Api.Mappers.Workspace;
 using HeuteApp.Api.Services.Contexts;
 using HeuteApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +27,6 @@ public class LayoutController(
             return NotFound($"Layout with name '{name}' and version '{version}' not found for the current user.");
         }
 
-        return Ok(layout);
+        return Ok(layout.ToResponse());
     }
 }
