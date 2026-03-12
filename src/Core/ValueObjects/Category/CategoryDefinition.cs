@@ -1,6 +1,7 @@
 namespace HeuteApp.Core.ValueObjects.Category;
 
-public sealed record CategoryDefinition {
+public sealed record CategoryDefinition
+{
     public static CategoryDefinition Empty => new();
 
     //
@@ -23,4 +24,10 @@ public sealed record CategoryDefinition {
     {
         Name = key.Name;
     }
+
+    //
+
+    public CategoryKey Key => new(Name);
+
+    public CategoryProps Props => CategoryProps.Empty;
 }
