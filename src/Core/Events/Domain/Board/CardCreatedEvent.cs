@@ -2,6 +2,7 @@ using HeuteApp.Core.ValueObjects.Board;
 using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Core.Events.Abstractions;
+using HeuteApp.Core.Enums.Events;
 
 namespace HeuteApp.Core.Events.Domain.Board;
 

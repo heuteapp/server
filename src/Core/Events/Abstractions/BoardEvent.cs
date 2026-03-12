@@ -1,5 +1,6 @@
 using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Core.Aggregates.Layout;
+using HeuteApp.Core.Enums.Events;
 
 namespace HeuteApp.Core.Events.Abstractions;
 
@@ -9,8 +10,3 @@ public abstract record BoardEvent(
     HeuteLayout Layout,
     BoardEventType Type
 ) : DomainEvent(OccurredAt);
-
-public enum BoardEventType
-{
-    CardCreated,
-}
