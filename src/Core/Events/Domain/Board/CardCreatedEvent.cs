@@ -6,4 +6,4 @@ namespace HeuteApp.Core.Events.Domain.Board;
 public record CardCreatedEvent(
     DateTimeOffset OccurredAt,
     BoardCardProps Props
-) : BoardEvent(OccurredAt);
+) : BoardEvent(OccurredAt, BoardEventType.CardCreated);

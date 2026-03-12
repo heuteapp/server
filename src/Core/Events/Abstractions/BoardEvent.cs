@@ -1,5 +1,11 @@
 namespace HeuteApp.Core.Events.Abstractions;
 
 public abstract record BoardEvent(
-    DateTimeOffset OccurredAt
+    DateTimeOffset OccurredAt,
+    BoardEventType Type
 ) : DomainEvent(OccurredAt);
+
+public enum BoardEventType
+{
+    CardCreated,
+}
