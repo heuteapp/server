@@ -22,9 +22,9 @@ public class LayoutSection
 
     //
 
-    public Guid Id { get; private set; }
+    public Guid Id { get; private set; } = Guid.Empty;
 
-    public string Name { get; private set;} = null!;
+    public string Name { get; private set;} = string.Empty;
 
-    public GridRect Position { get; internal set; } = null!;
+    public GridRect Position { get; internal set; } = GridRect.Empty;
 }

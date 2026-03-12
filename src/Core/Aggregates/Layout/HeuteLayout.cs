@@ -38,15 +38,15 @@ public class HeuteLayout
 
     //
 
-    public Guid Id { get; private set; }
+    public Guid Id { get; private set; } = Guid.Empty;
 
-    public Guid OwnerId { get; private set; }
+    public Guid OwnerId { get; private set; } = Guid.Empty;
 
-    public string Name { get; private set; } = null!;
+    public string Name { get; private set; } = string.Empty;
 
-    public int Version { get; private set; }
+    public int Version { get; private set; } = 0;
 
-    public GridDimensions Dimensions { get; private set; } = null!;
+    public GridDimensions Dimensions { get; private set; } = GridDimensions.Empty;
 
     public IReadOnlyCollection<LayoutSection> Sections => m_sections;
 

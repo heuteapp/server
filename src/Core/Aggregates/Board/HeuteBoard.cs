@@ -30,15 +30,15 @@ public class HeuteBoard
 
     //
 
-    public Guid Id { get; private set; }
+    public Guid Id { get; private set; } = Guid.Empty;
 
-    public Guid OwnerId { get; private set; }
+    public Guid OwnerId { get; private set; } = Guid.Empty;
 
-    public Guid LayoutId { get; private set; }
+    public Guid LayoutId { get; private set; } = Guid.Empty;
 
-    public Guid CategoryId { get; private set; }
+    public Guid CategoryId { get; private set; } = Guid.Empty;
 
-    public DateOnly Date { get; private set; }
+    public DateOnly Date { get; private set; } = DateOnly.MinValue;
 
     public IReadOnlyCollection<BoardCard> Cards => m_cards;
 

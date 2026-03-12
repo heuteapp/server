@@ -22,9 +22,9 @@ public class HeuteCategory
 
     //
 
-    public Guid Id { get; private set; }
+    public Guid Id { get; private set; } = Guid.Empty;
 
-    public Guid OwnerId { get; internal set; }
+    public Guid OwnerId { get; internal set; } = Guid.Empty;
 
-    public string Name { get; private set; } = null!;
+    public string Name { get; private set; } = string.Empty;
 }

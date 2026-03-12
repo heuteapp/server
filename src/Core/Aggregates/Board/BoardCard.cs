@@ -27,13 +27,13 @@ public class BoardCard
 
     //
 
-    public Guid Id { get; private set; }
+    public Guid Id { get; private set; } = Guid.Empty;
 
-    public string Name { get; private set; } = null!;
+    public string Name { get; private set; } = string.Empty;
 
-    public BoardCardContent Content { get; internal set; } = null!;
+    public BoardCardContent Content { get; internal set; } = BoardCardContent.Empty;
 
-    public BoardCardPlacement? Placement { get; private set; }
+    public BoardCardPlacement? Placement { get; private set; } = null;
 
     public bool HasPlacement => Placement is not null;
 
