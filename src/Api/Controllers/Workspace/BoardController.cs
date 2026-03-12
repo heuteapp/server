@@ -10,7 +10,8 @@ namespace HeuteApp.Api.Controllers.Workspace;
 [Route("workspace/board")]
 public class BoardController(
     UserContext userContext, 
-    BoardService boardService
+    BoardService boardService,
+    LayoutService layoutService
 ) : ControllerBase
 {
     [HttpGet("{categoryName}")]
@@ -27,7 +28,7 @@ public class BoardController(
         var board = await boardService.GetBoardAsync(userId, new(categoryName), date)
             ?? await boardService.CreateBoardAsync(userId, new(categoryName), new("two", 1), new(date));
 
-        return Ok(board.ToResponse());
+        return Ok(await board.ToResponse(layoutService));
     }
 
     [HttpPost("{categoryName}/events")]
