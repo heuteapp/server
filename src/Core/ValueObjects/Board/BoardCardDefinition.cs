@@ -2,18 +2,49 @@ namespace HeuteApp.Core.ValueObjects.Board;
 
 public record BoardCardDefinition
 {
-    public BoardCardDefinition(
-        BoardCardKey Key,
-        BoardCardProps Props)
+    public string Name { get; private set; } = null!;
+
+    public string Title { get; private set; } = null!;
+
+    public string SectionName { get; private set; } = null!;
+
+    public int ColIndex { get; private set; }
+
+    public int RowIndex { get; private set; }
+
+    public int ColSpan { get; private set; }
+
+    public int RowSpan { get; private set; }
+
+    //
+
+    private BoardCardDefinition() { }
+
+    public BoardCardDefinition(string name, string title, string sectionName, int colIndex, int rowIndex, int colSpan, int rowSpan)
     {
-        Name = Key.Name;
-        Content = Props.Content;
-        Placement = Props.Placement;
+        Name = name;
+        Title = title;
+        SectionName = sectionName;
+        ColIndex = colIndex;
+        RowIndex = rowIndex;
+        ColSpan = colSpan;
+        RowSpan = rowSpan;
+    }
+    
+    public BoardCardDefinition(BoardCardKey key, BoardCardProps props)
+    {
+        Name = key.Name;
+        Title = props.Title;
+        SectionName = props.SectionName;
+        ColIndex = props.ColIndex;
+        RowIndex = props.RowIndex;
+        ColSpan = props.ColSpan;
+        RowSpan = props.RowSpan;
     }
 
-    public string Name { get; }
+    //
 
-    public BoardCardContent Content { get; }
+    public BoardCardKey Key => new(Name);
 
-    public BoardCardPlacement? Placement { get; }
+    public BoardCardProps Props => new(Title, SectionName, ColIndex, RowIndex, ColSpan, RowSpan);
 }
