@@ -10,6 +10,10 @@ public sealed record Rect
 
     public int Height { get; }
 
+    //
+
+    private Rect() { }
+
     public Rect(int x, int y, int width, int height)
     {
         X = x;
