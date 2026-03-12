@@ -1,5 +1,5 @@
 namespace HeuteApp.Core.Events.Abstractions;
 
-public abstract record BoardEvent(
+public abstract record DomainEvent(
     DateTimeOffset OccurredAt
-) : DomainEvent(OccurredAt);
+);
