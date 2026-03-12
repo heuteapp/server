@@ -2,9 +2,13 @@ namespace HeuteApp.Core.ValueObjects;
 
 public sealed record GridPointer
 {
-    public int ColIndex { get; } = 0;
+    public static GridPointer Empty => new();
 
-    public int RowIndex { get; } = 0;
+    //
+
+    public int ColIndex { get; private set; } = -1;
+
+    public int RowIndex { get; private set; } = -1;
 
     //
 

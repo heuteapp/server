@@ -2,9 +2,13 @@ namespace HeuteApp.Core.ValueObjects;
 
 public sealed record GridDimensions
 {
-    public int ColCount { get; }
+    public static GridDimensions Empty => new();
 
-    public int RowCount { get; }
+    //
+
+    public int ColCount { get; private set; } = 0;
+
+    public int RowCount { get; private set; } = 0;
 
     //
 

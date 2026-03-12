@@ -2,13 +2,17 @@ namespace HeuteApp.Core.ValueObjects;
 
 public sealed record Rect
 {    
-    public int X { get; }
+    public static Rect Empty => new();
 
-    public int Y { get; }
+    //
 
-    public int Width { get; }
+    public int X { get; private set; } = 0;
 
-    public int Height { get; }
+    public int Y { get; private set; } = 0;
+
+    public int Width { get; private set; } = 0;
+
+    public int Height { get; private set; } = 0;
 
     //
 

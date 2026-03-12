@@ -2,9 +2,13 @@ namespace HeuteApp.Core.ValueObjects;
 
 public sealed record Pointer
 {    
-    public int X { get; }
+    public static Pointer Empty => new();
 
-    public int Y { get; }
+    //
+
+    public int X { get; private set; } = 0;
+
+    public int Y { get; private set; } = 0;
 
     //
 

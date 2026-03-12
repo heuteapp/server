@@ -2,13 +2,17 @@ namespace HeuteApp.Core.ValueObjects;
 
 public sealed record GridRect
 {
-    public int ColIndex { get; private set;}
+    public static GridRect Empty => new();
 
-    public int RowIndex { get; private set;}
+    //
 
-    public int ColSpan { get; private set;}
+    public int ColIndex { get; private set; } = -1;
 
-    public int RowSpan { get; private set;}
+    public int RowIndex { get; private set; } = -1;
+
+    public int ColSpan { get; private set; } = 0;
+
+    public int RowSpan { get; private set; } = 0;
 
     //
 

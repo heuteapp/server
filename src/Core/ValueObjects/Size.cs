@@ -2,6 +2,10 @@ namespace HeuteApp.Core.ValueObjects;
 
 public sealed record Size
 {
+    public static Size Empty => new();
+
+    //
+
     public int Width { get; }
 
     public int Height { get; }
