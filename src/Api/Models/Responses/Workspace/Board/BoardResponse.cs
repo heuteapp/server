@@ -1,7 +1,8 @@
+using HeuteApp.Api.Models.Responses.Workspace.Layout;
+
 namespace HeuteApp.Api.Models.Responses.Workspace.Board;
 
 public record BoardResponse(
-    string LayoutName,
-    int? LayoutVersion,
+    LayoutResponse? Layout,
     IEnumerable<BoardCardResponse> Cards
 );
