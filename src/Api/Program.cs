@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 using HeuteApp.Api.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,18 @@ builder.Services
         o.JsonSerializerOptions.Converters.Add(
             new JsonStringEnumConverter()
         );
+    });
+
+builder.Services
+    .AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true
+        };
     });
 
 builder.AddServices();
