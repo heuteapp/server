@@ -1,6 +1,7 @@
 #pragma warning disable CA1822
 using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Core.Aggregates.Layout;
+using HeuteApp.Core.ValueObjects;
 using HeuteApp.Core.ValueObjects.Board;
 
 namespace HeuteApp.Core.Services;
@@ -81,7 +82,13 @@ public class BoardPlacementService
         if (section is null)
             return false;
 
-        return section.Position.Contains(placement.Position);
+        var localPosition = new GridRect(
+            1, 1,
+            section.Position.ColSpan,
+            section.Position.RowSpan
+        );
+
+        return localPosition.Contains(placement.Position);
     }
 
     public BoardCard? GetOverlappingCard(HeuteBoard board, Guid? cardId, BoardCardPlacement placement)
@@ -90,21 +97,23 @@ public class BoardPlacementService
         ArgumentNullException.ThrowIfNull(placement);
 
         return board.Cards.FirstOrDefault(c =>
+            c.Placement?.Position != null &&
+            c.Placement.SectionName?.Equals(placement.SectionName, StringComparison.OrdinalIgnoreCase) == true &&
             (cardId == null || c.Id != cardId) &&
-            c.Placement?.SectionName == placement.SectionName &&
-            c.Placement?.Position?.Overlaps(placement.Position) == true);
+            c.Placement.Position.Overlaps(placement.Position)
+        );
     }
 
     public void EnsureFitsInSection(HeuteLayout layout, BoardCardPlacement placement)
     {
         if (!IsFitsInSection(layout, placement))
-            throw new InvalidOperationException("Card Position does not fit in section");
+            throw new InvalidOperationException($"Card Position does not fit in section: \n{placement}");
     }
 
     public void EnsureNoOverlap(HeuteBoard board, Guid? cardId, BoardCardPlacement placement)
     {
         var overlappingCard = GetOverlappingCard(board, cardId, placement);
         if (overlappingCard is not null)
-            throw new InvalidOperationException("Card Position overlaps with another card");
+            throw new InvalidOperationException($"Card Position overlaps with another card: {placement}");
     }
 }
