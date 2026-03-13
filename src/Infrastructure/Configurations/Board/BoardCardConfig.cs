@@ -18,6 +18,9 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
         builder.Property(c => c.BoardId)
                .IsRequired();
 
+        builder.Property(c => c.Name)
+               .IsRequired();
+
         builder.OwnsOne(c => c.Content, content =>
         {
                 content.Property(p => p.Title)
