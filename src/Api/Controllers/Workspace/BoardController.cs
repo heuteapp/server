@@ -34,7 +34,7 @@ public class BoardController(
         {
             var events = request.Commands.Select(e => e.ToDomain()).ToList();
 
-            await context.UserBasedCommandService.ExecuteSequentiallyAsync(context.UserId, async () =>
+            await context.CommandService.ExecuteSequentiallyAsync(context.UserId, async () =>
             {
                 await context.BoardService.ProcessBoardEventsAsync(context.UserId, new(categoryName), events);
                 return true;
