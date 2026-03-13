@@ -1,5 +1,6 @@
 using HeuteApp.Api.Mappers.Workspace;
 using HeuteApp.Api.Models.Requests.Workspace.Board;
+using HeuteApp.Api.Services.Contexts;
 using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +10,14 @@ namespace HeuteApp.Api.Controllers.Workspace;
 [ApiController]
 [Route("workspace/board")]
 public class BoardController(
+    UserContext userContext,
     UserBasedActionService userBasedActionService
 ) : ControllerBase
 {
     [HttpGet("{categoryName}")]
     public async Task<IActionResult> GetTodaysBoard(string categoryName)
     {
-        return await userBasedActionService.ExecuteAsync(async context =>
+        return await userBasedActionService.ExecuteAsync(userContext, async context =>
         {
             var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -29,7 +31,7 @@ public class BoardController(
     [HttpPost("{categoryName}/events")]
     public async Task<IActionResult> PostEvents(string categoryName, [FromBody] BoardEventsRequest request)
     {
-        return await userBasedActionService.ExecuteAsync(async context =>
+        return await userBasedActionService.ExecuteAsync(userContext, async context =>
         {
             var events = request.Events.Select(e => e.ToDomain()).ToList();
 
