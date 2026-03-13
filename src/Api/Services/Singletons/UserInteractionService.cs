@@ -26,10 +26,3 @@ public class UserBasedActionService(
         return await func(context);
     }
 }
-
-public sealed record UserBasedActionContext(
-    Guid UserId,
-    UserEventQueueService UserEventQueueService,
-    BoardService BoardService,
-    LayoutService LayoutService
-);
