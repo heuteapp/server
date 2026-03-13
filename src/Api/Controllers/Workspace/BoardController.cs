@@ -27,12 +27,12 @@ public class BoardController(
         });
     }
 
-    [HttpPost("{categoryName}/events")]
-    public async Task<IActionResult> PostEvents(string categoryName, [FromBody] BoardCommandsRequest request)
+    [HttpPost("{categoryName}/commands")]
+    public async Task<IActionResult> PostCommands(string categoryName, [FromBody] BoardCommandsRequest request)
     {
         return await userBasedActionService.ExecuteAsync(userContext, async context =>
         {
-            var events = request.Events.Select(e => e.ToDomain()).ToList();
+            var events = request.Commands.Select(e => e.ToDomain()).ToList();
 
             await context.UserBasedCommandService.ExecuteSequentiallyAsync(context.UserId, async () =>
             {
