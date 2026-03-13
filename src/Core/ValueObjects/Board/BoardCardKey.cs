@@ -10,7 +10,7 @@ public sealed record BoardCardKey
 
     //
 
-    private BoardCardKey() { }
+    public BoardCardKey() { }
 
     public BoardCardKey(string name)
     {

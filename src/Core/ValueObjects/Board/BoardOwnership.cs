@@ -12,7 +12,7 @@ public sealed record BoardOwnership
 
     //
 
-    private BoardOwnership() { }
+    public BoardOwnership() { }
     
     public BoardOwnership(Guid ownerId, Guid categoryId)
     {

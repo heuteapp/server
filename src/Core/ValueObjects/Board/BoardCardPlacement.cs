@@ -20,7 +20,7 @@ public sealed record BoardCardPlacement
 
     //
 
-    private BoardCardPlacement() { }
+    public BoardCardPlacement() { }
 
     public BoardCardPlacement(string sectionName, int colIndex, int rowIndex, int colSpan, int rowSpan)
     {

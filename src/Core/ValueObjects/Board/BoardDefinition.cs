@@ -10,7 +10,7 @@ public record BoardDefinition
 
     //
 
-    private BoardDefinition() { }
+    public BoardDefinition() { }
 
     public BoardDefinition(
         DateOnly date)

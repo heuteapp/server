@@ -20,7 +20,7 @@ public sealed record BoardCardProps
 
     //
 
-    private BoardCardProps() { }
+    public BoardCardProps() { }
 
     public BoardCardProps(string title, string sectionName, int colIndex, int rowIndex, int colSpan, int rowSpan)
     {

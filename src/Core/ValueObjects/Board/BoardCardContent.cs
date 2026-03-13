@@ -10,7 +10,7 @@ public record BoardCardContent
 
     //
 
-    private BoardCardContent() { }
+    public BoardCardContent() { }
 
     public BoardCardContent(string? title)
     {

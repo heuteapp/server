@@ -6,7 +6,7 @@ public sealed record BoardReference
 
     //
 
-    private BoardReference() { }
+    public BoardReference() { }
 
     public BoardReference(Guid layoutId)
     {

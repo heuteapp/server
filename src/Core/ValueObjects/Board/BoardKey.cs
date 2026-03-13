@@ -10,7 +10,7 @@ public sealed record BoardKey
 
     //
 
-    private BoardKey() { }
+    public BoardKey() { }
 
     public BoardKey(DateOnly date)
     {
