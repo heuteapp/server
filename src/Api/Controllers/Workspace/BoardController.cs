@@ -50,8 +50,6 @@ public class BoardController(
             return true;
         });
 
-        await boardService.ProcessBoardEventsAsync(userId, new(categoryName), events);
-
         return Ok();
     }
 }

@@ -35,32 +35,5 @@ public class BoardCard
 
     public BoardCardPlacement? Placement { get; private set; } = null;
 
-    public bool HasPlacement => Placement is not null;
-
-    public bool CanBePlaced => HasPlacement && !IsVerified;
-
-    public bool IsPlaced => HasPlacement && IsVerified;
-
-    public bool IsVerified { get; private set; } = false;
-
-    //
-
-    internal void DoPlace(BoardCardPlacement placement)
-    {
-        ArgumentNullException.ThrowIfNull(placement);
-
-        Placement = placement;
-        IsVerified = false;
-    }
-
-    internal void DoUnplace()
-    {
-        Placement = null;
-        IsVerified = false;
-    }
-
-    internal void DoVerify()
-    {
-        IsVerified = true;
-    }
+    public bool IsPlaced => Placement is not null;
 }

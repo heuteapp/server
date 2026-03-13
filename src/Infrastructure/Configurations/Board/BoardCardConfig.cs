@@ -52,10 +52,7 @@ public class BoardCardConfig : IEntityTypeConfiguration<BoardCardModel>
 
         builder.Navigation(c => c.Placement)
                .IsRequired(false);
-
-        builder.Ignore(c => c.IsVerified);
-        builder.Ignore(c => c.HasPlacement);
-        builder.Ignore(c => c.CanBePlaced);
+               
         builder.Ignore(c => c.IsPlaced);
 
         builder.HasIndex(c => c.BoardId);

@@ -8,32 +8,6 @@ namespace HeuteApp.Core.Services;
 
 public class BoardPlacementService
 {
-    public void SyncBoard(HeuteBoard board, HeuteLayout layout, BoardProps syncProps)
-    {
-        ArgumentNullException.ThrowIfNull(board);
-        ArgumentNullException.ThrowIfNull(layout);
-        ArgumentNullException.ThrowIfNull(syncProps);
-
-        /*// Remove cards that are not in syncProps and DEFINITON DOES NOT HAVE ID  JUST HAVE NAME
-        var cardsToRemove = board.Cards.Where(c => !syncProps.Cards.Any(sc => sc.Name == c.Name)).ToList();
-        foreach (var card in cardsToRemove)
-        {
-            board.Internal_RemoveCard(card.Id);
-        }
-
-        // Add or update cards from syncProps
-        foreach (var syncCard in syncProps.Cards)
-        {            
-            var existingCard = board.Cards.FirstOrDefault(c => c.Name == syncCard.Name);
-            if (existingCard == null)
-            {
-                // Add new card
-                var newCard = board.Internal_CreateCard(new BoardCardDefinition(new(syncCard.Name), new(syncCard.Content, syncCard.Placement)));
-                board.Internal_AddCard(newCard);
-            }
-        }*/
-    }
-
     public BoardCard AddCard(HeuteBoard board, HeuteLayout layout, BoardCardDefinition definition)
     {        
         ArgumentNullException.ThrowIfNull(board);
@@ -45,15 +19,12 @@ public class BoardPlacementService
 
         var card = board.Internal_CreateCard(definition);
 
-        if(card.CanBePlaced)
+        if(card.Placement is not null)
         {
-            var cardId = card.Id;
-            var placement = card.Placement!;
-
-            EnsureFitsInSection(layout, placement);
-            EnsureNoOverlap(board, cardId, placement);
+            EnsureFitsInSection(layout, card.Placement);
+            EnsureNoOverlap(board, card.Id, card.Placement);
         }
-
+            
         board.Internal_AddCard(card);
         return card;
     }
@@ -69,8 +40,6 @@ public class BoardPlacementService
 
         EnsureFitsInSection(layout, placement);
         EnsureNoOverlap(board, cardId, placement);
-
-        card.DoPlace(placement);
     }
 
     public bool IsFitsInSection(HeuteLayout layout, BoardCardPlacement placement)
@@ -96,12 +65,24 @@ public class BoardPlacementService
         ArgumentNullException.ThrowIfNull(board);
         ArgumentNullException.ThrowIfNull(placement);
 
-        return board.Cards.FirstOrDefault(c =>
-            c.Placement?.Position != null &&
-            c.Placement.SectionName?.Equals(placement.SectionName, StringComparison.OrdinalIgnoreCase) == true &&
-            (cardId == null || c.Id != cardId) &&
-            c.Placement.Position.Overlaps(placement.Position)
-        );
+        foreach (var card in board.Cards)
+        {
+            if(!card.IsPlaced)
+                continue;
+
+            if (card.Id == cardId)
+                continue;
+
+            if (card.Placement!.SectionName != placement.SectionName)
+                continue;
+
+            if (!card.Placement.Position.Overlaps(placement.Position))
+                continue;
+            
+            return card;
+        }
+
+        return null;
     }
 
     public void EnsureFitsInSection(HeuteLayout layout, BoardCardPlacement placement)
@@ -114,6 +95,6 @@ public class BoardPlacementService
     {
         var overlappingCard = GetOverlappingCard(board, cardId, placement);
         if (overlappingCard is not null)
-            throw new InvalidOperationException($"Card Position overlaps with another card: {placement}");
+            throw new InvalidOperationException($"Card Position overlaps with another card: {overlappingCard.Placement}");
     }
 }
