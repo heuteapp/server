@@ -28,7 +28,7 @@ public static class ServiceExtensions
 
         // Singleton
         builder.Services.AddSingleton<SupabaseProvider>();
-        builder.Services.AddSingleton<UserEventQueueService>();
+        builder.Services.AddSingleton<UserBasedCommandService>();
 
         // Scoped
         builder.Services.AddScoped<UserContext>();

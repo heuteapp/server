@@ -5,7 +5,7 @@ namespace HeuteApp.Api.Services.Contexts;
 
 public sealed record UserBasedActionContext(
     Guid UserId,
-    UserEventQueueService UserEventQueueService,
+    UserBasedCommandService UserEventQueueService,
     BoardService BoardService,
     LayoutService LayoutService
 );

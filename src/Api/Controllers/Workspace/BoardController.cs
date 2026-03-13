@@ -33,7 +33,7 @@ public class BoardController(
         {
             var events = request.Events.Select(e => e.ToDomain()).ToList();
 
-            await context.UserEventQueueService.RunInQueueAsync(context.UserId, async () =>
+            await context.UserEventQueueService.ExecuteSequentiallyAsync(context.UserId, async () =>
             {
                 await context.BoardService.ProcessBoardEventsAsync(context.UserId, new(categoryName), events);
                 return true;
