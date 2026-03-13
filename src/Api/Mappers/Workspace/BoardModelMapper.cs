@@ -19,7 +19,7 @@ public static class BoardModelMapper
         return request.Type switch
         {
             BoardEventType.CardCreated => new CardCreatedEvent(
-                DateTimeOffset.Parse(request.OccuredAt),
+                DateTimeOffset.Parse(request.OccurredAt),
                 JsonSerializer.Deserialize<BoardCardDefinition>(request.Payload.ToString()!)!
             ),
             

@@ -3,7 +3,7 @@ using HeuteApp.Core.Enums.Events;
 namespace HeuteApp.Api.Models.Requests.Workspace.Board;
 
 public record BoardEventRequest(
-    string OccuredAt,
+    string OccurredAt,
     BoardEventType Type,
     object Payload
 );
