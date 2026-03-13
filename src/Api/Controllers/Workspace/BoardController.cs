@@ -1,6 +1,7 @@
 using HeuteApp.Api.Mappers.Workspace;
 using HeuteApp.Api.Models.Requests.Workspace.Board;
 using HeuteApp.Api.Services.Contexts;
+using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace HeuteApp.Api.Controllers.Workspace;
 [Route("workspace/board")]
 public class BoardController(
     UserContext userContext, 
+    UserEventQueueService userEventQueueService,
     BoardService boardService,
     LayoutService layoutService
 ) : ControllerBase
@@ -41,6 +43,12 @@ public class BoardController(
         Guid userId = userContext.UserId.Value;
 
         var events = request.Events.Select(e => e.ToDomain()).ToList();
+
+        await userEventQueueService.RunInQueueAsync(userId, async () =>
+        {
+            await boardService.ProcessBoardEventsAsync(userId, new(categoryName), events);
+            return true;
+        });
 
         await boardService.ProcessBoardEventsAsync(userId, new(categoryName), events);
 
