@@ -15,7 +15,7 @@ public class BoardController(
     [HttpGet("{categoryName}")]
     public async Task<IActionResult> GetTodaysBoard(string categoryName)
     {
-        return await userBasedActionService.Execute(async context =>
+        return await userBasedActionService.ExecuteAsync(async context =>
         {
             var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -29,7 +29,7 @@ public class BoardController(
     [HttpPost("{categoryName}/events")]
     public async Task<IActionResult> PostEvents(string categoryName, [FromBody] BoardEventsRequest request)
     {
-        return await userBasedActionService.Execute(async context =>
+        return await userBasedActionService.ExecuteAsync(async context =>
         {
             var events = request.Events.Select(e => e.ToDomain()).ToList();
 

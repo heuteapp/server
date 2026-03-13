@@ -10,7 +10,7 @@ public class UserBasedActionService(
     BoardService boardService,
     LayoutService layoutService)
 {
-    public async Task<IActionResult> Execute(Func<UserBasedActionContext, Task<IActionResult>> func)
+    public async Task<IActionResult> ExecuteAsync(Func<UserBasedActionContext, Task<IActionResult>> func)
     {
         if(!userContext.UserId.HasValue){
             return new UnauthorizedObjectResult("Unauthorized: No user context found.");
