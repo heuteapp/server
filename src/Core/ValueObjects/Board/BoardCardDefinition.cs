@@ -24,7 +24,7 @@ public record BoardCardDefinition
 
     public BoardCardDefinition() { }
 
-    public BoardCardDefinition(string name, string? title, string sectionName, int colIndex, int rowIndex, int colSpan, int rowSpan)
+    public BoardCardDefinition(string name, string? title, string? sectionName, int? colIndex, int? rowIndex, int? colSpan, int? rowSpan)
     {
         Name = name;
         Title = title;
