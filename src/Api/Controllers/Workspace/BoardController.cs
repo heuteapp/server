@@ -9,36 +9,33 @@ namespace HeuteApp.Api.Controllers.Workspace;
 [ApiController]
 [Route("workspace/board")]
 public class BoardController(
-    UserBasedActionService userBasedActionService, 
-    UserEventQueueService userEventQueueService,
-    BoardService boardService,
-    LayoutService layoutService
+    UserBasedActionService userBasedActionService
 ) : ControllerBase
 {
     [HttpGet("{categoryName}")]
     public async Task<IActionResult> GetTodaysBoard(string categoryName)
     {
-        return await userBasedActionService.Execute(async userId =>
+        return await userBasedActionService.Execute(async context =>
         {
             var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
-            var board = await boardService.GetBoardAsync(userId, new(categoryName), date)
-                ?? await boardService.CreateBoardAsync(userId, new(categoryName), new("two", 1), new(date));
+            var board = await context.BoardService.GetBoardAsync(context.UserId, new(categoryName), date)
+                ?? await context.BoardService.CreateBoardAsync(context.UserId, new(categoryName), new("two", 1), new(date));
 
-            return Ok(await board.ToResponse(layoutService));
+            return Ok(await board.ToResponse(context.LayoutService));
         });
     }
 
     [HttpPost("{categoryName}/events")]
     public async Task<IActionResult> PostEvents(string categoryName, [FromBody] BoardEventsRequest request)
     {
-        return await userBasedActionService.Execute(async userId =>
+        return await userBasedActionService.Execute(async context =>
         {
             var events = request.Events.Select(e => e.ToDomain()).ToList();
 
-            await userEventQueueService.RunInQueueAsync(userId, async () =>
+            await context.UserEventQueueService.RunInQueueAsync(context.UserId, async () =>
             {
-                await boardService.ProcessBoardEventsAsync(userId, new(categoryName), events);
+                await context.BoardService.ProcessBoardEventsAsync(context.UserId, new(categoryName), events);
                 return true;
             });
 
