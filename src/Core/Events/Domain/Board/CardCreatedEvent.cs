@@ -6,5 +6,5 @@ namespace HeuteApp.Core.Events.Domain.Board;
 
 public record CardCreatedEvent(
     DateTimeOffset OccurredAt,
-    BoardCardDefinition Definition
+    BoardCardDefinition Payload
 ) : BoardEvent(OccurredAt, BoardEventType.CardCreated);

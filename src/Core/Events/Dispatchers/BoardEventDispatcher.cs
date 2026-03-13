@@ -32,6 +32,6 @@ public class BoardEventDispatcher(
 
     private void HandleCardCreatedEvent(BoardEventContext context, CardCreatedEvent e)
     {
-        boardPlacementService.AddCard(context.Board, context.Layout, e.Definition);
+        boardPlacementService.AddCard(context.Board, context.Layout, e.Payload);
     }
 }
