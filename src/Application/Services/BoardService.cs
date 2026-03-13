@@ -1,9 +1,9 @@
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Application.Mappers;
 using HeuteApp.Application.Results.Board;
-using HeuteApp.Core.Aggregates.Board;
-using HeuteApp.Core.Events.Abstractions;
-using HeuteApp.Core.Events.Dispatchers;
+using HeuteApp.Core.Commands.Abstractions;
+using HeuteApp.Core.Commands.Contexts;
+using HeuteApp.Core.Commands.Dispatchers;
 using HeuteApp.Core.ValueObjects.Board;
 using HeuteApp.Core.ValueObjects.Category;
 using HeuteApp.Core.ValueObjects.Layout;
@@ -16,7 +16,7 @@ public class BoardService(
     ILayoutRepository layoutRepository, 
     IBoardRepository boardRepository, 
     IUnitOfWork unitOfWork,
-    BoardEventDispatcher boardEventDispatcher)
+    BoardCommandDispatcher boardCommandDispatcher)
 {
     public async Task<BoardResult?> GetBoardAsync(Guid ownerId, CategoryKey categoryKey, DateOnly date)
     {
@@ -53,7 +53,7 @@ public class BoardService(
         return board.ToResult();
     }
 
-    public async Task<bool> ProcessBoardEventsAsync(Guid ownerId, CategoryKey categoryKey, IEnumerable<BoardEvent> events)
+    public async Task<bool> ProcessBoardEventsAsync(Guid ownerId, CategoryKey categoryKey, IEnumerable<BoardCommand> events)
     {
         var category = await categoryRepository.GetByKeyAsync(new(ownerId), categoryKey)
             ?? throw new Exception("Category not found.");
@@ -66,9 +66,9 @@ public class BoardService(
         var layout = await layoutRepository.GetByIdAsync(board.LayoutId)
             ?? throw new Exception("Layout not found.");
 
-        var context = new Core.Events.Contexts.BoardEventContext(board, layout);
+        var context = new BoardCommandContext(board, layout);
 
-        boardEventDispatcher.Dispatch(context, [..events]);
+        boardCommandDispatcher.Dispatch(context, [..events]);
 
         await unitOfWork.SaveChangesAsync();
         return true;

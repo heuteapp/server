@@ -3,22 +3,22 @@ using HeuteApp.Api.Models.Requests.Workspace.Board;
 using HeuteApp.Api.Models.Responses.Workspace.Board;
 using HeuteApp.Application.Results.Board;
 using HeuteApp.Application.Services;
-using HeuteApp.Core.Enums.Events;
-using HeuteApp.Core.Events.Abstractions;
-using HeuteApp.Core.Events.Domain.Board;
+using HeuteApp.Core.Enums.Commands;
+using HeuteApp.Core.Commands.Abstractions;
+using HeuteApp.Core.Commands.Domain.Board;
 using HeuteApp.Core.ValueObjects.Board;
 
 namespace HeuteApp.Api.Mappers.Workspace;
 
 public static class BoardModelMapper
 {
-    public static BoardEvent ToDomain(this BoardEventRequest request)
+    public static BoardCommand ToDomain(this BoardCommandRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
 
         return request.Type switch
         {
-            BoardEventType.CardCreated => new CardCreatedEvent(
+            BoardCommandType.CreateCard => new CreateCardCommand(
                 DateTimeOffset.Parse(request.OccurredAt),
                 HandleCardDefinition(request.Payload)
             ),

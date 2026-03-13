@@ -7,7 +7,7 @@ using HeuteApp.Api.Services.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using HeuteApp.Core.Services;
-using HeuteApp.Core.Events.Dispatchers;
+using HeuteApp.Core.Commands.Dispatchers;
 
 namespace HeuteApp.Api.Extensions;
 
@@ -38,7 +38,7 @@ public static class ServiceExtensions
         builder.Services.AddScoped<ILayoutRepository, LayoutRepository>();
         builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
         builder.Services.AddScoped<IBoardRepository, BoardRepository>();
-        builder.Services.AddScoped<BoardEventDispatcher>();
+        builder.Services.AddScoped<BoardCommandDispatcher>();
         builder.Services.AddScoped<BoardPlacementService>();
 
         builder.Services.AddScoped<ProfileService>();

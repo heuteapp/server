@@ -2,7 +2,6 @@ using HeuteApp.Api.Mappers.Workspace;
 using HeuteApp.Api.Models.Requests.Workspace.Board;
 using HeuteApp.Api.Services.Contexts;
 using HeuteApp.Api.Services.Singletons;
-using HeuteApp.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeuteApp.Api.Controllers.Workspace;
@@ -29,7 +28,7 @@ public class BoardController(
     }
 
     [HttpPost("{categoryName}/events")]
-    public async Task<IActionResult> PostEvents(string categoryName, [FromBody] BoardEventsRequest request)
+    public async Task<IActionResult> PostEvents(string categoryName, [FromBody] BoardCommandsRequest request)
     {
         return await userBasedActionService.ExecuteAsync(userContext, async context =>
         {

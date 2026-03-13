@@ -1,9 +1,9 @@
 using HeuteApp.Core.Aggregates.Board;
 using HeuteApp.Core.Aggregates.Layout;
 
-namespace HeuteApp.Core.Events.Contexts;
+namespace HeuteApp.Core.Commands.Contexts;
 
-public record BoardEventContext(
+public record BoardCommandContext(
     HeuteBoard Board,
     HeuteLayout Layout
 );

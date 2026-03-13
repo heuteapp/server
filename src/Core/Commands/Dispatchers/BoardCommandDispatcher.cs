@@ -1,14 +1,14 @@
-using HeuteApp.Core.Events.Abstractions;
-using HeuteApp.Core.Events.Contexts;
-using HeuteApp.Core.Events.Domain.Board;
+using HeuteApp.Core.Commands.Abstractions;
+using HeuteApp.Core.Commands.Contexts;
+using HeuteApp.Core.Commands.Domain.Board;
 using HeuteApp.Core.Services;
 
-namespace HeuteApp.Core.Events.Dispatchers;
+namespace HeuteApp.Core.Commands.Dispatchers;
 
-public class BoardEventDispatcher(
+public class BoardCommandDispatcher(
     BoardPlacementService boardPlacementService)
 {
-    public void Dispatch(BoardEventContext context, IReadOnlyCollection<BoardEvent> events)
+    public void Dispatch(BoardCommandContext context, IReadOnlyCollection<BoardCommand> events)
     {
         foreach (var boardEvent in events)
         {
@@ -16,11 +16,11 @@ public class BoardEventDispatcher(
         }
     }
 
-    private void HandleEvent(BoardEventContext context, BoardEvent boardEvent)
+    private void HandleEvent(BoardCommandContext context, BoardCommand boardEvent)
     {
         switch (boardEvent)
         {
-            case CardCreatedEvent e:
+            case CreateCardCommand e:
                 HandleCardCreatedEvent(context, e);
                 break;
             default:
@@ -30,7 +30,7 @@ public class BoardEventDispatcher(
 
     //
 
-    private void HandleCardCreatedEvent(BoardEventContext context, CardCreatedEvent e)
+    private void HandleCardCreatedEvent(BoardCommandContext context, CreateCardCommand e)
     {
         boardPlacementService.AddCard(context.Board, context.Layout, e.Payload);
     }
