@@ -40,7 +40,9 @@ public class BoardController(
 
         Guid userId = userContext.UserId.Value;
 
-        await boardService.ProcessBoardEventsAsync(userId, new(categoryName), request.Events);
+        var events = request.Events.Select(e => e.ToDomain()).ToList();
+
+        await boardService.ProcessBoardEventsAsync(userId, new(categoryName), events);
 
         return Ok();
     }
