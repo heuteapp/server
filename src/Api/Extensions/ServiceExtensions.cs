@@ -29,7 +29,6 @@ public static class ServiceExtensions
         // Singleton
         builder.Services.AddSingleton<SupabaseProvider>();
         builder.Services.AddSingleton<UserBasedCommandService>();
-        builder.Services.AddSingleton<UserBasedActionService>();
 
         // Scoped
         builder.Services.AddScoped<UserContext>();
@@ -46,5 +45,8 @@ public static class ServiceExtensions
         builder.Services.AddScoped<LayoutService>();
         builder.Services.AddScoped<CategoryService>();
         builder.Services.AddScoped<BoardService>();
+
+        //
+        builder.Services.AddScoped<UserBasedActionService>();
     }
 }
