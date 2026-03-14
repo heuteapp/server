@@ -29,7 +29,7 @@ public class BoardPlacementService
         return card;
     }
 
-    public void PlaceCard(HeuteBoard board, HeuteLayout layout, BoardCardKey cardKey, BoardCardPlacement placement)
+    public BoardCard PlaceCard(HeuteBoard board, HeuteLayout layout, BoardCardKey cardKey, BoardCardPlacement placement)
     {
         ArgumentNullException.ThrowIfNull(board);
         ArgumentNullException.ThrowIfNull(layout);
@@ -40,6 +40,19 @@ public class BoardPlacementService
 
         EnsureFitsInSection(layout, placement);
         EnsureNoOverlap(board, cardKey, placement);
+
+        return card;
+    }
+
+    public BoardCard DeleteCard(HeuteBoard board, HeuteLayout layout, BoardCardKey cardKey)
+    {
+        ArgumentNullException.ThrowIfNull(board);
+        ArgumentNullException.ThrowIfNull(layout);
+  
+        var card = board.Internal_RemoveCard(cardKey) 
+            ?? throw new InvalidOperationException("Card not found");
+
+        return card;
     }
 
     public bool IsFitsInSection(HeuteLayout layout, BoardCardPlacement placement)
