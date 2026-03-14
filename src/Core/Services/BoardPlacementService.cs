@@ -22,24 +22,24 @@ public class BoardPlacementService
         if(card.Placement is not null)
         {
             EnsureFitsInSection(layout, card.Placement);
-            EnsureNoOverlap(board, card.Id, card.Placement);
+            EnsureNoOverlap(board, new(card.Name), card.Placement);
         }
             
         board.Internal_AddCard(card);
         return card;
     }
 
-    public void PlaceCard(HeuteBoard board, HeuteLayout layout, Guid cardId, BoardCardPlacement placement)
+    public void PlaceCard(HeuteBoard board, HeuteLayout layout, BoardCardKey cardKey, BoardCardPlacement placement)
     {
         ArgumentNullException.ThrowIfNull(board);
         ArgumentNullException.ThrowIfNull(layout);
         ArgumentNullException.ThrowIfNull(placement);
 
-        var card = board.Cards.FirstOrDefault(c => c.Id == cardId) 
+        var card = board.Cards.FirstOrDefault(c => c.Name == cardKey.Name) 
             ?? throw new InvalidOperationException("Card not found");
 
         EnsureFitsInSection(layout, placement);
-        EnsureNoOverlap(board, cardId, placement);
+        EnsureNoOverlap(board, cardKey, placement);
     }
 
     public bool IsFitsInSection(HeuteLayout layout, BoardCardPlacement placement)
@@ -60,7 +60,7 @@ public class BoardPlacementService
         return localPosition.Contains(placement.Position);
     }
 
-    public BoardCard? GetOverlappingCard(HeuteBoard board, Guid? cardId, BoardCardPlacement placement)
+    public BoardCard? GetOverlappingCard(HeuteBoard board, BoardCardKey cardKey, BoardCardPlacement placement)
     {
         ArgumentNullException.ThrowIfNull(board);
         ArgumentNullException.ThrowIfNull(placement);
@@ -70,7 +70,7 @@ public class BoardPlacementService
             if(!card.IsPlaced)
                 continue;
 
-            if (card.Id == cardId)
+            if (card.Name == cardKey.Name)
                 continue;
 
             if (card.Placement!.SectionName != placement.SectionName)
@@ -91,9 +91,9 @@ public class BoardPlacementService
             throw new InvalidOperationException($"Card Position does not fit in section: \n{placement}");
     }
 
-    public void EnsureNoOverlap(HeuteBoard board, Guid? cardId, BoardCardPlacement placement)
+    public void EnsureNoOverlap(HeuteBoard board, BoardCardKey cardKey, BoardCardPlacement placement)
     {
-        var overlappingCard = GetOverlappingCard(board, cardId, placement);
+        var overlappingCard = GetOverlappingCard(board, cardKey, placement);
         if (overlappingCard is not null)
             throw new InvalidOperationException($"Card Position overlaps with another card: {overlappingCard.Placement}");
     }
