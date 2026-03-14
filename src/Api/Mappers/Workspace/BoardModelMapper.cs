@@ -21,7 +21,14 @@ public static class BoardModelMapper
                 DateTimeOffset.Parse(request.OccurredAt),
                 BoardCommandPayloadsMapper.HandleCreateCardPayload(request.Payload)
             ),
-            
+            BoardCommandType.PlaceCard => new PlaceCardCommand(
+                DateTimeOffset.Parse(request.OccurredAt),
+                BoardCommandPayloadsMapper.HandlePlaceCardPayload(request.Payload)
+            ),
+            BoardCommandType.DeleteCard => new DeleteCardCommand(
+                DateTimeOffset.Parse(request.OccurredAt),
+                BoardCommandPayloadsMapper.HandleDeleteCardPayload(request.Payload)
+            ),
             _ => throw new NotSupportedException($"Event type not supported: {request.Type}")
         };
     }
