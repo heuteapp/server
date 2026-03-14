@@ -16,8 +16,8 @@ public static class BoardCommandPayloadsMapper
                 definitionElement.GetProperty("sectionName").GetString(),
                 definitionElement.GetProperty("colIndex").GetInt32(),
                 definitionElement.GetProperty("rowIndex").GetInt32(),
-                definitionElement.GetProperty("rowIndex").GetInt32(),
-                definitionElement.GetProperty("rowIndex").GetInt32()
+                definitionElement.GetProperty("colSpan").GetInt32(),
+                definitionElement.GetProperty("rowSpan").GetInt32()
             )
         );
     }
@@ -35,8 +35,8 @@ public static class BoardCommandPayloadsMapper
                 placementElement.GetProperty("sectionName").GetString()!,
                 placementElement.GetProperty("colIndex").GetInt32(),
                 placementElement.GetProperty("rowIndex").GetInt32(),
-                placementElement.GetProperty("rowIndex").GetInt32(),
-                placementElement.GetProperty("rowIndex").GetInt32()
+                placementElement.GetProperty("colSpan").GetInt32(),
+                placementElement.GetProperty("rowSpan").GetInt32()
             )
         );
     }
