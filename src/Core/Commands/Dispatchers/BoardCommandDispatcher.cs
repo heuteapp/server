@@ -43,7 +43,7 @@ public class BoardCommandDispatcher(
 
     private void HandleCardPlacedEvent(BoardCommandContext context, PlaceCardCommand e)
     {
-        boardPlacementService.PlaceCard(context.Board, context.Layout, e.Payload.CardKey, e.Payload.Placement);
+        boardPlacementService.PlaceCard(context.Board, context.Layout, e.Payload.Key, e.Payload.Placement);
     }
 
     private void HandleCardDeletedEvent(BoardCommandContext context, DeleteCardCommand e)

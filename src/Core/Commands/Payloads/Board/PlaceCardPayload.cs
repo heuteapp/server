@@ -3,6 +3,6 @@ using HeuteApp.Core.ValueObjects.Board;
 namespace HeuteApp.Core.Commands.Payloads.Board;
 
 public record PlaceCardPayload(
-    BoardCardKey CardKey,
+    BoardCardKey Key,
     BoardCardPlacement Placement
 );
