@@ -6,5 +6,10 @@ namespace HeuteApp.Core.Commands.Domain.Board;
 
 public record PlaceCardCommand(
     DateTimeOffset OccurredAt,
-    BoardCardPlacement Payload
+    PlaceCardCommandPayload Payload
 ) : BoardCommand(OccurredAt, BoardCommandType.PlaceCard);
+
+public record PlaceCardCommandPayload(
+    BoardCardKey CardKey,
+    BoardCardPlacement Placement
+);
