@@ -60,16 +60,16 @@ public class HeuteBoard
     {
         ArgumentNullException.ThrowIfNull(card);
 
-        if (m_cards.Any(c => c.Id == card.Id))
+        if (m_cards.Any(c => c.Name == card.Name))
             return false;
 
         m_cards.Add(card);
         return true;
     }
 
-    internal BoardCard Internal_RemoveCard(Guid cardId)
+    internal BoardCard? Internal_RemoveCard(BoardCardKey cardKey)
     {
-        var card = Cards.First(c => c.Id == cardId);
+        var card = Cards.First(c => c.Name == cardKey.Name);
         m_cards.Remove(card);
         return card;
     }
