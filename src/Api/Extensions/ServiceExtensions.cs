@@ -10,7 +10,7 @@ using Npgsql;
 using HeuteApp.Core.Services;
 using HeuteApp.Core.Commands.Dispatchers;
 using HeuteApp.Application.Services.UserBased;
-using HeuteApp.Application.Interfaces.UserBased;
+using HeuteApp.Application.Services.Internal;
 
 namespace HeuteApp.Api.Extensions;
 
@@ -44,6 +44,8 @@ public static class ServiceExtensions
         builder.Services.AddScoped<BoardPlacementService>();
 
         builder.Services.AddScoped<ProfileService>();
+
+        builder.Services.AddScoped<InternalLayoutService>();
         builder.Services.AddScoped<UserBasedLayoutService>();
         builder.Services.AddScoped<UserBasedCategoryService>();
         builder.Services.AddScoped<UserBasedBoardService>();

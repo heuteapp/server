@@ -1,8 +1,7 @@
 using HeuteApp.Api.Mappers.Workspace;
 using HeuteApp.Api.Models.Requests.Workspace.Board;
-using HeuteApp.Api.Services.Contexts;
-using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Application.Results.Board;
+using HeuteApp.Application.Services.Internal;
 using HeuteApp.Application.Services.UserBased;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +10,7 @@ namespace HeuteApp.Api.Controllers.Workspace;
 [ApiController]
 [Route("workspace/board")]
 public class BoardController(
+    InternalLayoutService layoutService,
     UserBasedActionService userBasedActionService
 ) : ControllerBase
 {
@@ -42,7 +42,7 @@ public class BoardController(
                 }
             }
 
-            return Ok(await board!.ToResponse(context.LayoutService));
+            return Ok(await board!.ToResponse(layoutService));
         });
     }
 
