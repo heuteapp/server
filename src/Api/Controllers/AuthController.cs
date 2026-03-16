@@ -14,12 +14,38 @@ public class AuthController(
     PublicProfileService publicProfileService, 
     SupabaseProvider supabaseProvider) : ControllerBase
 {
-    [HttpPost("signup")]
+    [HttpPost("sign-in")]
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    {        
+        var profile = await publicProfileService.GetProfileByIdentifierAsync(request.Identifier);
+        if (profile == null)
+            return NotFound();
+
+        var session = await supabaseProvider.Client.Auth.SignIn(profile.Email, request.Password);
+        if (session?.User == null)
+            return Unauthorized();
+
+        Response.Cookies.Append("refreshToken", session.RefreshToken!, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTimeOffset.UtcNow.AddDays(30)
+        });
+
+        return Ok(new
+        {
+            profile,
+            session.AccessToken
+        });
+    }
+
+    [HttpPost("sign-up")]
     public async Task<IActionResult> Signup([FromBody] SignUpRequest request)
     {
         var session = await supabaseProvider.Client.Auth.SignUp(request.Email, request.Password, new() { });
         if (session?.User == null)
-            return BadRequest("Supabase signup failed or returned invalid data.");
+            return BadRequest();
 
         string userId = session.User.Id!;
 
@@ -36,32 +62,6 @@ public class AuthController(
         return Ok(new
         {
             profile
-        });
-    }
-
-    [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
-    {        
-        var profile = await publicProfileService.GetProfileByIdentifierAsync(request.Identifier);
-        if (profile == null)
-            return NotFound("Profile not found for this user.");
-
-        var session = await supabaseProvider.Client.Auth.SignIn(profile.Email, request.Password);
-        if (session?.User == null)
-            return Unauthorized("Supabase login failed or returned invalid data.");
-
-        Response.Cookies.Append("refreshToken", session.RefreshToken!, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTimeOffset.UtcNow.AddDays(30)
-        });
-
-        return Ok(new
-        {
-            profile,
-            session.AccessToken
         });
     }
 
