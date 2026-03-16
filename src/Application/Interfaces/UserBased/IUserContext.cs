@@ -4,6 +4,8 @@ public interface IUserContext
 {
     public Guid? UserId { get; }
 
+    public void SetUser(Guid userId);
+
     public Guid GetUserIdOrThrow()
     {
         if (!UserId.HasValue)

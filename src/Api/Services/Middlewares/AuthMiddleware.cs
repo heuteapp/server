@@ -1,5 +1,5 @@
-using HeuteApp.Api.Services.Contexts;
 using HeuteApp.Api.Services.Singletons;
+using HeuteApp.Application.Interfaces.UserBased;
 
 namespace HeuteApp.Api.Services.Middlewares;
 
@@ -7,7 +7,7 @@ public class AuthMiddleware(RequestDelegate next, SupabaseProvider supabaseProvi
 {
     public async Task InvokeAsync(HttpContext context)
     {
-        var userContext = context.RequestServices.GetRequiredService<UserContext>();
+        var userContext = context.RequestServices.GetRequiredService<IUserContext>();
 
         var accessToken = context.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
         var refreshToken = context.Request.Cookies["refreshToken"];
