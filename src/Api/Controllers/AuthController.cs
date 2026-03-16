@@ -15,7 +15,7 @@ public class AuthController(
     SupabaseProvider supabaseProvider) : ControllerBase
 {
     [HttpPost("sign-in")]
-    public async Task<IActionResult> Login([FromBody] SignInRequest request)
+    public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
     {        
         var profile = await publicProfileService.GetProfileByIdentifierAsync(request.Identifier);
         if (profile == null)
@@ -41,7 +41,7 @@ public class AuthController(
     }
 
     [HttpPost("sign-up")]
-    public async Task<IActionResult> Signup([FromBody] SignUpRequest request)
+    public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
     {
         var session = await supabaseProvider.Client.Auth.SignUp(request.Email, request.Password, new() { });
         if (session?.User == null)
