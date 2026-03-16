@@ -1,4 +1,4 @@
-using HeuteApp.Application.Interfaces;
+using HeuteApp.Application.Interfaces.UserBased;
 
 namespace HeuteApp.Api.Services.Contexts;
 
