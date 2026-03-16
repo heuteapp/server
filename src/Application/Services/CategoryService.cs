@@ -9,26 +9,23 @@ public class CategoryService(
     ICategoryRepository repository, 
     IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteCategory> GetCategoryByKeyAsync(string ownerName, CategoryKey key)
+    public async Task<HeuteCategory> GetCategoryByKeyAsync(Guid ownerId, CategoryKey key)
     {
-        var owner = await profileRepository.GetByNameAsync(ownerName)
-            ?? throw new Exception($"Owner not found for name '{ownerName}'.");
-
-        var category = await repository.GetByKeyAsync(new (owner.Id), key) 
-            ?? throw new Exception($"Category not found for owner '{ownerName}' and key '{key}'.");
+        var category = await repository.GetByKeyAsync(new (ownerId), key) 
+            ?? throw new Exception($"Category not found and key '{key}'.");
 
         return category;
     }
 
-    public async Task<HeuteCategory> CreateCategoryAsync(string ownerName, CategoryDefinition definition)
+    public async Task<HeuteCategory> CreateCategoryAsync(Guid ownerId, CategoryDefinition definition)
     {
-        var owner = await profileRepository.GetByNameAsync(ownerName)
-            ?? throw new Exception($"Owner not found for name '{ownerName}'.");
+        var owner = await profileRepository.GetByIdAsync(ownerId)
+            ?? throw new Exception($"Owner not found for id '{ownerId}'.");
 
         var existing = await repository.GetByKeyAsync(new (owner.Id), definition.Key);
 
         if (existing != null)
-            throw new Exception($"Category already exists for owner '{ownerName}' and key '{definition.Key}'.");
+            throw new Exception($"Category already exists for owner '{ownerId}' and key '{definition.Key}'.");
 
         var category = await repository.CreateAsync(owner, definition);
 

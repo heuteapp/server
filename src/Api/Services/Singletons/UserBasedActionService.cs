@@ -6,6 +6,7 @@ namespace HeuteApp.Api.Services.Singletons;
 
 public class UserBasedActionService(
     UserBasedCommandService userBasedCommandService,
+    CategoryService categoryService,
     BoardService boardService,
     LayoutService layoutService)
 {
@@ -18,6 +19,7 @@ public class UserBasedActionService(
         var context = new UserBasedActionContext(
             userContext.UserId.Value,
             userBasedCommandService,
+            categoryService,
             boardService,
             layoutService
         );

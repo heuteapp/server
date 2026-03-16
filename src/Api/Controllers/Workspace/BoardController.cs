@@ -20,8 +20,21 @@ public class BoardController(
         {
             var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
-            var board = await context.BoardService.GetBoardAsync(context.UserId, new(categoryName), date)
-                ?? await context.BoardService.CreateBoardAsync(context.UserId, new(categoryName), new("two", 1), new(date));
+            var board = await context.BoardService.GetBoardAsync(context.UserId, new(categoryName), date);
+
+            if(board == null)
+            {                
+                await context.LayoutService.CreateLayoutAsync(context.UserId, "two", new(
+                    18, 8, [
+                        new("first", 1, 1, 18, 4),
+                        new("second", 1, 5, 18, 4)
+                    ]
+                ));
+
+                await context.CategoryService.CreateCategoryAsync(context.UserId, new(categoryName));
+
+                board = await context.BoardService.CreateBoardAsync(context.UserId, new(categoryName), new("two", 1), new(date));
+            }
 
             return Ok(await board.ToResponse(context.LayoutService));
         });
