@@ -1,7 +1,7 @@
 using HeuteApp.Api.Models.Requests.Workspace.Board;
 using HeuteApp.Api.Models.Responses.Workspace.Board;
 using HeuteApp.Application.Results.Board;
-using HeuteApp.Application.Services;
+using HeuteApp.Application.Services.UserBased;
 using HeuteApp.Core.Enums.Commands;
 using HeuteApp.Core.Commands.Abstractions;
 using HeuteApp.Core.Commands.Domain.Board;
@@ -35,7 +35,7 @@ public static class BoardModelMapper
 
     //
 
-    public static async Task<BoardResponse> ToResponse(this BoardResult board, LayoutService layoutService)
+    public static async Task<BoardResponse> ToResponse(this BoardResult board, UserBasedLayoutService layoutService)
     {
         ArgumentNullException.ThrowIfNull(board);
         ArgumentNullException.ThrowIfNull(layoutService);

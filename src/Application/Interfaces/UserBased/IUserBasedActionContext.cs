@@ -9,9 +9,9 @@ public interface IUserBasedActionContext
 
     UserBasedCommandService CommandService { get; }
 
-    CategoryService CategoryService { get; }
+    UserBasedCategoryService CategoryService { get; }
     
-    BoardService BoardService { get; }
+    UserBasedBoardService BoardService { get; }
 
-    LayoutService LayoutService { get; }
+    UserBasedLayoutService LayoutService { get; }
 }

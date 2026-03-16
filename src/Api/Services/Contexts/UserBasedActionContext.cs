@@ -1,12 +1,12 @@
-using HeuteApp.Api.Services.Singletons;
-using HeuteApp.Application.Services;
+using HeuteApp.Application.Interfaces.UserBased;
+using HeuteApp.Application.Services.UserBased;
 
 namespace HeuteApp.Api.Services.Contexts;
 
 public sealed record UserBasedActionContext(
     Guid UserId,
     UserBasedCommandService CommandService,
-    CategoryService CategoryService,
-    BoardService BoardService,
-    LayoutService LayoutService
-);
+    UserBasedCategoryService CategoryService,
+    UserBasedBoardService BoardService,
+    UserBasedLayoutService LayoutService
+) : IUserBasedActionContext;

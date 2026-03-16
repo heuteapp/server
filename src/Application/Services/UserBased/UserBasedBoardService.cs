@@ -1,5 +1,6 @@
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Application.Interfaces.Repositories;
+using HeuteApp.Application.Interfaces.UserBased;
 using HeuteApp.Application.Mappers;
 using HeuteApp.Application.Results.Board;
 using HeuteApp.Core.Commands.Abstractions;
@@ -9,9 +10,10 @@ using HeuteApp.Core.ValueObjects.Board;
 using HeuteApp.Core.ValueObjects.Category;
 using HeuteApp.Core.ValueObjects.Layout;
 
-namespace HeuteApp.Application.Services;
+namespace HeuteApp.Application.Services.UserBased;
 
-public class BoardService(
+public class UserBasedBoardService(
+    IUserContext userContext,
     IProfileRepository profileRepository,
     ICategoryRepository categoryRepository,
     ILayoutRepository layoutRepository, 
@@ -19,31 +21,35 @@ public class BoardService(
     IUnitOfWork unitOfWork,
     BoardCommandDispatcher boardCommandDispatcher)
 {
-    public async Task<BoardResult?> GetBoardAsync(Guid ownerId, CategoryKey categoryKey, DateOnly date)
+    public async Task<BoardResult?> GetBoardAsync(CategoryKey categoryKey, DateOnly date)
     {
-        var category = await categoryRepository.GetByKeyAsync(new(ownerId), categoryKey)
+        var userId = userContext.GetUserIdOrThrow();
+
+        var category = await categoryRepository.GetByKeyAsync(new(userId), categoryKey)
             ?? throw new Exception("Category not found.");
 
-        var board = await boardRepository.GetByKeyAsync(new (ownerId, category.Id), new (date));
+        var board = await boardRepository.GetByKeyAsync(new (userId, category.Id), new (date));
 
         return board?.ToResult();
     }
 
-    public async Task<BoardResult> CreateBoardAsync(Guid ownerId, CategoryKey categoryKey, LayoutKey layoutKey, BoardKey Key)
+    public async Task<BoardResult> CreateBoardAsync(CategoryKey categoryKey, LayoutKey layoutKey, BoardKey Key)
     {
+        var userId = userContext.GetUserIdOrThrow();
+
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var owner = await profileRepository.GetByIdAsync(ownerId)
-            ?? throw new Exception($"User with ID '{ownerId}' not found.");
+        var owner = await profileRepository.GetByIdAsync(userId)
+            ?? throw new Exception($"User not found.");
 
-        var category = await categoryRepository.GetByKeyAsync(new(owner.Id), categoryKey)
+        var category = await categoryRepository.GetByKeyAsync(new(userId), categoryKey)
             ?? throw new Exception("Category not found.");
 
-        var layout = await layoutRepository.GetByKeyAsync(new (owner.Id, layoutKey.Name, layoutKey.Version))
+        var layout = await layoutRepository.GetByKeyAsync(new (userId, layoutKey.Name, layoutKey.Version))
             ?? throw new Exception("Layout not found.");
 
         var existing = await boardRepository
-            .GetByKeyAsync(new (owner.Id, category.Id), new (date));
+            .GetByKeyAsync(new (userId, category.Id), new (date));
 
         if (existing != null)
             throw new Exception("Board already exists for this date.");
@@ -54,14 +60,16 @@ public class BoardService(
         return board.ToResult();
     }
 
-    public async Task<bool> ProcessBoardEventsAsync(Guid ownerId, CategoryKey categoryKey, IEnumerable<BoardCommand> events)
+    public async Task<bool> ProcessBoardEventsAsync(CategoryKey categoryKey, IEnumerable<BoardCommand> events)
     {
-        var category = await categoryRepository.GetByKeyAsync(new(ownerId), categoryKey)
+        var userId = userContext.GetUserIdOrThrow();
+
+        var category = await categoryRepository.GetByKeyAsync(new(userId), categoryKey)
             ?? throw new Exception("Category not found.");
 
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var board = await boardRepository.GetByKeyAsync(new(ownerId, category.Id), new(date))
+        var board = await boardRepository.GetByKeyAsync(new(userId, category.Id), new(date))
             ?? throw new Exception("Board not found for today. Please create today's board before posting events.");
 
         var layout = await layoutRepository.GetByIdAsync(board.LayoutId)

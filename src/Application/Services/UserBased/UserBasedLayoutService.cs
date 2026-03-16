@@ -3,36 +3,38 @@ using HeuteApp.Application.Interfaces.Repositories;
 using HeuteApp.Application.Results.Layout;
 using HeuteApp.Application.Mappers;
 using HeuteApp.Core.ValueObjects.Layout;
+using HeuteApp.Application.Interfaces.UserBased;
 
-namespace HeuteApp.Application.Services;
+namespace HeuteApp.Application.Services.UserBased;
 
-public class LayoutService(
+public class UserBasedLayoutService(
+    IUserContext userContext,
     IProfileRepository profileRepository,
     ILayoutRepository repository, 
     IUnitOfWork unitOfWork)
 {
-    public async Task<LayoutResult?> GetLayoutByIdAsync(Guid layoutId)
+    public async Task<LayoutResult?> GetLayoutAsync(string name, int? version)
     {
-        var layout = await repository.GetByIdAsync(layoutId);
+        var userId = userContext.GetUserIdOrThrow();
+
+        var layout = await repository.GetByKeyAsync(new (userId, name, version));
         return layout?.ToResult();
     }
 
-    public async Task<LayoutResult?> GetLayoutAsync(Guid ownerId, string name, int? version)
-    {
-        var layout = await repository.GetByKeyAsync(new (ownerId, name, version));
-        return layout?.ToResult();
-    }
-
-    public async Task<IEnumerable<LayoutResult>> GetLayoutsAsync(Guid ownerId)
+    public async Task<IEnumerable<LayoutResult>> GetLayoutsAsync()
     {        
-        var layouts = await repository.GetByOwnerAsync(ownerId);
+        var userId = userContext.GetUserIdOrThrow();
+
+        var layouts = await repository.GetByOwnerAsync(userId);
         return layouts.Select(l => l.ToResult());
     }
 
-    public async Task<LayoutResult> CreateLayoutAsync(Guid ownerId, string name, LayoutProps props)
+    public async Task<LayoutResult> CreateLayoutAsync(string name, LayoutProps props)
     {
-        var owner = await profileRepository.GetByIdAsync(ownerId)
-            ?? throw new Exception($"Owner not found for ID '{ownerId}'.");
+        var userId = userContext.GetUserIdOrThrow();
+
+        var owner = await profileRepository.GetByIdAsync(userId)
+            ?? throw new Exception($"Owner not found for ID '{userId}'.");
 
         var lastVersion = await repository.GetLastestVersionAsync(owner.Id, name);
         var existing = await repository.GetByKeyAsync(new (owner.Id, name, lastVersion));

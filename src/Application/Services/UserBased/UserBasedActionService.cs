@@ -6,9 +6,9 @@ public class UserBasedActionService(
     IUserContext userContext, 
     IUserBasedActionContextFactory userBasedActionContextFactory,
     UserBasedCommandService userBasedCommandService,
-    CategoryService categoryService,
-    BoardService boardService,
-    LayoutService layoutService)
+    UserBasedCategoryService categoryService,
+    UserBasedBoardService boardService,
+    UserBasedLayoutService layoutService)
 {
     public async Task<TResult> ExecuteAsync<TResult>(Func<IUserBasedActionContext, Task<TResult>> func)
     {

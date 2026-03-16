@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using HeuteApp.Core.Services;
 using HeuteApp.Core.Commands.Dispatchers;
+using HeuteApp.Application.Services.UserBased;
+using HeuteApp.Application.Interfaces.UserBased;
 
 namespace HeuteApp.Api.Extensions;
 
@@ -29,7 +31,6 @@ public static class ServiceExtensions
 
         // Singleton
         builder.Services.AddSingleton<SupabaseProvider>();
-        builder.Services.AddSingleton<UserBasedCommandService>();
 
         // Scoped
         builder.Services.AddScoped<UserContext>();
@@ -43,11 +44,12 @@ public static class ServiceExtensions
         builder.Services.AddScoped<BoardPlacementService>();
 
         builder.Services.AddScoped<ProfileService>();
-        builder.Services.AddScoped<LayoutService>();
-        builder.Services.AddScoped<CategoryService>();
-        builder.Services.AddScoped<BoardService>();
+        builder.Services.AddScoped<UserBasedLayoutService>();
+        builder.Services.AddScoped<UserBasedCategoryService>();
+        builder.Services.AddScoped<UserBasedBoardService>();
 
         //
         builder.Services.AddScoped<UserBasedActionService>();
+        //builder.Services.AddScoped<IUserBasedActionContextFactory, UserBasedActionContextFactory>();
     }
 }

@@ -8,7 +8,7 @@ public interface IUserBasedActionContextFactory
     IUserBasedActionContext Create(
         Guid userId,
         UserBasedCommandService commandService,
-        CategoryService categoryService,
-        BoardService boardService,
-        LayoutService layoutService);
+        UserBasedCategoryService categoryService,
+        UserBasedBoardService boardService,
+        UserBasedLayoutService layoutService);
 }
