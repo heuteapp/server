@@ -1,6 +1,6 @@
 namespace HeuteApp.Api.Models.Requests.Auth;
 
-public record LoginRequest(
+public record SignInRequest(
     string Identifier,
     string Password
 );

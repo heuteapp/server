@@ -15,7 +15,7 @@ public class AuthController(
     SupabaseProvider supabaseProvider) : ControllerBase
 {
     [HttpPost("sign-in")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] SignInRequest request)
     {        
         var profile = await publicProfileService.GetProfileByIdentifierAsync(request.Identifier);
         if (profile == null)
