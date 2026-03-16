@@ -20,6 +20,9 @@ public class BoardController(
         {
             var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
+            var category = await context.CategoryService.GetCategoryByKeyAsync(context.UserId, new(categoryName))
+                ?? await context.CategoryService.CreateCategoryAsync(context.UserId, new(categoryName));
+
             var board = await context.BoardService.GetBoardAsync(context.UserId, new(categoryName), date);
 
             if(board == null)
