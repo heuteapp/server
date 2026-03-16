@@ -12,6 +12,7 @@ using HeuteApp.Core.Commands.Dispatchers;
 using HeuteApp.Application.Services.UserBased;
 using HeuteApp.Application.Services.Internal;
 using HeuteApp.Application.Interfaces.UserBased;
+using HeuteApp.Application.Services.Public;
 
 namespace HeuteApp.Api.Extensions;
 
@@ -44,9 +45,11 @@ public static class ServiceExtensions
         builder.Services.AddScoped<BoardCommandDispatcher>();
         builder.Services.AddScoped<BoardPlacementService>();
 
-        builder.Services.AddScoped<ProfileService>();
-
         builder.Services.AddScoped<InternalLayoutService>();
+        builder.Services.AddScoped<InternalProfileService>();
+
+        builder.Services.AddScoped<PublicProfileService>();
+
         builder.Services.AddScoped<UserBasedLayoutService>();
         builder.Services.AddScoped<UserBasedCategoryService>();
         builder.Services.AddScoped<UserBasedBoardService>();

@@ -3,15 +3,10 @@ using HeuteApp.Application.Interfaces.Repositories;
 using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Core.ValueObjects.Profile;
 
-namespace HeuteApp.Application.Services;
+namespace HeuteApp.Application.Services.Public;
 
-public class ProfileService(IProfileRepository repository, IUnitOfWork unitOfWork)
+public class PublicProfileService(IProfileRepository repository, IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteProfile?> GetProfileByIdAsync(Guid profileId)
-    {
-        return await repository.GetByIdAsync(profileId);
-    }
-
     public async Task<HeuteProfile?> GetProfileByIdentifierAsync(string identifier)
     {
         if(identifier.Contains('@'))

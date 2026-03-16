@@ -1,15 +1,18 @@
-using HeuteApp.Application.Services;
 using HeuteApp.Core.ValueObjects.Profile;
 using Microsoft.AspNetCore.Mvc;
 using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Api.Models.Requests.Auth;
+using HeuteApp.Application.Services.Public;
+using HeuteApp.Application.Services.Internal;
 
 namespace HeuteApp.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
 public class AuthController(
-    ProfileService profileService, SupabaseProvider supabaseProvider) : ControllerBase
+    InternalProfileService internalProfileService,
+    PublicProfileService publicProfileService, 
+    SupabaseProvider supabaseProvider) : ControllerBase
 {
     [HttpPost("signup")]
     public async Task<IActionResult> Signup([FromBody] SignUpRequest request)
@@ -20,7 +23,7 @@ public class AuthController(
 
         string userId = session.User.Id!;
 
-        var profile = await profileService.CreateProfileAsync(
+        var profile = await publicProfileService.CreateProfileAsync(
             new ProfileDefinition(
                 Guid.Parse(userId),
                 new ProfileProps(
@@ -39,7 +42,7 @@ public class AuthController(
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {        
-        var profile = await profileService.GetProfileByIdentifierAsync(request.Identifier);
+        var profile = await publicProfileService.GetProfileByIdentifierAsync(request.Identifier);
         if (profile == null)
             return NotFound("Profile not found for this user.");
 
@@ -79,7 +82,7 @@ public class AuthController(
         return Ok(new
         {
             accessToken = session.AccessToken,
-            profile = await profileService.GetProfileByIdAsync(Guid.Parse(session.User!.Id!))
+            profile = await internalProfileService.GetProfileByIdAsync(Guid.Parse(session.User!.Id!))
         });
     }
 }
