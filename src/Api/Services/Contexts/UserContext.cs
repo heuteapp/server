@@ -1,6 +1,8 @@
+using HeuteApp.Application.Interfaces;
+
 namespace HeuteApp.Api.Services.Contexts;
 
-public sealed class UserContext
+public sealed class UserContext : IUserContext
 {
     public Guid? UserId { get; private set; }
 
