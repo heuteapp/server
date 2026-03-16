@@ -6,7 +6,7 @@ public sealed record ProfileProps
 
     //
 
-    public string Name { get; private set; } = string.Empty;
+    public string Username { get; private set; } = string.Empty;
 
     public string Email { get; private set; } = string.Empty;
 
@@ -18,7 +18,7 @@ public sealed record ProfileProps
         string name, 
         string email)
     {
-        Name = name;
+        Username = name;
         Email = email;
     }
 }

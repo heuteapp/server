@@ -32,7 +32,7 @@ public class UserBasedCategoryService(
         var existing = await repository.GetByKeyAsync(new (profile.Id), definition.Key);
 
         if (existing != null)
-            throw new Exception($"Category already exists for owner '{profile.Name}' and key '{definition.Key}'.");
+            throw new Exception($"Category already exists for owner '{profile.Username}' and key '{definition.Key}'.");
 
         var category = await repository.CreateAsync(profile, definition);
 

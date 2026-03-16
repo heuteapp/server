@@ -15,7 +15,7 @@ public class HeuteProfileConfig : IEntityTypeConfiguration<HeuteProfileModel>
         builder.Property(c => c.Id)
             .ValueGeneratedNever();
 
-        builder.Property(b => b.Name)
+        builder.Property(b => b.Username)
             .IsRequired();
 
         builder.Property(b => b.Email)

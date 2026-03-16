@@ -17,10 +17,18 @@ public class ProfileRepository(HeuteDbContext context) : IProfileRepository
         return user;
     }
 
-    public async Task<HeuteProfile?> GetByNameAsync(string name)
+    public async Task<HeuteProfile?> GetByUsernameAsync(string username)
     {
         var user = await context.Profiles
-            .FirstOrDefaultAsync(c => c.Name == name);
+            .FirstOrDefaultAsync(c => c.Username == username);
+
+        return user;
+    }
+
+    public async Task<HeuteProfile?> GetByEmailAsync(string email)
+    {
+        var user = await context.Profiles
+            .FirstOrDefaultAsync(c => c.Email == email);
 
         return user;
     }

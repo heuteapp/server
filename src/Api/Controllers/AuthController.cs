@@ -12,7 +12,7 @@ public class AuthController(
     ProfileService profileService, SupabaseProvider supabaseProvider) : ControllerBase
 {
     [HttpPost("signup")]
-    public async Task<IActionResult> Signup([FromBody] SignupRequest request)
+    public async Task<IActionResult> Signup([FromBody] SignUpRequest request)
     {
         var session = await supabaseProvider.Client.Auth.SignUp(request.Email, request.Password, new() { });
         if (session?.User == null)
@@ -24,7 +24,7 @@ public class AuthController(
             new ProfileDefinition(
                 Guid.Parse(userId),
                 new ProfileProps(
-                    request.Name,
+                    request.Username,
                     request.Email
                 )
             )
@@ -39,7 +39,7 @@ public class AuthController(
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {        
-        var profile = await profileService.GetProfileByNameAsync(request.Name);
+        var profile = await profileService.GetProfileByIdentifierAsync(request.Identifier);
         if (profile == null)
             return NotFound("Profile not found for this user.");
 

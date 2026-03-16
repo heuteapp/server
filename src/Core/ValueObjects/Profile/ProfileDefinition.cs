@@ -8,9 +8,9 @@ public sealed record ProfileDefinition
 
     public Guid Id { get; private set; } = Guid.Empty;
 
-    public string Name { get; private set; } = string.Empty;
+    public string Username { get; private set; } = string.Empty;
 
-    public string Version { get; private set; } = string.Empty;
+    public string Email { get; private set; } = string.Empty;
 
     //
 
@@ -18,12 +18,12 @@ public sealed record ProfileDefinition
 
     public ProfileDefinition(
         Guid id, 
-        string name, 
-        string version)
+        string username, 
+        string email)
     {
         Id = id;
-        Name = name;
-        Version = version;
+        Username = username;
+        Email = email;
     }
 
     public ProfileDefinition(
@@ -31,11 +31,11 @@ public sealed record ProfileDefinition
         ProfileProps props)
     {
         Id = id;
-        Name = props.Name;
-        Version = props.Email;
+        Username = props.Username;
+        Email = props.Email;
     }
 
     //
 
-    public ProfileProps Props => new(Name, Version);
+    public ProfileProps Props => new(Username, Email);
 }

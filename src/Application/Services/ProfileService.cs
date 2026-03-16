@@ -12,19 +12,20 @@ public class ProfileService(IProfileRepository repository, IUnitOfWork unitOfWor
         return await repository.GetByIdAsync(profileId);
     }
 
-    public async Task<HeuteProfile?> GetProfileByNameAsync(string name)
+    public async Task<HeuteProfile?> GetProfileByIdentifierAsync(string identifier)
     {
-        var profile = await repository.GetByNameAsync(name);
-            
-        return profile;
+        if(identifier.Contains('@'))
+            return await repository.GetByEmailAsync(identifier);
+        else
+            return await repository.GetByUsernameAsync(identifier);
     }
 
     public async Task<HeuteProfile> CreateProfileAsync(ProfileDefinition definition)
     {
-        var existing = await repository.GetByNameAsync(definition.Props.Name);
+        var existing = await repository.GetByUsernameAsync(definition.Props.Username);
 
         if (existing != null)
-            throw new Exception($"Profile already exists for name '{definition.Props.Name}'.");
+            throw new Exception($"Profile already exists for username '{definition.Props.Username}'.");
 
         var profile = await repository.CreateAsync(definition);
 

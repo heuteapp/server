@@ -9,7 +9,7 @@ public class HeuteProfile
     protected HeuteProfile(ProfileDefinition definition)
     {
         Id = definition.Id;
-        Name = definition.Props.Name;
+        Username = definition.Props.Username;
         Email = definition.Props.Email;
     }
 
@@ -23,7 +23,7 @@ public class HeuteProfile
 
     public Guid Id { get; private set; } = Guid.Empty;
 
-    public string Name { get; private set; } = string.Empty;
+    public string Username { get; private set; } = string.Empty;
 
     public string Email { get; private set; } = string.Empty;
 }
