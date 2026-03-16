@@ -3,7 +3,7 @@ using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Core.ValueObjects.Layout;
 
-namespace HeuteApp.Application.Interfaces;
+namespace HeuteApp.Application.Interfaces.Repositories;
 
 public interface ILayoutRepository
 {

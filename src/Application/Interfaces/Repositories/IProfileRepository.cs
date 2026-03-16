@@ -1,7 +1,7 @@
 using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Core.ValueObjects.Profile;
 
-namespace HeuteApp.Application.Interfaces;
+namespace HeuteApp.Application.Interfaces.Repositories;
 
 public interface IProfileRepository
 {    

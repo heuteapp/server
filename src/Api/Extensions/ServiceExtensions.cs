@@ -1,6 +1,7 @@
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Application.Services;
 using HeuteApp.Application.Interfaces;
+using HeuteApp.Application.Interfaces.Repositories;
 using HeuteApp.Infrastructure.Repositories;
 using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Api.Services.Contexts;
