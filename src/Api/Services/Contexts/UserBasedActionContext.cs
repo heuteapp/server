@@ -10,3 +10,22 @@ public sealed record UserBasedActionContext(
     UserBasedBoardService BoardService,
     UserBasedLayoutService LayoutService
 ) : IUserBasedActionContext;
+
+public class UserBasedActionContextFactory : IUserBasedActionContextFactory
+{
+    public IUserBasedActionContext Create(
+        Guid userId, 
+        UserBasedCommandService commandService, 
+        UserBasedCategoryService categoryService, 
+        UserBasedBoardService boardService, 
+        UserBasedLayoutService layoutService)
+    {
+        return new UserBasedActionContext(
+            userId,
+            commandService,
+            categoryService,
+            boardService,
+            layoutService
+        );
+    }
+}

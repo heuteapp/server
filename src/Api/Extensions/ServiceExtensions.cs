@@ -11,6 +11,7 @@ using HeuteApp.Core.Services;
 using HeuteApp.Core.Commands.Dispatchers;
 using HeuteApp.Application.Services.UserBased;
 using HeuteApp.Application.Services.Internal;
+using HeuteApp.Application.Interfaces.UserBased;
 
 namespace HeuteApp.Api.Extensions;
 
@@ -33,7 +34,7 @@ public static class ServiceExtensions
         builder.Services.AddSingleton<SupabaseProvider>();
 
         // Scoped
-        builder.Services.AddScoped<UserContext>();
+        builder.Services.AddScoped<IUserContext, UserContext>();
         builder.Services.AddScoped<HttpClient>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
@@ -52,6 +53,7 @@ public static class ServiceExtensions
 
         //
         builder.Services.AddScoped<UserBasedActionService>();
-        //builder.Services.AddScoped<IUserBasedActionContextFactory, UserBasedActionContextFactory>();
+        builder.Services.AddScoped<UserBasedCommandService>();
+        builder.Services.AddScoped<IUserBasedActionContextFactory, UserBasedActionContextFactory>();
     }
 }
