@@ -40,7 +40,7 @@ public class BoardController(
                         new("first", 1, 1, 18, 4),
                         new("second", 1, 5, 18, 4)
                     ]
-                ), new() { Behavior = VersionedCreateBehavior.ReturnLatest });
+                ), new() { VersionedBehavior = VersionedCreateBehavior.ReturnLatest });
 
                 // board oluştur ve tekrar ata
                 board = await context.BoardService.CreateBoardAsync(new(categoryName), new("two", 1), new(date));

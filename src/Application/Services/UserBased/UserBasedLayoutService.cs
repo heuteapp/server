@@ -42,7 +42,7 @@ public class UserBasedLayoutService(
 
         if(last != null)
         {
-            if(options?.Behavior == VersionedCreateBehavior.ReturnLatest)
+            if(options?.VersionedBehavior == VersionedCreateBehavior.ReturnLatest)
             {
                 return last.ToResult();
             }
