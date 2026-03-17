@@ -17,28 +17,37 @@ public class BoardController(
     [HttpGet("{categoryName}")]
     public async Task<IActionResult> GetTodaysBoard(string categoryName)
     {
-        return await userBasedActionService.ExecuteAsync(async context =>
+        return await userBasedActionService.ExecuteAsync<IActionResult>(async context =>
         {
             var date = DateOnly.FromDateTime(DateTime.UtcNow);
-
             BoardResult? board = null;
-            try {
+
+            try
+            {
                 board = await context.BoardService.GetBoardAsync(new(categoryName), date);
             }
-            catch
+            catch {}
+
+            if (board == null)
             {
-                if(board == null)
+                // kategori yoksa oluştur
+                await context.CategoryService.CreateCategoryAsync(new(categoryName));
+
+                // layout yoksa oluştur
+                await context.LayoutService.CreateLayoutAsync("two", new(
+                    18, 8, [
+                        new("first", 1, 1, 18, 4),
+                        new("second", 1, 5, 18, 4)
+                    ]
+                ));
+
+                // board oluştur ve tekrar ata
+                board = await context.BoardService.CreateBoardAsync(new(categoryName), new("two", 1), new(date));
+
+                if (board == null)
                 {
-                    await context.CategoryService.CreateCategoryAsync(new(categoryName));
-
-                    await context.LayoutService.CreateLayoutAsync("two", new(
-                        18, 8, [
-                            new("first", 1, 1, 18, 4),
-                            new("second", 1, 5, 18, 4)
-                        ]
-                    ));
-
-                    board = await context.BoardService.CreateBoardAsync(new(categoryName), new("two", 1), new(date));
+                    // hâlâ null ise kullanıcıya anlamlı bir mesaj dön
+                    return NotFound(new { message = $"Board could not be created for category '{categoryName}'." });
                 }
             }
 
