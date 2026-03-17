@@ -1,5 +1,6 @@
 using HeuteApp.Api.Mappers.Workspace;
 using HeuteApp.Api.Models.Requests.Workspace.Board;
+using HeuteApp.Application.Enums.Services;
 using HeuteApp.Application.Results.Board;
 using HeuteApp.Application.Services.Internal;
 using HeuteApp.Application.Services.UserBased;
@@ -31,7 +32,7 @@ public class BoardController(
             if (board == null)
             {
                 // kategori yoksa oluştur
-                await context.CategoryService.CreateCategoryAsync(new(categoryName), new() { ReturnIfExists = true });
+                await context.CategoryService.CreateCategoryAsync(new(categoryName), new() { ConflictBehavior = CreateConflictBehavior.ReturnExisting });
 
                 // layout yoksa oluştur
                 await context.LayoutService.CreateLayoutAsync("two", new(
@@ -39,7 +40,7 @@ public class BoardController(
                         new("first", 1, 1, 18, 4),
                         new("second", 1, 5, 18, 4)
                     ]
-                ), new() { ReturnIfExists = true });
+                ), new() { Behavior = VersionedCreateBehavior.ReturnLatest });
 
                 // board oluştur ve tekrar ata
                 board = await context.BoardService.CreateBoardAsync(new(categoryName), new("two", 1), new(date));
