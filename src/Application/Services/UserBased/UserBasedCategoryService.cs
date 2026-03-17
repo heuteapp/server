@@ -22,8 +22,10 @@ public class UserBasedCategoryService(
         return category;
     }
 
-    public async Task<HeuteCategory> CreateCategoryAsync(CategoryDefinition definition)
+    public async Task<HeuteCategory> CreateCategoryAsync(CategoryDefinition definition, CreateCategoryOptions? options = null)
     {        
+        options ??= new();
+
         var userId = userContext.GetUserIdOrThrow();
 
         var profile = await profileRepository.GetByIdAsync(userId)
@@ -31,12 +33,23 @@ public class UserBasedCategoryService(
 
         var existing = await repository.GetByKeyAsync(new (profile.Id), definition.Key);
 
-        if (existing != null)
-            throw new Exception($"Category already exists for owner '{profile.Username}' and key '{definition.Key}'.");
+        if (existing is not null)
+        {
+            if (options.ReturnIfExists)
+                return existing;
+
+            throw new InvalidOperationException(
+                $"Category already exists. User: '{profile.Username}', Key: '{definition.Key}'.");
+        }
 
         var category = await repository.CreateAsync(profile, definition);
 
         await unitOfWork.SaveChangesAsync();
         return category;
     }
+}
+
+public sealed class CreateCategoryOptions
+{
+    public bool ReturnIfExists { get; init; } = false;
 }
