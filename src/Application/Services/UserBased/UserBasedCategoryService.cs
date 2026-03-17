@@ -1,5 +1,7 @@
+using HeuteApp.Application.Enums.Services;
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Application.Interfaces.Repositories;
+using HeuteApp.Application.Interfaces.Services.Category;
 using HeuteApp.Application.Interfaces.UserBased;
 using HeuteApp.Core.Aggregates.Category;
 using HeuteApp.Core.ValueObjects.Category;
@@ -35,11 +37,11 @@ public class UserBasedCategoryService(
 
         if (existing is not null)
         {
-            if (options.ReturnIfExists)
-                return existing;
-
-            throw new InvalidOperationException(
-                $"Category already exists. User: '{profile.Username}', Key: '{definition.Key}'.");
+            return options.ConflictBehavior switch
+            {
+                CreateConflictBehavior.ReturnExisting => existing,
+                _ => throw new InvalidOperationException($"Unsupported conflict behavior: {options.ConflictBehavior}"),
+            };
         }
 
         var category = await repository.CreateAsync(profile, definition);
@@ -47,9 +49,4 @@ public class UserBasedCategoryService(
         await unitOfWork.SaveChangesAsync();
         return category;
     }
-}
-
-public sealed class CreateCategoryOptions
-{
-    public bool ReturnIfExists { get; init; } = false;
 }

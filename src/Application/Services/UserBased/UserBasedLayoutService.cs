@@ -32,23 +32,10 @@ public class UserBasedLayoutService(
 
     public async Task<LayoutResult> CreateLayoutAsync(string name, LayoutProps props, CreateLayoutOptions? options = null)
     {   
-        options ??= new();
         var userId = userContext.GetUserIdOrThrow();
 
         var owner = await profileRepository.GetByIdAsync(userId)
             ?? throw new Exception($"Owner not found for ID '{userId}'.");
-
-        var lastVersion = await repository.GetLastestVersionAsync(owner.Id, name);
-        var existing = await repository.GetByKeyAsync(new (owner.Id, name, lastVersion));
-
-        if (existing != null)
-        {
-            if (options.ReturnIfExists)
-                return existing.ToResult();
-
-            throw new InvalidOperationException(
-                $"Layout already exists. User: '{owner.Username}', Name: '{name}'.");
-        }
 
         var layout = await repository.CreateAsync(owner, name, props);
         await unitOfWork.SaveChangesAsync();
