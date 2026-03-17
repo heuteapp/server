@@ -41,6 +41,16 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return await query.FirstOrDefaultAsync();
     }
 
+    public async Task<HeuteLayout?> GetLastestAsync(Guid? ownerId, string name)
+    {
+        var layout = await context.Layouts
+            .Where(l => l.OwnerId == ownerId && l.Name == name)
+            .OrderByDescending(l => l.Version)
+            .FirstOrDefaultAsync();
+
+        return layout;
+    }
+
     public async Task<IEnumerable<HeuteLayout>> GetByOwnerAsync(Guid ownerId)
     {
         var layout = await context.Layouts
@@ -51,25 +61,12 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return layout;
     }
 
-    public async Task<int?> GetLastestVersionAsync(Guid? ownerId, string name)
-    {
-        var layout = await context.Layouts
-            .Where(l => l.OwnerId == ownerId && l.Name == name)
-            .OrderByDescending(l => l.Version)
-            .FirstOrDefaultAsync();
-
-        return layout?.Version;
-    }
-
-    public async Task<HeuteLayout> CreateAsync(HeuteProfile owner, string name, LayoutProps props)
+    public async Task<HeuteLayout> CreateAsync(HeuteProfile owner, LayoutDefinition definition)
     {
         if(owner is not HeuteProfileModel ownerModel)
             throw new ArgumentException("Expected HeuteProfileModel", nameof(owner));
 
-        var lastVersion = await GetLastestVersionAsync(owner.Id, name);
-
-        var version = lastVersion.HasValue ? lastVersion.Value + 1 : 1;
-        var layout = HeuteLayoutModel.Create(ownerModel, new LayoutDefinition(new (name, version), props));
+        var layout = HeuteLayoutModel.Create(ownerModel, definition);
 
         context.Layouts.Add(layout);
         return layout;

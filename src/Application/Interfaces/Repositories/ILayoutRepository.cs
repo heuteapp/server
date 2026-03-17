@@ -11,9 +11,9 @@ public interface ILayoutRepository
     
     Task<HeuteLayout?> GetByKeyAsync(LayoutLookup key);
 
+    Task<HeuteLayout?> GetLastestAsync(Guid? ownerId, string name);
+
     Task<IEnumerable<HeuteLayout>> GetByOwnerAsync(Guid ownerId);
 
-    Task<int?> GetLastestVersionAsync(Guid? ownerId, string name);
-
-    Task<HeuteLayout> CreateAsync(HeuteProfile user, string name, LayoutProps props);
+    Task<HeuteLayout> CreateAsync(HeuteProfile user, LayoutDefinition definition);
 }

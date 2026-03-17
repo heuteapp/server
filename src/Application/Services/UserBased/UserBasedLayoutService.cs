@@ -5,6 +5,7 @@ using HeuteApp.Application.Mappers;
 using HeuteApp.Core.ValueObjects.Layout;
 using HeuteApp.Application.Interfaces.UserBased;
 using HeuteApp.Application.Interfaces.Services.Layout;
+using HeuteApp.Application.Enums.Services;
 
 namespace HeuteApp.Application.Services.UserBased;
 
@@ -37,7 +38,17 @@ public class UserBasedLayoutService(
         var owner = await profileRepository.GetByIdAsync(userId)
             ?? throw new Exception($"Owner not found for ID '{userId}'.");
 
-        var layout = await repository.CreateAsync(owner, name, props);
+        var last = await repository.GetLastestAsync(userId, name);
+
+        if(last != null)
+        {
+            if(options?.Behavior == VersionedCreateBehavior.ReturnLatest)
+            {
+                return last.ToResult();
+            }
+        }
+
+        var layout = await repository.CreateAsync(owner, new LayoutDefinition(new (name, last?.Version ?? 1), props));
         await unitOfWork.SaveChangesAsync();
 
         return layout.ToResult();
