@@ -4,6 +4,7 @@ using HeuteApp.Application.Results.Layout;
 using HeuteApp.Application.Mappers;
 using HeuteApp.Core.ValueObjects.Layout;
 using HeuteApp.Application.Interfaces.UserBased;
+using HeuteApp.Application.Interfaces.Services.Layout;
 
 namespace HeuteApp.Application.Services.UserBased;
 
@@ -29,8 +30,9 @@ public class UserBasedLayoutService(
         return layouts.Select(l => l.ToResult());
     }
 
-    public async Task<LayoutResult> CreateLayoutAsync(string name, LayoutProps props)
-    {
+    public async Task<LayoutResult> CreateLayoutAsync(string name, LayoutProps props, CreateLayoutOptions? options = null)
+    {   
+        options ??= new();
         var userId = userContext.GetUserIdOrThrow();
 
         var owner = await profileRepository.GetByIdAsync(userId)
@@ -40,7 +42,13 @@ public class UserBasedLayoutService(
         var existing = await repository.GetByKeyAsync(new (owner.Id, name, lastVersion));
 
         if (existing != null)
-            throw new Exception("Layout already exists for this owner, name, and version.");
+        {
+            if (options.ReturnIfExists)
+                return existing.ToResult();
+
+            throw new InvalidOperationException(
+                $"Layout already exists. User: '{owner.Username}', Name: '{name}'.");
+        }
 
         var layout = await repository.CreateAsync(owner, name, props);
         await unitOfWork.SaveChangesAsync();
