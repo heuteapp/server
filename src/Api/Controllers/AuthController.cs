@@ -43,7 +43,15 @@ public class AuthController(
     [HttpPost("sign-up")]
     public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
     {
-        var session = await supabaseProvider.Client.Auth.SignUp(request.Email, request.Password, new() { });
+        var session = await supabaseProvider.Client.Auth.SignUp(
+            request.Email,
+            request.Password, 
+            new()
+            {
+                RedirectTo = "https://www.heuteapp.net/workspace/verification"
+            }
+        );
+
         if (session?.User == null)
             return BadRequest();
 
