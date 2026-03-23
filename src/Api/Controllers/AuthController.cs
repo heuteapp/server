@@ -65,6 +65,30 @@ public class AuthController(
         });
     }
 
+    [HttpPost("me")]
+    public async Task<IActionResult> Me()
+    {
+        var refreshToken = Request.Cookies["refreshToken"];
+        var accessToken = Request.Headers.Authorization
+            .FirstOrDefault()?
+            .Split(" ")
+            .Last();
+
+        if (string.IsNullOrEmpty(refreshToken) || string.IsNullOrEmpty(accessToken))
+            return Unauthorized();
+
+        var session = await supabaseProvider.Client.Auth.SetSession(accessToken, refreshToken, false);
+
+        if (session?.User == null)
+            return Unauthorized();
+
+        var profile = await internalProfileService.GetProfileByIdAsync(
+            Guid.Parse(session.User.Id!)
+        );
+
+        return Ok(profile);
+    }
+
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh()
     {
