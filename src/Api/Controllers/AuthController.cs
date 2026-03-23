@@ -65,7 +65,28 @@ public class AuthController(
         });
     }
 
-    [HttpPost("me")]
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh()
+    {
+        var refreshToken = Request.Cookies["refreshToken"];
+        var accessToken = Request.Headers["Authorization"]
+            .FirstOrDefault()?
+            .Split(" ")
+            .Last();
+
+        if (string.IsNullOrEmpty(refreshToken)) return BadRequest();
+        var session = await supabaseProvider.Client.Auth.SetSession(accessToken!, refreshToken, true);
+
+        if (session?.AccessToken == null) return Unauthorized();
+
+        return Ok(new
+        {
+            accessToken = session.AccessToken,
+            profile = await internalProfileService.GetProfileByIdAsync(Guid.Parse(session.User!.Id!))
+        });
+    }
+
+    [HttpGet("me")]
     public async Task<IActionResult> Me()
     {
         var refreshToken = Request.Cookies["refreshToken"];
@@ -87,26 +108,5 @@ public class AuthController(
         );
 
         return Ok(profile);
-    }
-
-    [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh()
-    {
-        var refreshToken = Request.Cookies["refreshToken"];
-        var accessToken = Request.Headers["Authorization"]
-            .FirstOrDefault()?
-            .Split(" ")
-            .Last();
-
-        if (string.IsNullOrEmpty(refreshToken)) return BadRequest();
-        var session = await supabaseProvider.Client.Auth.SetSession(accessToken!, refreshToken, true);
-
-        if (session?.AccessToken == null) return Unauthorized();
-
-        return Ok(new
-        {
-            accessToken = session.AccessToken,
-            profile = await internalProfileService.GetProfileByIdAsync(Guid.Parse(session.User!.Id!))
-        });
     }
 }
