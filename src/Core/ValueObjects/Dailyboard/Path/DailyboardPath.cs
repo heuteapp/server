@@ -1,6 +1,6 @@
 using HeuteApp.Core.ValueObjects.Category.Path;
 
-namespace HeuteApp.Core.ValueObjects.Dailyboard;
+namespace HeuteApp.Core.ValueObjects.Dailyboard.Path;
 
 public sealed partial record DailyboardPath
 {
