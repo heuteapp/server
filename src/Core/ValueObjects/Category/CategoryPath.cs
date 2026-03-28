@@ -1,7 +1,12 @@
+using System.Text.RegularExpressions;
+
 namespace HeuteApp.Core.ValueObjects.Category;
 
-public sealed record CategoryPath
+public sealed partial record CategoryPath
 {
+    [GeneratedRegex(@"^[a-zA-Z0-9-]+$")]
+    private static partial Regex ValidSegmentRegex();
+    
     public string Value { get; }
     
     private CategoryPath(string value)
@@ -45,7 +50,7 @@ public sealed record CategoryPath
             throw new ArgumentException("Segment cannot be empty");
 
         // 2. Special characters are not allowed (only letters, numbers and hyphens)
-        if (!System.Text.RegularExpressions.Regex.IsMatch(segment, @"^[a-zA-Z0-9-]+$"))
+        if (!ValidSegmentRegex().IsMatch(segment))
             throw new ArgumentException($"Segment '{segment}' contains invalid characters. Only letters, numbers and hyphens are allowed");
         
         // 3. Segment length should be between 1 and 10 characters
@@ -54,15 +59,17 @@ public sealed record CategoryPath
         
         // 4. Segment cannot start with a number
         if (char.IsDigit(segment[0]))
+        {
+            // 4a. If segment looks like a date in yyMMdd format, provide specific error message
+            if (YYMMDDDate.TryParse(segment, out _))
+                throw new ArgumentException($"Segment '{segment}' cannot be a valid date in yyMMdd format");
+
             throw new ArgumentException($"Segment '{segment}' cannot start with a number");
+        }
         
         // 5. Segment cannot start or end with a hyphen
         if (segment.StartsWith('-') || segment.EndsWith('-'))
             throw new ArgumentException($"Segment '{segment}' cannot start or end with hyphen");   
-
-        // 6. Segment cannot be a valid date in yyMMdd format
-        if (YYMMDDDate.TryParse(segment, out _))
-            throw new ArgumentException($"Segment '{segment}' cannot be a valid date in yyMMdd format");
     }
     
     public static CategoryPath FromSegments(params string[] segments)
