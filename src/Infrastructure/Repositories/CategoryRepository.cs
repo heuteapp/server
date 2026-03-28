@@ -19,12 +19,26 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         return category;
     }
 
-    public async Task<HeuteCategory?> GetByKeyAsync(CategoryOwnership ownership, CategoryKey key)
+    public async Task<HeuteCategory?> GetByPathAsync(Guid ownerId, CategoryPath path)
     {
-        var category = await context.Categories
-            .FirstOrDefaultAsync(c => c.OwnerId == ownership.OwnerId && c.Name == key.Name);
-
-        return category;
+        HeuteCategory? current = null;
+        Guid? parentId = null;
+        
+        foreach (var segment in path.Segments)
+        {
+            current = await context.Categories
+                .FirstOrDefaultAsync(c => 
+                    c.OwnerId == ownerId && 
+                    c.ParentId == parentId && 
+                    c.Name == segment);
+            
+            if (current == null)
+                return null;
+            
+            parentId = current.Id;
+        }
+        
+        return current;
     }
 
     public async Task<HeuteCategory> CreateAsync(HeuteProfile owner, HeuteCategory? parent, CategoryDefinition definition)
