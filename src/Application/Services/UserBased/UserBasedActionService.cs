@@ -7,7 +7,7 @@ public class UserBasedActionService(
     IUserBasedActionContextFactory userBasedActionContextFactory,
     UserBasedCommandService userBasedCommandService,
     UserBasedCategoryService categoryService,
-    UserBasedBoardService boardService,
+    UserBasedDailyboardService dailyboardService,
     UserBasedLayoutService layoutService)
 {
     public async Task<TResult> ExecuteAsync<TResult>(Func<IUserBasedActionContext, Task<TResult>> func)
@@ -20,7 +20,7 @@ public class UserBasedActionService(
             userContext.UserId.Value,
             userBasedCommandService,
             categoryService,
-            boardService,
+            dailyboardService,
             layoutService
         );
 

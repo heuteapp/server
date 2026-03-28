@@ -9,6 +9,6 @@ public interface IUserBasedActionContextFactory
         Guid userId,
         UserBasedCommandService commandService,
         UserBasedCategoryService categoryService,
-        UserBasedBoardService boardService,
+        UserBasedDailyboardService dailyboardService,
         UserBasedLayoutService layoutService);
 }
