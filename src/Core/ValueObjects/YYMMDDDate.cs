@@ -14,15 +14,42 @@ public sealed record YYMMDDDate
         if (string.IsNullOrWhiteSpace(dateStr))
             throw new ArgumentException("Date cannot be empty", nameof(dateStr));
         
+        if (!TryParse(dateStr, out var date))
+            throw new ArgumentException($"Invalid date format: {dateStr}. Expected yyMMdd (e.g., 240115 for 2024-01-15)", nameof(dateStr));
+        
+        return new YYMMDDDate(date);
+    }
+    
+    public static bool TryParse(string dateStr, out DateTime date)
+    {
+        date = default;
+        
+        if (string.IsNullOrWhiteSpace(dateStr))
+            return false;
+        
         if (!IsValidFormat(dateStr))
-            throw new ArgumentException($"Invalid date format: {dateStr}. Expected yyMMdd");
+            return false;
         
         var yy = int.Parse(dateStr.AsSpan(0, 2));
         var mm = int.Parse(dateStr.AsSpan(2, 2));
         var dd = int.Parse(dateStr.AsSpan(4, 2));
         
-        var date = new DateTime(2000 + yy, mm, dd);
-        return new YYMMDDDate(date);
+        // Validate month and day ranges
+        if (mm < 1 || mm > 12)
+            return false;
+        
+        if (dd < 1 || dd > DateTime.DaysInMonth(2000 + yy, mm))
+            return false;
+        
+        try
+        {
+            date = new DateTime(2000 + yy, mm, dd);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
     
     public static YYMMDDDate FromDateTime(DateTime date)
