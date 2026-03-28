@@ -5,10 +5,10 @@ using HeuteApp.Api.Models.Requests.Auth;
 using HeuteApp.Application.Services.Public;
 using HeuteApp.Application.Services.Internal;
 
-namespace HeuteApp.Api.Controllers;
+namespace HeuteApp.Api.Controllers.Workspace;
 
 [ApiController]
-[Route("auth")]
+[Route("workspace")]
 public class AuthController(
     InternalProfileService internalProfileService,
     PublicProfileService publicProfileService, 
@@ -73,8 +73,8 @@ public class AuthController(
         });
     }
 
-    [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh()
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshToken()
     {
         var refreshToken = Request.Cookies["refreshToken"];
         var accessToken = Request.Headers["Authorization"]
