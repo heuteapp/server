@@ -14,8 +14,9 @@ public sealed record CategoryOwnership
 
     private CategoryOwnership() { }
 
-    public CategoryOwnership(Guid ownerId)
+    public CategoryOwnership(Guid ownerId, Guid? parentId = null)
     {
         OwnerId = ownerId;
+        ParentId = parentId;
     }
 }
