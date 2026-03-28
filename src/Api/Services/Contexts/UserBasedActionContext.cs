@@ -7,7 +7,7 @@ public sealed record UserBasedActionContext(
     Guid UserId,
     UserBasedCommandService CommandService,
     UserBasedCategoryService CategoryService,
-    UserBasedBoardService BoardService,
+    UserBasedDailyboardService DailyboardService,
     UserBasedLayoutService LayoutService
 ) : IUserBasedActionContext;
 
@@ -17,14 +17,14 @@ public class UserBasedActionContextFactory : IUserBasedActionContextFactory
         Guid userId, 
         UserBasedCommandService commandService, 
         UserBasedCategoryService categoryService, 
-        UserBasedBoardService boardService, 
+        UserBasedDailyboardService dailyboardService, 
         UserBasedLayoutService layoutService)
     {
         return new UserBasedActionContext(
             userId,
             commandService,
             categoryService,
-            boardService,
+            dailyboardService,
             layoutService
         );
     }

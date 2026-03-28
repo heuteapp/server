@@ -11,7 +11,7 @@ public interface IUserBasedActionContext
 
     UserBasedCategoryService CategoryService { get; }
     
-    UserBasedBoardService BoardService { get; }
+    UserBasedDailyboardService DailyboardService { get; }
 
     UserBasedLayoutService LayoutService { get; }
 }

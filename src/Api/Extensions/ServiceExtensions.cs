@@ -1,5 +1,4 @@
 using HeuteApp.Infrastructure.Persistence;
-using HeuteApp.Application.Services;
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Application.Interfaces.Repositories;
 using HeuteApp.Infrastructure.Repositories;
@@ -41,9 +40,9 @@ public static class ServiceExtensions
         builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
         builder.Services.AddScoped<ILayoutRepository, LayoutRepository>();
         builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-        builder.Services.AddScoped<IBoardRepository, BoardRepository>();
-        builder.Services.AddScoped<BoardCommandDispatcher>();
-        builder.Services.AddScoped<BoardPlacementService>();
+        builder.Services.AddScoped<IDailyboardRepository, DailyboardRepository>();
+        builder.Services.AddScoped<DailyboardCommandDispatcher>();
+        builder.Services.AddScoped<DailyboardPlacementService>();
 
         builder.Services.AddScoped<InternalLayoutService>();
         builder.Services.AddScoped<InternalProfileService>();
@@ -52,7 +51,7 @@ public static class ServiceExtensions
 
         builder.Services.AddScoped<UserBasedLayoutService>();
         builder.Services.AddScoped<UserBasedCategoryService>();
-        builder.Services.AddScoped<UserBasedBoardService>();
+        builder.Services.AddScoped<UserBasedDailyboardService>();
 
         //
         builder.Services.AddScoped<UserBasedActionService>();
