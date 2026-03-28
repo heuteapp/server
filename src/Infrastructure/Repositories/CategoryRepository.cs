@@ -62,15 +62,33 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
 
     public async Task<HeuteCategory> CreateAsync(HeuteProfile owner, HeuteCategory? parent, CategoryDefinition definition)
     {
-        if(owner is not HeuteProfileModel ownerModel)
+        if (owner is not HeuteProfileModel ownerModel)
             throw new ArgumentException("Owner must be a HeuteProfileModel", nameof(owner));
 
-        if(parent is not HeuteCategoryModel parentModel)
-            throw new ArgumentException("Parent must be a HeuteCategoryModel", nameof(parent));
+        var exists = await context.Categories
+            .AnyAsync(c => 
+                c.OwnerId == owner.Id && 
+                (parent == null ? c.ParentId == null : c.ParentId == parent.Id) && 
+                c.Name == definition.Key.Name);
+        
+        if (exists)
+            throw new InvalidOperationException($"Category '{definition.Key.Name}' already exists at this level");
 
-        var category = HeuteCategoryModel.Create(ownerModel, parentModel, definition);
+        HeuteCategoryModel category;
+        
+        if (parent == null)
+        {
+            category = HeuteCategoryModel.Create(ownerModel, null, definition);
+        }
+        else
+        {
+            if (parent is not HeuteCategoryModel parentModel)
+                throw new ArgumentException("Parent must be a HeuteCategoryModel", nameof(parent));
+                
+            category = HeuteCategoryModel.Create(ownerModel, parentModel, definition);
+        }
 
-        context.Categories.Add(category);
+        await context.Categories.AddAsync(category);
         return category;
     }
 }
