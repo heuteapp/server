@@ -12,15 +12,14 @@ namespace HeuteApp.Application.Services.UserBased;
 
 public class UserBasedCategoryService(
     IUserContext userContext,
-    IProfileRepository profileRepository,
     ICategoryRepository repository, 
     IUnitOfWork unitOfWork)
 {
     public async Task<HeuteCategory> GetCategoryAsync(CategoryPath path)
     {
-        var userId = userContext.GetUserIdOrThrow();
-        
-        var result = await repository.GetByPathAsync(userId, path);
+        var profile = await userContext.GetProfileAsync();
+
+        var result = await repository.GetByPathAsync(profile.Id, path);
         
         if (!result.IsSuccess)
         {
@@ -47,18 +46,10 @@ public class UserBasedCategoryService(
         options ??= new CreateCategoryOptions();
         
         // 2. Get the current owner profile
-        var userId = userContext.GetUserIdOrThrow();
-
-        var ownerResult = await profileRepository.GetByIdAsync(userId);
-        if (!ownerResult.IsSuccess || ownerResult.Profile == null)
-        {
-            throw new Exception($"Owner profile not found for user ID '{userId}'.");
-        }
-
-        var profile = ownerResult.Profile;
+        var profile = await userContext.GetProfileAsync();
         
         // 3. Find the parent category by path
-        var pathResult = await repository.GetByPathAsync(userId, parentPath);
+        var pathResult = await repository.GetByPathAsync(profile.Id, parentPath);
         
         var parentCategory = pathResult.Category;
 
@@ -92,7 +83,7 @@ public class UserBasedCategoryService(
             
             // Return existing category
             var fullPath = CategoryPath.Combine(parentPath, name);
-            var existingResult = await repository.GetByPathAsync(userId, fullPath);
+            var existingResult = await repository.GetByPathAsync(profile.Id, fullPath);
             
             if (existingResult.Status == CategoryPathStatus.Success)
             {
@@ -120,15 +111,7 @@ public class UserBasedCategoryService(
     // Helper method to create missing parent path recursively
     private async Task<HeuteCategory> CreateParentPathAsync(CategoryPath path)
     {        
-        var userId = userContext.GetUserIdOrThrow();
-
-        var ownerResult = await profileRepository.GetByIdAsync(userId);
-        if (!ownerResult.IsSuccess || ownerResult.Profile == null)
-        {
-            throw new Exception($"Owner profile not found for user ID '{userId}'.");
-        }
-
-        var profile = ownerResult.Profile;
+        var profile = await userContext.GetProfileAsync();
 
         HeuteCategory? currentParent = null;
         var segments = path.Segments;

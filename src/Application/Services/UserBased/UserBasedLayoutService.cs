@@ -35,8 +35,13 @@ public class UserBasedLayoutService(
     {   
         var userId = userContext.GetUserIdOrThrow();
 
-        var owner = await profileRepository.GetByIdAsync(userId)
-            ?? throw new Exception($"Owner not found for ID '{userId}'.");
+        var profileResult = await profileRepository.GetByIdAsync(userId);
+        if (!profileResult.IsSuccess || profileResult.Profile == null)
+        {
+            throw new Exception($"Profile for user ID '{userId}' not found.");
+        }
+
+        var profile = profileResult.Profile;
 
         var last = await repository.GetLastestAsync(userId, name);
 
@@ -48,7 +53,7 @@ public class UserBasedLayoutService(
             }
         }
 
-        var layout = await repository.CreateAsync(owner, new LayoutDefinition(new (name, last?.Version ?? 1), props));
+        var layout = await repository.CreateAsync(profile, new LayoutDefinition(new (name, last?.Version ?? 1), props));
         await unitOfWork.SaveChangesAsync();
 
         return layout.ToResult();
