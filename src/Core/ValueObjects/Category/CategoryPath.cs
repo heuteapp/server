@@ -25,13 +25,16 @@ public sealed record CategoryPath
         
         foreach (var segment in segments)
         {
-            ValidateSegment(segment);
+            try
+            {
+                ValidateSegment(segment);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException($"Invalid segment '{segment}' in category path: {ex.Message}", nameof(path));
+            }
         }
-        
-        // It should not contain any segment that looks like a date in YYMMDD format
-        if (ContainsYYMMDD(segments))
-            throw new ArgumentException("Category path cannot contain YYMMDD formatted segments", nameof(path));
-        
+                
         return new CategoryPath(path);
     }
     
@@ -56,44 +59,10 @@ public sealed record CategoryPath
         // 5. Segment cannot start or end with a hyphen
         if (segment.StartsWith('-') || segment.EndsWith('-'))
             throw new ArgumentException($"Segment '{segment}' cannot start or end with hyphen");   
-    }
 
-    private static bool ContainsYYMMDD(string[] segments)
-    {
-        foreach (var segment in segments)
-        {
-            if (IsYYMMDD(segment))
-                return true;
-        }
-        return false;
-    }
-    
-    private static bool IsYYMMDD(string segment)
-    {
-        // YYMMDD format: 6 digits, where YY is year (00-99), MM is month (01-12), DD is day (01-31)
-        if (segment.Length != 6)
-            return false;
-        
-        if (!System.Text.RegularExpressions.Regex.IsMatch(segment, @"^\d{6}$"))
-            return false;
-        
-        // Check if it can be a valid date
-        try
-        {
-            int year = 2000 + int.Parse(segment.Substring(0, 2));
-            int month = int.Parse(segment.Substring(2, 2));
-            int day = int.Parse(segment.Substring(4, 2));
-            
-            // Try to create a date to validate the month and day values
-            var date = new DateTime(year, month, day);
-            
-            // Only allow years between 2000 and 2099 to avoid confusion with other formats
-            return year >= 2000 && year <= 2099;
-        }
-        catch
-        {
-            return false;
-        }
+        // 6. Segment cannot be a valid date in yyMMdd format
+        if (YYMMDDDate.TryParse(segment, out _))
+            throw new ArgumentException($"Segment '{segment}' cannot be a valid date in yyMMdd format");
     }
     
     public static CategoryPath FromSegments(params string[] segments)
