@@ -12,5 +12,5 @@ public interface ICategoryRepository
 
     Task<CategoryPathResult> GetByPathAsync(Guid ownerId, CategoryPath path);
 
-    Task<HeuteCategory> CreateAsync(HeuteProfile owner, HeuteCategory? parent, CategoryDefinition definition);
+    Task<CategoryCreateResult> CreateAsync(HeuteProfile owner, HeuteCategory? parent, CategoryDefinition definition);
 }

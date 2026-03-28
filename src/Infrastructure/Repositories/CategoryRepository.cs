@@ -61,10 +61,17 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         };
     }
 
-    public async Task<HeuteCategory> CreateAsync(HeuteProfile owner, HeuteCategory? parent, CategoryDefinition definition)
+    public async Task<CategoryCreateResult> CreateAsync(HeuteProfile owner, HeuteCategory? parent, CategoryDefinition definition)
     {
         if (owner is not HeuteProfileModel ownerModel)
-            throw new ArgumentException("Owner must be a HeuteProfileModel", nameof(owner));
+        {
+            return new CategoryCreateResult
+            {
+                Category = null,
+                Status = CategoryCreateStatus.InvalidOwner,
+                ExistingName = null
+            };
+        }
 
         var exists = await context.Categories
             .AnyAsync(c => 
@@ -73,23 +80,38 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
                 c.Name == definition.Key.Name);
         
         if (exists)
-            throw new InvalidOperationException($"Category '{definition.Key.Name}' already exists at this level");
-
-        HeuteCategoryModel category;
-        
-        if (parent == null)
         {
-            category = HeuteCategoryModel.Create(ownerModel, null, definition);
-        }
-        else
-        {
-            if (parent is not HeuteCategoryModel parentModel)
-                throw new ArgumentException("Parent must be a HeuteCategoryModel", nameof(parent));
-                
-            category = HeuteCategoryModel.Create(ownerModel, parentModel, definition);
+            return new CategoryCreateResult
+            {
+                Category = null,
+                Status = CategoryCreateStatus.AlreadyExists,
+                ExistingName = definition.Key.Name
+            };
         }
 
+        HeuteCategoryModel? parentModel = null;
+        if (parent != null)
+        {
+            if (parent is not HeuteCategoryModel model)
+            {
+                return new CategoryCreateResult
+                {
+                    Category = null,
+                    Status = CategoryCreateStatus.InvalidParent,
+                    ExistingName = null
+                };
+            }
+            parentModel = model;
+        }
+
+        var category = HeuteCategoryModel.Create(ownerModel, parentModel, definition);
         await context.Categories.AddAsync(category);
-        return category;
+        
+        return new CategoryCreateResult
+        {
+            Category = category,
+            Status = CategoryCreateStatus.Success,
+            ExistingName = null
+        };
     }
 }
