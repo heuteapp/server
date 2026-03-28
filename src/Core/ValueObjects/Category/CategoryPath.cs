@@ -8,6 +8,7 @@ public sealed partial record CategoryPath
     private static partial Regex ValidSegmentRegex();
     
     public string Value { get; }
+    private string[]? _segments;
     
     private CategoryPath(string value)
     {
@@ -19,13 +20,14 @@ public sealed partial record CategoryPath
         if (string.IsNullOrWhiteSpace(path))
             throw new ArgumentException("Category path cannot be empty", nameof(path));
         
+        path = path.Trim();
+        
         if (path.Contains("//"))
             throw new ArgumentException("Category path cannot contain double slashes", nameof(path));
         
         if (path.StartsWith('/') || path.EndsWith('/'))
             throw new ArgumentException("Category path cannot start or end with slash", nameof(path));
         
-        // Check each segment for validity
         var segments = path.Split('/');
         
         foreach (var segment in segments)
@@ -45,45 +47,58 @@ public sealed partial record CategoryPath
     
     private static void ValidateSegment(string segment)
     {        
-        // 1. Empty segment is not allowed (already caught by previous checks)
         if (string.IsNullOrWhiteSpace(segment))
             throw new ArgumentException("Segment cannot be empty");
 
-        // 2. Special characters are not allowed (only letters, numbers and hyphens)
+        if (segment.Length > 10)
+            throw new ArgumentException($"Segment '{segment}' exceeds maximum length of 10 characters");
+
         if (!ValidSegmentRegex().IsMatch(segment))
             throw new ArgumentException($"Segment '{segment}' contains invalid characters. Only letters, numbers and hyphens are allowed");
         
-        // 3. Segment length should be between 1 and 10 characters
-        if (segment.Length > 10)
-            throw new ArgumentException($"Segment '{segment}' exceeds maximum length of 10 characters");
-        
-        // 4. Segment cannot start with a number
         if (char.IsDigit(segment[0]))
         {
-            // 4a. If segment looks like a date in yyMMdd format, provide specific error message
             if (YYMMDDDate.TryParse(segment, out _))
                 throw new ArgumentException($"Segment '{segment}' cannot be a valid date in yyMMdd format");
 
             throw new ArgumentException($"Segment '{segment}' cannot start with a number");
         }
         
-        // 5. Segment cannot start or end with a hyphen
         if (segment.StartsWith('-') || segment.EndsWith('-'))
             throw new ArgumentException($"Segment '{segment}' cannot start or end with hyphen");   
     }
     
     public static CategoryPath FromSegments(params string[] segments)
     {
+        if (segments == null || segments.Length == 0)
+            throw new ArgumentException("At least one segment is required", nameof(segments));
+        
         var cleanedSegments = segments
             .Where(s => !string.IsNullOrWhiteSpace(s))
             .Select(s => s.Trim())
             .ToArray();
         
+        if (cleanedSegments.Length == 0)
+            throw new ArgumentException("At least one valid segment is required", nameof(segments));
+        
         var path = string.Join("/", cleanedSegments);
         return Create(path);
     }
     
-    public string[] Segments => Value.Split('/');
+    public string[] Segments => _segments ??= Value.Split('/');
+    
+    public string Name => Segments[^1];
+    
+    public bool IsChildOf(CategoryPath parent)
+    {
+        if (parent is null) return false;
+        if (parent == this) return false;
+        
+        return Value.StartsWith(parent.Value + "/") && 
+               Value.Length > parent.Value.Length;
+    }
+    
+    public override string ToString() => Value;
     
     public CategoryPath? Parent
     {
@@ -94,16 +109,20 @@ public sealed partial record CategoryPath
                 return null;
             
             var parentPath = string.Join("/", segments.Take(segments.Length - 1));
-            return Create(parentPath);
+            return new CategoryPath(parentPath);
         }
     }
     
-    public string Name => Segments[^1];
-    
-    public bool IsChildOf(CategoryPath parent)
+    public IEnumerable<CategoryPath> GetHierarchy()
     {
-        return Value.StartsWith(parent.Value + "/");
+        var segments = Segments;
+        var currentPath = segments[0];
+        yield return new CategoryPath(currentPath);
+        
+        for (int i = 1; i < segments.Length; i++)
+        {
+            currentPath += "/" + segments[i];
+            yield return new CategoryPath(currentPath);
+        }
     }
-    
-    public override string ToString() => Value;
 }
