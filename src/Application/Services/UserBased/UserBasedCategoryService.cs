@@ -48,22 +48,6 @@ public class UserBasedCategoryService(
         
         // 2. Get the current owner profile
         var userId = userContext.GetUserIdOrThrow();
-        
-        // 3. Find the parent category by path
-        var pathResult = await repository.GetByPathAsync(userId, parentPath);
-        
-        // 4. Handle PARENT NOT FOUND scenario
-        if (pathResult.Status != CategoryPathStatus.Success)
-        {
-            throw new Exception($"Parent category not found at segment '{pathResult.MissingSegment}' (level {pathResult.MissingAtLevel})");
-        }
-        
-        var parentCategory = pathResult.Category;
-        
-        // 5. Create category definition
-        var definition = new CategoryDefinition(
-            name
-        );
 
         var ownerResult = await profileRepository.GetByIdAsync(userId);
         if (!ownerResult.IsSuccess || ownerResult.Profile == null)
@@ -72,14 +56,32 @@ public class UserBasedCategoryService(
         }
 
         var profile = ownerResult.Profile;
+        
+        // 3. Find the parent category by path
+        var pathResult = await repository.GetByPathAsync(userId, parentPath);
+        
+        var parentCategory = pathResult.Category;
+
+        // 4. Handle PARENT NOT FOUND scenario
+        if (pathResult.Status != CategoryPathStatus.Success)
+        {
+            parentCategory = options.ParentNotFoundBehavior switch
+            {
+                ParentNotFoundBehavior.Throw => throw new Exception($"Parent category not found at segment '{pathResult.MissingSegment}' (level {pathResult.MissingAtLevel})"),
+                
+                ParentNotFoundBehavior.Create => await CreateParentPathAsync(parentPath),
+                        
+                _ => throw new Exception("Invalid ParentNotFoundBehavior option"),
+            };       
+        }
+        
+        
+        // 5. Create category definition
+        var definition = new CategoryDefinition(
+            name
+        );
 
         var createResult = await repository.CreateAsync(profile, parentCategory, definition);
-
-        // 8. Handle creation result
-        if (createResult.Status == CategoryCreateStatus.Success)
-        {
-            return createResult.Category!;
-        }
         
         if (createResult.Status == CategoryCreateStatus.AlreadyExists)
         {
@@ -111,6 +113,55 @@ public class UserBasedCategoryService(
             throw new Exception("Invalid parent category");
         }
         
-        throw new Exception($"Unexpected create status: {createResult.Status}");
+        await unitOfWork.SaveChangesAsync();
+        return createResult.Category!;
+    }
+
+    // Helper method to create missing parent path recursively
+    private async Task<HeuteCategory> CreateParentPathAsync(CategoryPath path)
+    {        
+        var userId = userContext.GetUserIdOrThrow();
+
+        var ownerResult = await profileRepository.GetByIdAsync(userId);
+        if (!ownerResult.IsSuccess || ownerResult.Profile == null)
+        {
+            throw new Exception($"Owner profile not found for user ID '{userId}'.");
+        }
+
+        var profile = ownerResult.Profile;
+
+        HeuteCategory? currentParent = null;
+        var segments = path.Segments;
+        
+        for (int i = 0; i < segments.Length; i++)
+        {
+            var segment = segments[i];
+            
+            // Build path up to current segment
+            var currentPath = CategoryPath.FromSegments([.. segments.Take(i + 1)]);
+            
+            // Check if this category already exists
+            var existingResult = await repository.GetByPathAsync(profile.Id, currentPath);
+            
+            if (existingResult.Status == CategoryPathStatus.Success)
+            {
+                // Category exists, use it as parent for next level
+                currentParent = existingResult.Category;
+                continue;
+            }
+            
+            // Category doesn't exist, create it
+            var definition = new CategoryDefinition(segment);
+            var createResult = await repository.CreateAsync(profile, currentParent, definition);
+            
+            if (createResult.Status != CategoryCreateStatus.Success)
+            {
+                throw new Exception($"Failed to create parent category '{segment}' at path {currentPath}");
+            }
+            
+            currentParent = createResult.Category;
+        }
+        
+        return currentParent!;
     }
 }
