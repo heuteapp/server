@@ -125,4 +125,36 @@ public sealed partial record CategoryPath
             yield return new CategoryPath(currentPath);
         }
     }
+
+    //
+
+    public static CategoryPath Combine(CategoryPath parent, string child)
+    {
+        ArgumentNullException.ThrowIfNull(parent);
+
+        if (string.IsNullOrWhiteSpace(child))
+            throw new ArgumentException("Child segment cannot be empty", nameof(child));
+        
+        ValidateSegment(child);
+        
+        var combinedPath = $"{parent.Value}/{child}";
+        return new CategoryPath(combinedPath);
+    }
+    
+    public static CategoryPath Combine(string parent, string child)
+    {
+        if (string.IsNullOrWhiteSpace(parent))
+            throw new ArgumentException("Parent path cannot be empty", nameof(parent));
+        
+        if (string.IsNullOrWhiteSpace(child))
+            throw new ArgumentException("Child segment cannot be empty", nameof(child));
+        
+        var combinedPath = $"{parent.Trim().TrimEnd('/')}/{child.Trim()}";
+        return Create(combinedPath);
+    }
+    
+    public CategoryPath Append(string child)
+    {
+        return Combine(this, child);
+    }
 }
