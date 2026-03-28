@@ -16,7 +16,7 @@ public sealed class UserContext(
         UserId = id;
     }
 
-    public async Task<HeuteProfile?> GetProfileAsync()
+    public async Task<HeuteProfile> GetProfileAsync()
     {
         if (_profileCache != null) return _profileCache;
 
