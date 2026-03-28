@@ -1,4 +1,4 @@
-using HeuteApp.Core.ValueObjects.Category;
+using HeuteApp.Core.ValueObjects.Category.Path;
 
 namespace HeuteApp.Core.ValueObjects.Dailyboard;
 

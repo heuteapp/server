@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace HeuteApp.Core.ValueObjects.Category;
+namespace HeuteApp.Core.ValueObjects.Category.Path;
 
 public sealed partial record CategoryPath
 {
