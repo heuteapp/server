@@ -1,3 +1,5 @@
+using HeuteApp.Core.Aggregates.Profile;
+
 namespace HeuteApp.Application.Interfaces.UserBased;
 
 public interface IUserContext
@@ -5,6 +7,8 @@ public interface IUserContext
     public Guid? UserId { get; }
 
     public void SetUser(Guid userId);
+
+    public Task<HeuteProfile?> GetProfileAsync();
 
     public Guid GetUserIdOrThrow()
     {
