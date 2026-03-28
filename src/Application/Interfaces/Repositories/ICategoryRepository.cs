@@ -8,7 +8,7 @@ namespace HeuteApp.Application.Interfaces.Repositories;
 
 public interface ICategoryRepository
 {    
-    Task<HeuteCategory?> GetByIdAsync(Guid categoryId);
+    Task<CategoryGetResult> GetByIdAsync(Guid categoryId);
 
     Task<CategoryPathResult> GetByPathAsync(Guid ownerId, CategoryPath path);
 

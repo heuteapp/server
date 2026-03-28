@@ -14,12 +14,22 @@ namespace HeuteApp.Infrastructure.Repositories;
 
 public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
 {
-    public async Task<HeuteCategory?> GetByIdAsync(Guid categoryId)
+    public async Task<CategoryGetResult> GetByIdAsync(Guid categoryId)
     {
         var category = await context.Categories
             .FirstOrDefaultAsync(c => c.Id == categoryId);
 
-        return category;
+        return category == null
+            ? new CategoryGetResult
+            {
+                Category = null,
+                Status = CategoryGetStatus.NotFound
+            }
+            : new CategoryGetResult
+            {
+                Category = category,
+                Status = CategoryGetStatus.Success
+            };
     }
 
     public async Task<CategoryPathResult> GetByPathAsync(Guid ownerId, CategoryPath path)
