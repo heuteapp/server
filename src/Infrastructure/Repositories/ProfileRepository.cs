@@ -1,43 +1,105 @@
-using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Core.ValueObjects.Profile;
 using HeuteApp.Application.Interfaces.Repositories;
 using HeuteApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using HeuteApp.Infrastructure.Models.Profile;
+using HeuteApp.Application.Results.Profile.Repository;
+using HeuteApp.Application.Enums.Results.Profile.Repository;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
 public class ProfileRepository(HeuteDbContext context) : IProfileRepository
 {
-    public async Task<HeuteProfile?> GetByIdAsync(Guid userId)
+    public async Task<ProfileGetResult> GetByIdAsync(Guid userId)
     {
-        var user = await context.Profiles
+        var profile = await context.Profiles
             .FirstOrDefaultAsync(c => c.Id == userId);
 
-        return user;
+        return profile == null
+            ? new ProfileGetResult
+            {
+                Profile = null,
+                Status = ProfileGetStatus.NotFound
+            }
+            : new ProfileGetResult
+            {
+                Profile = profile,
+                Status = ProfileGetStatus.Success
+            };
     }
 
-    public async Task<HeuteProfile?> GetByUsernameAsync(string username)
+    public async Task<ProfileGetResult> GetByUsernameAsync(string username)
     {
-        var user = await context.Profiles
+        var profile = await context.Profiles
             .FirstOrDefaultAsync(c => c.Username == username);
 
-        return user;
+        return profile == null
+            ? new ProfileGetResult
+            {
+                Profile = null,
+                Status = ProfileGetStatus.NotFound
+            }
+            : new ProfileGetResult
+            {
+                Profile = profile,
+                Status = ProfileGetStatus.Success
+            };
     }
 
-    public async Task<HeuteProfile?> GetByEmailAsync(string email)
+    public async Task<ProfileGetResult> GetByEmailAsync(string email)
     {
-        var user = await context.Profiles
+        var profile = await context.Profiles
             .FirstOrDefaultAsync(c => c.Email == email);
 
-        return user;
+        return profile == null
+            ? new ProfileGetResult
+            {
+                Profile = null,
+                Status = ProfileGetStatus.NotFound
+            }
+            : new ProfileGetResult
+            {
+                Profile = profile,
+                Status = ProfileGetStatus.Success
+            };
     }
 
-    public async Task<HeuteProfile> CreateAsync(ProfileDefinition definition)
+    public async Task<ProfileCreateResult> CreateAsync(ProfileDefinition definition)
     {
-        var user = HeuteProfileModel.Create(definition);
-
-        context.Profiles.Add(user);
-        return user;
+        var usernameExists = await context.Profiles
+            .AnyAsync(p => p.Username == definition.Username);
+        
+        if (usernameExists)
+        {
+            return new ProfileCreateResult
+            {
+                Profile = null,
+                Status = ProfileCreateStatus.UsernameAlreadyExists,
+                ExistingIdentifier = definition.Username
+            };
+        }
+        
+        var emailExists = await context.Profiles
+            .AnyAsync(p => p.Email == definition.Email);
+        
+        if (emailExists)
+        {
+            return new ProfileCreateResult
+            {
+                Profile = null,
+                Status = ProfileCreateStatus.EmailAlreadyExists,
+                ExistingIdentifier = definition.Email
+            };
+        }
+        
+        var profile = HeuteProfileModel.Create(definition);
+        await context.Profiles.AddAsync(profile);
+        
+        return new ProfileCreateResult
+        {
+            Profile = profile,
+            Status = ProfileCreateStatus.Success,
+            ExistingIdentifier = null
+        };
     }
 }
