@@ -8,6 +8,8 @@ public sealed record CategoryOwnership
 
     public Guid OwnerId { get; private set; } = Guid.Empty;
 
+    public Guid? ParentId { get; private set; } = null;
+
     //
 
     private CategoryOwnership() { }

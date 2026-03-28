@@ -10,6 +10,7 @@ public class HeuteCategory
     {
         Id = Guid.NewGuid();
         OwnerId = ownership.OwnerId;
+        ParentId = ownership.ParentId;
         Name = definition.Key.Name;
     }
 
@@ -25,6 +26,8 @@ public class HeuteCategory
     public Guid Id { get; private set; } = Guid.Empty;
 
     public Guid OwnerId { get; internal set; } = Guid.Empty;
+
+    public Guid? ParentId { get; internal set; } = null;
 
     public string Name { get; private set; } = string.Empty;
 }
