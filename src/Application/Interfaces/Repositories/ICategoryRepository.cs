@@ -10,5 +10,5 @@ public interface ICategoryRepository
 
     Task<HeuteCategory?> GetByKeyAsync(CategoryOwnership ownership, CategoryKey key);
 
-    Task<HeuteCategory> CreateAsync(HeuteProfile owner, CategoryDefinition definition);
+    Task<HeuteCategory> CreateAsync(HeuteProfile owner, HeuteCategory? parent, CategoryDefinition definition);
 }

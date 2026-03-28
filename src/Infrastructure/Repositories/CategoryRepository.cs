@@ -27,12 +27,15 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         return category;
     }
 
-    public async Task<HeuteCategory> CreateAsync(HeuteProfile owner, CategoryDefinition definition)
+    public async Task<HeuteCategory> CreateAsync(HeuteProfile owner, HeuteCategory? parent, CategoryDefinition definition)
     {
         if(owner is not HeuteProfileModel ownerModel)
             throw new ArgumentException("Owner must be a HeuteProfileModel", nameof(owner));
 
-        var category = HeuteCategoryModel.Create(ownerModel, definition);
+        if(parent is not HeuteCategoryModel parentModel)
+            throw new ArgumentException("Parent must be a HeuteCategoryModel", nameof(parent));
+
+        var category = HeuteCategoryModel.Create(ownerModel, parentModel, definition);
 
         context.Categories.Add(category);
         return category;
