@@ -1,7 +1,7 @@
+using HeuteApp.Application.Enums.Results.Category.Repository;
 using HeuteApp.Core.Aggregates.Category;
-using HeuteApp.Core.Enums.Category.Path;
 
-namespace HeuteApp.Core.ValueObjects.Category.Path;
+namespace HeuteApp.Application.Results.Category.Repository;
 
 public record CategoryPathResult
 {

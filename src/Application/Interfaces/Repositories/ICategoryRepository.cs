@@ -1,3 +1,4 @@
+using HeuteApp.Application.Results.Category.Repository;
 using HeuteApp.Core.Aggregates.Category;
 using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Core.ValueObjects.Category;

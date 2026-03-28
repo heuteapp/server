@@ -1,4 +1,4 @@
-namespace HeuteApp.Core.Enums.Category.Path;
+namespace HeuteApp.Application.Enums.Results.Category.Repository;
 
 public enum CategoryPathStatus
 {
