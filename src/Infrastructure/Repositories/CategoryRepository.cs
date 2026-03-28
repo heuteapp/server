@@ -7,6 +7,7 @@ using HeuteApp.Infrastructure.Models.Category;
 using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Infrastructure.Models.Profile;
 using HeuteApp.Core.ValueObjects.Category.Path;
+using HeuteApp.Core.Enums.Category.Path;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
@@ -20,13 +21,16 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         return category;
     }
 
-    public async Task<HeuteCategory?> GetByPathAsync(Guid ownerId, CategoryPath path)
+    public async Task<CategoryPathResult> GetByPathAsync(Guid ownerId, CategoryPath path)
     {
         HeuteCategory? current = null;
         Guid? parentId = null;
+        var segments = path.Segments;
         
-        foreach (var segment in path.Segments)
+        for (int i = 0; i < segments.Length; i++)
         {
+            var segment = segments[i];
+            
             current = await context.Categories
                 .FirstOrDefaultAsync(c => 
                     c.OwnerId == ownerId && 
@@ -34,12 +38,26 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
                     c.Name == segment);
             
             if (current == null)
-                return null;
+            {
+                return new CategoryPathResult
+                {
+                    Category = null,
+                    Status = CategoryPathStatus.SegmentMissing,
+                    MissingSegment = segment,
+                    MissingAtLevel = i + 1
+                };
+            }
             
             parentId = current.Id;
         }
         
-        return current;
+        return new CategoryPathResult
+        {
+            Category = current,
+            Status = CategoryPathStatus.Success,
+            MissingSegment = null,
+            MissingAtLevel = null
+        };
     }
 
     public async Task<HeuteCategory> CreateAsync(HeuteProfile owner, HeuteCategory? parent, CategoryDefinition definition)
