@@ -18,10 +18,11 @@ public sealed class UserContext(
 
     public async Task<HeuteProfile?> GetProfileAsync()
     {
-        if (!UserId.HasValue) return null;
         if (_profileCache != null) return _profileCache;
 
-        _profileCache = await profileService.GetProfileByIdAsync(UserId.Value);
+        var id = (this as IUserContext).GetUserIdOrThrow();
+        _profileCache = await profileService.GetProfileByIdAsync(id);
+        
         return _profileCache;
     }
 }
