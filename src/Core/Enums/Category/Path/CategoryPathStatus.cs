@@ -5,6 +5,4 @@ public enum CategoryPathStatus
     Success,
     
     SegmentMissing,
-
-    PathInvalid
 }
