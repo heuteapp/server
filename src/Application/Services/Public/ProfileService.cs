@@ -7,24 +7,33 @@ namespace HeuteApp.Application.Services.Public;
 
 public class PublicProfileService(IProfileRepository repository, IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteProfile?> GetProfileByIdentifierAsync(string identifier)
+    public async Task<HeuteProfile> GetProfileByIdentifierAsync(string identifier)
     {
-        if(identifier.Contains('@'))
-            return await repository.GetByEmailAsync(identifier);
-        else
-            return await repository.GetByUsernameAsync(identifier);
+        var isEmail = identifier.Contains('@');
+        
+        var result = isEmail 
+            ? await repository.GetByEmailAsync(identifier) 
+            : await repository.GetByUsernameAsync(identifier);
+
+        if (!result.IsSuccess || result.Profile == null)
+        {
+            throw new Exception($"Profile with {(isEmail ? "email" : "username")} '{identifier}' not found.");
+        }
+
+        return result.Profile;
     }
 
     public async Task<HeuteProfile> CreateProfileAsync(ProfileDefinition definition)
     {
-        var existing = await repository.GetByUsernameAsync(definition.Props.Username);
+        var result = await repository.CreateAsync(definition);
 
-        if (existing != null)
-            throw new Exception($"Profile already exists for username '{definition.Props.Username}'.");
-
-        var profile = await repository.CreateAsync(definition);
+        if (!result.IsSuccess || result.Profile == null)
+        {
+            throw new Exception($"Failed to create profile: {result.Status}");
+        }
 
         await unitOfWork.SaveChangesAsync();
-        return profile;
+
+        return result.Profile;
     }
 }
