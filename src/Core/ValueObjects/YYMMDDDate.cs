@@ -15,14 +15,14 @@ public sealed record YYMMDDDate
             throw new ArgumentException("Date cannot be empty", nameof(dateStr));
         
         if (!TryParse(dateStr, out var date))
-            throw new ArgumentException($"Invalid date format: {dateStr}. Expected yyMMdd (e.g., 240115 for 2024-01-15)", nameof(dateStr));
+            throw new ArgumentException($"Invalid date format: {dateStr}. Expected yyMMdd (e.g., 260409 for 2026-04-09)", nameof(dateStr));
         
-        return new YYMMDDDate(date);
+        return date!;
     }
     
-    public static bool TryParse(string dateStr, out DateTime date)
+    public static bool TryParse(string dateStr, out YYMMDDDate? date)
     {
-        date = default;
+        date = null;
         
         if (string.IsNullOrWhiteSpace(dateStr))
             return false;
@@ -43,7 +43,8 @@ public sealed record YYMMDDDate
         
         try
         {
-            date = new DateTime(2000 + yy, mm, dd);
+            var dateTime = new DateTime(2000 + yy, mm, dd);
+            date = new YYMMDDDate(dateTime);
             return true;
         }
         catch
