@@ -15,7 +15,7 @@ public class HeuteLayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
        builder.Property(c => c.Id)
               .ValueGeneratedNever();
 
-       builder.Property(l => l.OwnerId)
+       builder.Property(l => l.UserId)
               .IsRequired();
 
        builder.Property(l => l.Name)
@@ -35,12 +35,12 @@ public class HeuteLayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
               .IsRequired();
        });
 
-       builder.HasOne(l => l.Owner)
+       builder.HasOne(l => l.Profile)
               .WithMany()
-              .HasForeignKey(l => l.OwnerId)
+              .HasForeignKey(l => l.UserId)
               .OnDelete(DeleteBehavior.Restrict);
 
-       builder.HasIndex(l => new { l.OwnerId, l.Name, l.Version })
+       builder.HasIndex(l => new { l.UserId, l.Name, l.Version })
               .IsUnique();
     }
 }

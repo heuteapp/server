@@ -15,7 +15,7 @@ public class HeuteDailyboardConfig : IEntityTypeConfiguration<HeuteDailyboardMod
         builder.Property(c => c.Id)
             .ValueGeneratedNever();
 
-        builder.Property(b => b.OwnerId)
+        builder.Property(b => b.UserId)
             .IsRequired();
 
         builder.Property(b => b.LayoutId)
@@ -27,9 +27,9 @@ public class HeuteDailyboardConfig : IEntityTypeConfiguration<HeuteDailyboardMod
         builder.Property(b => b.Date)
             .IsRequired();
 
-        builder.HasOne(b => b.Owner)
+        builder.HasOne(b => b.Profile)
             .WithMany()
-            .HasForeignKey(b => b.OwnerId)
+            .HasForeignKey(b => b.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(b => b.Category)
@@ -42,7 +42,7 @@ public class HeuteDailyboardConfig : IEntityTypeConfiguration<HeuteDailyboardMod
             .HasForeignKey(b => b.LayoutId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasIndex(b => new { b.OwnerId, b.Date })
+        builder.HasIndex(b => new { b.UserId, b.Date })
             .IsUnique();
     }
 }

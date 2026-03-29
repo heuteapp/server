@@ -8,20 +8,20 @@ public class HeuteCategoryModel : HeuteCategory
 {
     protected HeuteCategoryModel() { }
 
-    protected HeuteCategoryModel(HeuteProfileModel owner, HeuteCategoryModel? parent, CategoryDefinition definition) : base(owner.Id, parent?.Id, definition) 
+    protected HeuteCategoryModel(HeuteProfileModel profile, HeuteCategoryModel? parent, CategoryDefinition definition) : base(profile.Id, parent?.Id, definition) 
     {
-        Owner = owner;
+        Profile = profile;
         Parent = parent;
     }
 
     //
 
-    public HeuteProfileModel Owner { get; private set; } = null!;
+    public HeuteProfileModel Profile { get; private set; } = null!;
 
     public HeuteCategoryModel? Parent { get; private set; } = null;
 
-    public static HeuteCategoryModel Create(HeuteProfileModel owner, HeuteCategoryModel? parent, CategoryDefinition definition)
+    public static HeuteCategoryModel Create(HeuteProfileModel profile, HeuteCategoryModel? parent, CategoryDefinition definition)
     {
-        return new HeuteCategoryModel(owner, parent, definition);
+        return new HeuteCategoryModel(profile, parent, definition);
     }
 }

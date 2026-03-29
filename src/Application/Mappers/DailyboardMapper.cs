@@ -11,7 +11,7 @@ public static class DailyboardMapper
 
         return new DailyboardResult(
             dailyboard.Id,
-            dailyboard.OwnerId,
+            dailyboard.UserId,
             dailyboard.LayoutId,
             dailyboard.CategoryId,
             dailyboard.Date,

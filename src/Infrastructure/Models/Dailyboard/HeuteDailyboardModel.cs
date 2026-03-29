@@ -15,16 +15,16 @@ public class HeuteDailyboardModel : HeuteDailyboard
 
     protected HeuteDailyboardModel() { }
 
-    protected HeuteDailyboardModel(HeuteProfileModel owner,  HeuteCategoryModel category, HeuteLayoutModel layout, DailyboardDefinition definition) : base(owner.Id, category.Id, layout.Id, definition)
+    protected HeuteDailyboardModel(HeuteProfileModel profile,  HeuteCategoryModel category, HeuteLayoutModel layout, DailyboardDefinition definition) : base(profile.Id, category.Id, layout.Id, definition)
     { 
-        Owner = owner;
+        Profile = profile;
         Category = category;
         Layout = layout;
     }
 
     //
 
-    public HeuteProfileModel Owner { get; private set; } = null!;
+    public HeuteProfileModel Profile { get; private set; } = null!;
 
     public HeuteCategoryModel Category { get; private set; } = null!;
 
@@ -32,8 +32,8 @@ public class HeuteDailyboardModel : HeuteDailyboard
 
     //
 
-    public static HeuteDailyboardModel Create(HeuteProfileModel owner, HeuteCategoryModel category, HeuteLayoutModel layout, DailyboardDefinition definition)
+    public static HeuteDailyboardModel Create(HeuteProfileModel profile, HeuteCategoryModel category, HeuteLayoutModel layout, DailyboardDefinition definition)
     {
-        return new HeuteDailyboardModel(owner, category, layout, definition);
+        return new HeuteDailyboardModel(profile, category, layout, definition);
     }
 }

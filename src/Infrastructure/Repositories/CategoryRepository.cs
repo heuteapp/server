@@ -32,7 +32,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
             };
     }
 
-    public async Task<CategoryPathResult> GetByPathAsync(Guid ownerId, CategoryPath path)
+    public async Task<CategoryPathResult> GetByPathAsync(Guid userId, CategoryPath path)
     {
         HeuteCategory? current = null;
         Guid? parentId = null;
@@ -44,7 +44,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
             
             current = await context.Categories
                 .FirstOrDefaultAsync(c => 
-                    c.OwnerId == ownerId && 
+                    c.UserId == userId && 
                     c.ParentId == parentId && 
                     c.Name == segment);
             
@@ -71,9 +71,9 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         };
     }
 
-    public async Task<CategoryCreateResult> CreateAsync(HeuteProfile owner, HeuteCategory? parent, CategoryDefinition definition)
+    public async Task<CategoryCreateResult> CreateAsync(HeuteProfile profile, HeuteCategory? parent, CategoryDefinition definition)
     {
-        if (owner is not HeuteProfileModel ownerModel)
+        if (profile is not HeuteProfileModel ownerModel)
         {
             return new CategoryCreateResult
             {
@@ -85,7 +85,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
 
         var exists = await context.Categories
             .AnyAsync(c => 
-                c.OwnerId == owner.Id && 
+                c.UserId == profile.Id && 
                 (parent == null ? c.ParentId == null : c.ParentId == parent.Id) && 
                 c.Name == definition.Key.Name);
         

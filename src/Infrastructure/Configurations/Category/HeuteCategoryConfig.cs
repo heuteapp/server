@@ -15,15 +15,15 @@ public class HeuteCategoryConfig : IEntityTypeConfiguration<HeuteCategoryModel>
         builder.Property(c => c.Id)
             .ValueGeneratedNever();
 
-        builder.Property(c => c.OwnerId)
+        builder.Property(c => c.UserId)
             .IsRequired();
 
         builder.Property(b => b.Name)
             .IsRequired();
 
-        builder.HasOne(c => c.Owner)
+        builder.HasOne(c => c.Profile)
             .WithMany()
-            .HasForeignKey(c => c.OwnerId)
+            .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

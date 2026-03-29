@@ -45,7 +45,7 @@ public class UserBasedCategoryService(
         // 1. Set default options
         options ??= new CreateCategoryOptions();
         
-        // 2. Get the current owner profile
+        // 2. Get the current profile profile
         var profile = await userContext.GetProfileAsync();
         
         // 3. Find the parent category by path

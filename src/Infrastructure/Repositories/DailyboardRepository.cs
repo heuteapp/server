@@ -42,7 +42,7 @@ public class DailyboardRepository(HeuteDbContext context) : IDailyboardRepositor
             .Include(b => b.Cards)
             .Include(b => b.Layout)
             .FirstOrDefaultAsync(b => 
-                b.OwnerId == userId && 
+                b.UserId == userId && 
                 b.CategoryId == categoryId && 
                 b.Date == key.Date);
 
@@ -101,7 +101,7 @@ public class DailyboardRepository(HeuteDbContext context) : IDailyboardRepositor
         // Check if already exists
         var exists = await context.Dailyboards
             .AnyAsync(b => 
-                b.OwnerId == profile.Id && 
+                b.UserId == profile.Id && 
                 b.CategoryId == category.Id && 
                 b.Date == definition.Date);
 

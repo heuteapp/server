@@ -12,7 +12,7 @@ public class HeuteLayout
     protected HeuteLayout(Guid userId, LayoutDefinition definition)
     {
         Id = Guid.NewGuid();
-        OwnerId = userId;
+        UserId = userId;
         Name = definition.Key.Name;
         Version = definition.Key.Version;
         Dimensions = definition.Props.Dimensions;
@@ -40,7 +40,7 @@ public class HeuteLayout
 
     public Guid Id { get; private set; } = Guid.Empty;
 
-    public Guid OwnerId { get; private set; } = Guid.Empty;
+    public Guid UserId { get; private set; } = Guid.Empty;
 
     public string Name { get; private set; } = string.Empty;
 

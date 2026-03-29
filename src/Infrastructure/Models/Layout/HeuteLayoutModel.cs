@@ -13,19 +13,19 @@ public class HeuteLayoutModel : HeuteLayout
 
     protected HeuteLayoutModel() { }
 
-    protected HeuteLayoutModel(HeuteProfileModel owner, LayoutDefinition definition) : base(owner.Id, definition) 
+    protected HeuteLayoutModel(HeuteProfileModel profile, LayoutDefinition definition) : base(profile.Id, definition) 
     {
-        Owner = owner;
+        Profile = profile;
     }
 
     //
 
-    public HeuteProfileModel Owner { get; private set; } = null!;
+    public HeuteProfileModel Profile { get; private set; } = null!;
 
     //
 
-    public static HeuteLayoutModel Create(HeuteProfileModel owner, LayoutDefinition definition)
+    public static HeuteLayoutModel Create(HeuteProfileModel profile, LayoutDefinition definition)
     {
-        return new HeuteLayoutModel(owner, definition);
+        return new HeuteLayoutModel(profile, definition);
     }
 }

@@ -4,7 +4,7 @@ namespace HeuteApp.Application.Results.Layout;
 
 public record LayoutResult(
     Guid Id,
-    Guid? OwnerId,
+    Guid? UserId,
     string Name,
     int Version,
     GridDimensions Dimensions,

@@ -11,7 +11,7 @@ public static class LayoutMapper
         
         return new LayoutResult(
             layout.Id,
-            layout.OwnerId,
+            layout.UserId,
             layout.Name,
             layout.Version,
             layout.Dimensions,

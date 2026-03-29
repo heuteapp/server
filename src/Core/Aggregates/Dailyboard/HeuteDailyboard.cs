@@ -15,7 +15,7 @@ public class HeuteDailyboard
     protected HeuteDailyboard(Guid userId, Guid categoryId, Guid layoutId, DailyboardDefinition definition)
     {
         Id = Guid.NewGuid();
-        OwnerId = userId;
+        UserId = userId;
         CategoryId = categoryId;
         LayoutId = layoutId;
         Date = definition.Date;
@@ -34,7 +34,7 @@ public class HeuteDailyboard
 
     public Guid Id { get; private set; } = Guid.Empty;
 
-    public Guid OwnerId { get; private set; } = Guid.Empty;
+    public Guid UserId { get; private set; } = Guid.Empty;
 
     public Guid LayoutId { get; private set; } = Guid.Empty;
 

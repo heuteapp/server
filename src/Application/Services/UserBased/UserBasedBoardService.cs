@@ -39,7 +39,7 @@ public class UserBasedDailyboardService(
 
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var owner = await profileRepository.GetByIdAsync(userId)
+        var profile = await profileRepository.GetByIdAsync(userId)
             ?? throw new Exception($"User not found.");
 
         var category = await categoryRepository.GetByKeyAsync(new(userId), categoryKey)
@@ -54,7 +54,7 @@ public class UserBasedDailyboardService(
         if (existing != null)
             throw new Exception("Dailyboard already exists for this date.");
 
-        var dailyboard = await dailyboardRepository.CreateAsync(owner, category, layout, new(Key, DailyboardProps.Empty));
+        var dailyboard = await dailyboardRepository.CreateAsync(profile, category, layout, new(Key, DailyboardProps.Empty));
         await unitOfWork.SaveChangesAsync();
 
         return dailyboard.ToResult();
