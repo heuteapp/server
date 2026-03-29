@@ -6,19 +6,18 @@ public class HeuteCategory
 {
     protected HeuteCategory() { }
 
-    protected HeuteCategory(CategoryOwnership ownership, CategoryDefinition definition)
+    protected HeuteCategory(Guid userId, Guid? parentId, CategoryDefinition definition)
     {
         Id = Guid.NewGuid();
-        OwnerId = ownership.OwnerId;
-        ParentId = ownership.ParentId;
+        OwnerId = userId;
+        ParentId = parentId;
         Name = definition.Key.Name;
     }
 
-    public static HeuteCategory Create(CategoryOwnership ownership, CategoryDefinition definition)
+    public static HeuteCategory Create(Guid userId, Guid? parentId, CategoryDefinition definition)
     {
-        ArgumentNullException.ThrowIfNull(ownership);
         ArgumentNullException.ThrowIfNull(definition);
-        return new HeuteCategory(ownership, definition);
+        return new HeuteCategory(userId, parentId, definition);
     }
 
     //

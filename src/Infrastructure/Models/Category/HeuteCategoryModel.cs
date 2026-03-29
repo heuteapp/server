@@ -8,7 +8,7 @@ public class HeuteCategoryModel : HeuteCategory
 {
     protected HeuteCategoryModel() { }
 
-    protected HeuteCategoryModel(HeuteProfileModel owner, HeuteCategoryModel? parent, CategoryDefinition definition) : base(new (owner.Id), definition) 
+    protected HeuteCategoryModel(HeuteProfileModel owner, HeuteCategoryModel? parent, CategoryDefinition definition) : base(owner.Id, parent?.Id, definition) 
     {
         Owner = owner;
         Parent = parent;

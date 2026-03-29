@@ -12,20 +12,22 @@ public class HeuteDailyboard
 
     protected HeuteDailyboard() { }
 
-    protected HeuteDailyboard(DailyboardOwnership ownership, DailyboardReference reference, DailyboardDefinition definition)
+    protected HeuteDailyboard(Guid userId, Guid categoryId, Guid layoutId, DailyboardDefinition definition)
     {
         Id = Guid.NewGuid();
-        OwnerId = ownership.OwnerId;
-        CategoryId = ownership.CategoryId;
-        LayoutId = reference.LayoutId;
+        OwnerId = userId;
+        CategoryId = categoryId;
+        LayoutId = layoutId;
         Date = definition.Date;
     }
 
     //
 
-    public static HeuteDailyboard Create(DailyboardOwnership ownership, DailyboardReference reference, DailyboardDefinition definition)
+    public static HeuteDailyboard Create(Guid userId, Guid categoryId, Guid layoutId, DailyboardDefinition definition)
     {
-        return new HeuteDailyboard(ownership, reference, definition);
+        ArgumentNullException.ThrowIfNull(definition);
+
+        return new HeuteDailyboard(userId, categoryId, layoutId, definition);
     }
 
     //

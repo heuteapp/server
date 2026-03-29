@@ -15,7 +15,7 @@ public class HeuteDailyboardModel : HeuteDailyboard
 
     protected HeuteDailyboardModel() { }
 
-    protected HeuteDailyboardModel(HeuteProfileModel owner,  HeuteCategoryModel category, HeuteLayoutModel layout, DailyboardDefinition definition) : base(new(owner.Id, category.Id), new (layout.Id), definition)
+    protected HeuteDailyboardModel(HeuteProfileModel owner,  HeuteCategoryModel category, HeuteLayoutModel layout, DailyboardDefinition definition) : base(owner.Id, category.Id, layout.Id, definition)
     { 
         Owner = owner;
         Category = category;
