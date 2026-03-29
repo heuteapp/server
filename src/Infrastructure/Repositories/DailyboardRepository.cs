@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using HeuteApp.Core.Aggregates.Dailyboard;
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Application.Interfaces.Repositories;
 using HeuteApp.Infrastructure.Persistence;
@@ -10,45 +9,121 @@ using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Infrastructure.Models.Profile;
 using HeuteApp.Core.Aggregates.Category;
 using HeuteApp.Infrastructure.Models.Category;
+using HeuteApp.Application.Results.Dailyboard.Repository;
+using HeuteApp.Application.Enums.Results.Dailyboard.Repository;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
-public class DailyboardRepository(HeuteDbContext conext) : IDailyboardRepository
+public class DailyboardRepository(HeuteDbContext context) : IDailyboardRepository
 {
-    public async Task<HeuteDailyboard?> GetByIdAsync(Guid dailyboardId)
+    public async Task<DailyboardGetResult> GetByIdAsync(Guid dailyboardId)
     {
-        var entity = await conext.Dailyboards
+        var entity = await context.Dailyboards
             .Include(b => b.Layout)
             .Include(b => b.Cards)
             .FirstOrDefaultAsync(b => b.Id == dailyboardId);
 
-        return entity;
+        return entity == null
+            ? new DailyboardGetResult
+            {
+                Dailyboard = null,
+                Status = DailyboardGetStatus.NotFound
+            }
+            : new DailyboardGetResult
+            {
+                Dailyboard = entity,
+                Status = DailyboardGetStatus.Success
+            };
     }
 
-    public async Task<HeuteDailyboard?> GetByKeyAsync(DailyboardOwnership ownership, DailyboardKey key)
+    public async Task<DailyboardGetResult> GetByKeyAsync(DailyboardOwnership ownership, DailyboardKey key)
     {
-        var entity = await conext.Dailyboards
+        var entity = await context.Dailyboards
             .Include(b => b.Cards)
             .Include(b => b.Layout)
-            .FirstOrDefaultAsync(b => b.OwnerId == ownership.OwnerId && b.CategoryId == ownership.CategoryId && b.Date == key.Date);
+            .FirstOrDefaultAsync(b => 
+                b.OwnerId == ownership.OwnerId && 
+                b.CategoryId == ownership.CategoryId && 
+                b.Date == key.Date);
 
-        return entity;
+        return entity == null
+            ? new DailyboardGetResult
+            {
+                Dailyboard = null,
+                Status = DailyboardGetStatus.NotFound
+            }
+            : new DailyboardGetResult
+            {
+                Dailyboard = entity,
+                Status = DailyboardGetStatus.Success
+            };
     }
 
-    public Task<HeuteDailyboard> CreateAsync(HeuteProfile profile, HeuteCategory category, HeuteLayout layout, DailyboardDefinition definition)
+    public async Task<DailyboardCreateResult> CreateAsync(
+        HeuteProfile profile, 
+        HeuteCategory category, 
+        HeuteLayout layout, 
+        DailyboardDefinition definition)
     {
-        if(profile is not HeuteProfileModel profileModel)
-            throw new ArgumentException("Expected HeuteProfileModel", nameof(profile));
+        // Profile validation
+        if (profile is not HeuteProfileModel profileModel)
+        {
+            return new DailyboardCreateResult
+            {
+                Dailyboard = null,
+                Status = DailyboardCreateStatus.InvalidProfile,
+                ErrorMessage = "Invalid profile model"
+            };
+        }
 
-        if(category is not HeuteCategoryModel categoryModel)
-            throw new ArgumentException("Expected HeuteCategoryModel", nameof(category));
+        // Category validation
+        if (category is not HeuteCategoryModel categoryModel)
+        {
+            return new DailyboardCreateResult
+            {
+                Dailyboard = null,
+                Status = DailyboardCreateStatus.InvalidCategory,
+                ErrorMessage = "Invalid category model"
+            };
+        }
 
-        if(layout is not HeuteLayoutModel layoutModel)
-            throw new ArgumentException("Expected HeuteLayoutModel", nameof(layout));
+        // Layout validation
+        if (layout is not HeuteLayoutModel layoutModel)
+        {
+            return new DailyboardCreateResult
+            {
+                Dailyboard = null,
+                Status = DailyboardCreateStatus.InvalidLayout,
+                ErrorMessage = "Invalid layout model"
+            };
+        }
 
+        // Check if already exists
+        var exists = await context.Dailyboards
+            .AnyAsync(b => 
+                b.OwnerId == profile.Id && 
+                b.CategoryId == category.Id && 
+                b.Date == definition.Date);
+
+        if (exists)
+        {
+            return new DailyboardCreateResult
+            {
+                Dailyboard = null,
+                Status = DailyboardCreateStatus.AlreadyExists,
+                ErrorMessage = $"Dailyboard already exists for date {definition.Date}"
+            };
+        }
+
+        // Create
         var model = HeuteDailyboardModel.Create(profileModel, categoryModel, layoutModel, definition);
-
-        conext.Dailyboards.Add(model);
-        return Task.FromResult<HeuteDailyboard>(model);
+        await context.Dailyboards.AddAsync(model);
+        
+        return new DailyboardCreateResult
+        {
+            Dailyboard = model,
+            Status = DailyboardCreateStatus.Success,
+            ErrorMessage = null
+        };
     }
 }
