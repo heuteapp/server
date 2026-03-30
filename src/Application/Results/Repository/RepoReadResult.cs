@@ -9,6 +9,18 @@ public record RepoReadResult<T> : RepoResult
     public RepoReadStatus Status { get; init; }
 
     
+    public bool IsNotFound => Status == RepoReadStatus.NotFound;
+
+    public bool IsUnauthorized => Status == RepoReadStatus.Unauthorized;
+
+    public bool IsForbidden => Status == RepoReadStatus.Forbidden;
+
+    public bool IsFailure => Status == RepoReadStatus.Failure;
+    
+    private RepoReadResult() { }
+
+    //
+    
     public static RepoReadResult<T> Success(T entity)
     {
         return new RepoReadResult<T>
@@ -16,51 +28,59 @@ public record RepoReadResult<T> : RepoResult
             IsSuccess = true,
             Entity = entity,
             Status = RepoReadStatus.Success,
-            StatusCode = 200
+            StatusCode = (int)RepoReadStatus.Success
         };
     }
     
-    public static RepoReadResult<T> Unauthorized()
+    public static RepoReadResult<T> Unauthorized(string? message = null)
     {
         return new RepoReadResult<T>
         {
             IsSuccess = false,
-            ErrorMessage = "Unauthorized access",
+            ErrorMessage = message ?? "You are not authenticated to access this resource",
             Status = RepoReadStatus.Unauthorized,
-            StatusCode = 401
+            StatusCode = (int)RepoReadStatus.Unauthorized
         };
     }
-
-    public static RepoReadResult<T> Forbidden()
+    
+    public static RepoReadResult<T> Forbidden(string? message = null)
     {
         return new RepoReadResult<T>
         {
             IsSuccess = false,
-            ErrorMessage = "Forbidden access",
+            ErrorMessage = message ?? "You do not have permission to access this resource",
             Status = RepoReadStatus.Forbidden,
-            StatusCode = 403
+            StatusCode = (int)RepoReadStatus.Forbidden
         };
     }
-
-    public static RepoReadResult<T> NotFound(string entityName)
+    
+    public static RepoReadResult<T> NotFound(string? entityName = null)
     {
+        var message = string.IsNullOrEmpty(entityName) 
+            ? "The requested resource was not found"
+            : $"{entityName} was not found";
+            
         return new RepoReadResult<T>
         {
             IsSuccess = false,
-            ErrorMessage = $"{entityName} not found",
+            ErrorMessage = message,
             Status = RepoReadStatus.NotFound,
-            StatusCode = 404
+            StatusCode = (int)RepoReadStatus.NotFound
         };
     }
-
-    public static RepoReadResult<T> Failure(string errorMessage)
+    
+    public static RepoReadResult<T> Failure(string errorMessage, Exception? exception = null)
     {
         return new RepoReadResult<T>
         {
             IsSuccess = false,
             ErrorMessage = errorMessage,
             Status = RepoReadStatus.Failure,
-            StatusCode = 500
+            StatusCode = (int)RepoReadStatus.Failure
         };
     }
+
+    //
+    
+    public static implicit operator RepoReadResult<T>(T entity) => Success(entity);
 }
