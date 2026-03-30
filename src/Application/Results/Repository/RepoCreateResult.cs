@@ -5,7 +5,7 @@ namespace HeuteApp.Application.Results.Repository;
 public record RepoCreateResult<T> : RepoResult
 {
     public T? Entity { get; init; }
-    
+
     public int? Id { get; init; }
 
     public RepoCreateStatus Status { get; init; }
@@ -21,7 +21,7 @@ public record RepoCreateResult<T> : RepoResult
 
     public bool IsFailure => Status == RepoCreateStatus.Failure;
     
-    private RepoCreateResult() { }
+    protected RepoCreateResult() { }
     
     //
     
