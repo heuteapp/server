@@ -101,4 +101,73 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         
         return CreateResult<HeuteCategory>.Success(category);
     }
+
+    public async Task<CreateResult<HeuteCategory>> CreateByPathAsync(HeuteProfile profile, CategoryPath path, CategoryDefinition definition)
+    {
+        if (profile is not HeuteProfileModel ownerModel)
+        {
+            return CreateResult<HeuteCategory>.Error("Invalid profile owner");
+        }
+        
+        var categories = new List<HeuteCategory>();
+
+        Guid? currentParentId = null;
+        HeuteCategory? lastCategory = null;
+        
+        foreach (var segment in path.Segments)
+        {
+            var readResult = await ReadByNameAsync(profile.Id, currentParentId, segment);
+            
+            if (readResult.IsSuccess)
+            {
+                lastCategory = readResult.Entity!;
+                categories.Add(lastCategory);
+                currentParentId = lastCategory.Id;
+            }
+            else if (readResult.IsNotFound)
+            {
+                var parentDefinition = new CategoryDefinition(segment);
+                var createResult = await CreateAsync(profile, lastCategory, parentDefinition);
+                
+                if (!createResult.IsSuccess)
+                {
+                    return CreateResult<HeuteCategory>.Error($"Failed to create parent category '{segment}': {createResult.ErrorMessage}");
+                }
+                
+                lastCategory = createResult.Entity!;
+                categories.Add(lastCategory);
+                currentParentId = lastCategory.Id;
+            }
+            else
+            {
+                return CreateResult<HeuteCategory>.Error(readResult.ErrorMessage ?? "Failed to resolve category path");
+            }
+        }
+        
+        var exists = await context.Categories
+            .AnyAsync(c => 
+                c.UserId == profile.Id && 
+                (lastCategory == null ? c.ParentId == null : c.ParentId == lastCategory.Id) && 
+                c.Name == definition.Key.Name);
+        
+        if (exists)
+        {
+            return CreateResult<HeuteCategory>.AlreadyExists("Category", definition.Key.Name);
+        }
+        
+        HeuteCategoryModel? parentModel = null;
+        if (lastCategory != null)
+        {
+            if (lastCategory is not HeuteCategoryModel model)
+            {
+                return CreateResult<HeuteCategory>.Error("Invalid parent category");
+            }
+            parentModel = model;
+        }
+        
+        var newCategory = HeuteCategoryModel.Create(ownerModel, parentModel, definition);
+        await context.Categories.AddAsync(newCategory);
+        
+        return CreateResult<HeuteCategory>.Success(newCategory);
+    }
 }
