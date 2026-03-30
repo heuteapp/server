@@ -48,6 +48,7 @@ public static class ServiceExtensions
         builder.Services.AddScoped<InternalProfileService>();
 
         builder.Services.AddScoped<PublicProfileService>();
+        builder.Services.AddScoped<PublicLayoutService>();
 
         builder.Services.AddScoped<UserBasedLayoutService>();
         builder.Services.AddScoped<UserBasedCategoryService>();
