@@ -11,51 +11,49 @@ namespace HeuteApp.Application.Services.UserBased;
 
 public class UserBasedLayoutService(
     IUserContext userContext,
-    IProfileRepository profileRepository,
     ILayoutRepository repository, 
     IUnitOfWork unitOfWork)
 {
-    public async Task<LayoutResult?> GetLayoutAsync(string name, int? version)
+    public async Task<LayoutResult?> GetLayoutAsync(string name, int? version, bool isGlobal = false)
     {
-        var userId = userContext.GetUserIdOrThrow();
+        var profile = await userContext.GetProfileAsync();
 
-        var layout = await repository.GetByKeyAsync(new (userId, name, version));
-        return layout?.ToResult();
+        var result = await repository.ReadByNameAsync(isGlobal ? null : profile.Id, name, version);
+        result.ThrowIfFailure($"Failed to retrieve layout with name '{name}' v'{version}'");
+
+        return result.Entity!.ToResult();
     }
 
     public async Task<IEnumerable<LayoutResult>> GetLayoutsAsync()
     {        
-        var userId = userContext.GetUserIdOrThrow();
+        var profile = await userContext.GetProfileAsync();
 
-        var layouts = await repository.GetByOwnerAsync(userId);
-        return layouts.Select(l => l.ToResult());
+        var result = await repository.ReadListByUserAsync(profile.Id);
+        result.ThrowIfFailure($"Failed to retrieve layouts for user '{profile.Username}'");
+
+        return result.Entities!.Select(l => l.ToResult());
     }
 
     public async Task<LayoutResult> CreateLayoutAsync(string name, LayoutProps props, CreateLayoutOptions? options = null)
     {   
-        var userId = userContext.GetUserIdOrThrow();
+        var profile = await userContext.GetProfileAsync();
 
-        var profileResult = await profileRepository.GetByIdAsync(userId);
-        if (!profileResult.IsSuccess || profileResult.Profile == null)
-        {
-            throw new Exception($"Profile for user ID '{userId}' not found.");
-        }
+        var lastResult = await repository.ReadLatestAsync(profile.Id, name);
 
-        var profile = profileResult.Profile;
+        var last = lastResult.Entity;
 
-        var last = await repository.GetLastestAsync(userId, name);
-
-        if(last != null)
+        if(lastResult.IsSuccess)
         {
             if(options?.VersionedBehavior == VersionedCreateBehavior.ReturnLatest)
             {
-                return last.ToResult();
+                return last!.ToResult();
             }
         }
 
-        var layout = await repository.CreateAsync(profile, new LayoutDefinition(new (name, last?.Version ?? 1), props));
-        await unitOfWork.SaveChangesAsync();
+        var layoutResult = await repository.CreateAsync(profile, new LayoutDefinition(new (name, last?.Version ?? 1), props));
+        layoutResult.ThrowIfFailure($"Failed to create layout with name '{name}'");
 
-        return layout.ToResult();
+        await unitOfWork.SaveChangesAsync();
+        return layoutResult.Entity!.ToResult();
     }
 }
