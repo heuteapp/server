@@ -9,77 +9,88 @@ using HeuteApp.Core.Commands.Dispatchers;
 using HeuteApp.Core.ValueObjects.Dailyboard;
 using HeuteApp.Core.ValueObjects.Category;
 using HeuteApp.Core.ValueObjects.Layout;
+using HeuteApp.Core.ValueObjects.Dailyboard.Path;
+using HeuteApp.Core.ValueObjects;
+using HeuteApp.Core.ValueObjects.Category.Path;
 
 namespace HeuteApp.Application.Services.UserBased;
 
 public class UserBasedDailyboardService(
     IUserContext userContext,
-    IProfileRepository profileRepository,
     ICategoryRepository categoryRepository,
     ILayoutRepository layoutRepository, 
     IDailyboardRepository dailyboardRepository, 
     IUnitOfWork unitOfWork,
     DailyboardCommandDispatcher dailyboardCommandDispatcher)
 {
-    public async Task<DailyboardResult?> GetDailyboardAsync(CategoryKey categoryKey, DateOnly date)
+    public async Task<DailyboardResult> GetDailyboardAsync(DailyboardPath path)
     {
         var userId = userContext.GetUserIdOrThrow();
 
-        var category = await categoryRepository.GetByKeyAsync(new(userId), categoryKey)
-            ?? throw new Exception("Category not found.");
+        var categoryResult = await categoryRepository.ReadListByPathAsync(userId, path.CategoryPath);
+        categoryResult.ThrowIfFailure($"Failed to retrieve category for dailyboard at path: {path}");
 
-        var dailyboard = await dailyboardRepository.GetByKeyAsync(new (userId, category.Id), new (date));
+        var category = categoryResult.Entities!.LastOrDefault()!;
 
-        return dailyboard?.ToResult();
-    }
+        var date = path.Date ?? YYMMDDDate.Today();
+        var isToday = date.Equals(YYMMDDDate.Today());
+        var dateOnly = date.ToDateOnly();
 
-    public async Task<DailyboardResult> CreateDailyboardAsync(CategoryKey categoryKey, LayoutKey layoutKey, DailyboardKey Key)
-    {
-        var userId = userContext.GetUserIdOrThrow();
+        // !!
+        var layoutResult = await layoutRepository.ReadByNameAsync(null, "default");
+        layoutResult.ThrowIfFailure($"Failed to retrieve default layout for dailyboard at path: {path}");
 
-        var date = DateOnly.FromDateTime(DateTime.UtcNow);
+        var layout = layoutResult.Entity!;
 
-        var profile = await profileRepository.GetByIdAsync(userId)
-            ?? throw new Exception($"User not found.");
+        var dailyboardResult = await dailyboardRepository.ReadByDateAsync(userId, category.Id, dateOnly);
+        var dailyboard = dailyboardResult.Entity!;
 
-        var category = await categoryRepository.GetByKeyAsync(new(userId), categoryKey)
-            ?? throw new Exception("Category not found.");
+        if (dailyboardResult.IsNotFound)
+        {
+            if (isToday)
+            {
+                var profile = await userContext.GetProfileAsync();
+                var createResult = await dailyboardRepository.CreateAsync(profile, category, layout, new(dateOnly));
+                createResult.ThrowIfFailure($"Failed to create today's dailyboard at path: {path}");
 
-        var layout = await layoutRepository.GetByKeyAsync(new (userId, layoutKey.Name, layoutKey.Version))
-            ?? throw new Exception("Layout not found.");
+                await unitOfWork.SaveChangesAsync();
+                return createResult.Entity!.ToResult();
+            }
+        }
 
-        var existing = await dailyboardRepository
-            .GetByKeyAsync(new (userId, category.Id), new (date));
-
-        if (existing != null)
-            throw new Exception("Dailyboard already exists for this date.");
-
-        var dailyboard = await dailyboardRepository.CreateAsync(profile, category, layout, new(Key, DailyboardProps.Empty));
-        await unitOfWork.SaveChangesAsync();
-
+        dailyboardResult.ThrowIfFailure($"Failed to retrieve dailyboard for date {date} at path: {path}");
         return dailyboard.ToResult();
     }
 
-    public async Task<bool> ProcessDailyboardEventsAsync(CategoryKey categoryKey, IEnumerable<DailyboardCommand> events)
+    public async Task<DailyboardResult> CreateDailyboardAsync(CategoryPath path)
     {
-        var userId = userContext.GetUserIdOrThrow();
-
-        var category = await categoryRepository.GetByKeyAsync(new(userId), categoryKey)
-            ?? throw new Exception("Category not found.");
+        var profile = await userContext.GetProfileAsync();
 
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var dailyboard = await dailyboardRepository.GetByKeyAsync(new(userId, category.Id), new(date))
-            ?? throw new Exception("Dailyboard not found for today. Please create today's dailyboard before posting events.");
+        var categoryResult = await categoryRepository.ReadListByPathAsync(profile.Id, path);
+        categoryResult.ThrowIfFailure($"Failed to retrieve category for dailyboard at path: {path}");
 
-        var layout = await layoutRepository.GetByIdAsync(dailyboard.LayoutId)
-            ?? throw new Exception("Layout not found.");
+        var category = categoryResult.Entities!.LastOrDefault()!;
 
-        var context = new DailyboardCommandContext(dailyboard, layout);
+        // !!
+        var layoutResult = await layoutRepository.ReadByNameAsync(null, "default");
+        layoutResult.ThrowIfFailure($"Failed to retrieve default layout for dailyboard at path: {path}");
 
-        dailyboardCommandDispatcher.Dispatch(context, [..events]);
+        var layout = layoutResult.Entity!;
 
+        var existingResult = await dailyboardRepository.ReadByDateAsync(profile.Id, category.Id, date);
+        if (existingResult.IsSuccess)
+        {
+            throw new InvalidOperationException($"Dailyboard already exists for date {date} at path: {path}");
+        }
+
+        var dailyboardResult = await dailyboardRepository.CreateAsync(profile, category, layout, new(date));
+        dailyboardResult.ThrowIfFailure($"Failed to create dailyboard for date {date} at path: {path}");
+
+        var dailyboard = dailyboardResult.Entity!;
         await unitOfWork.SaveChangesAsync();
-        return true;
+
+        return dailyboard.ToResult();
     }
 }
