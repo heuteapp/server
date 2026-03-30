@@ -13,7 +13,7 @@ public class LayoutController(
 ) : ControllerBase
 {
     [HttpGet("global/{name}")]
-    public async Task<IActionResult> GetLayout(string name, [FromQuery] int? version)
+    public async Task<IActionResult> GetGlobalLayout(string name, [FromQuery] int? version)
     {
         var layout = await publicLayoutService.GetLayoutByNameAsync(name, version);
 
@@ -22,6 +22,13 @@ public class LayoutController(
         }
 
         return Ok(layout.ToResponse());
+    }
+
+    [HttpGet("global")]
+    public async Task<IActionResult> GetGlobalLayouts()
+    {
+        var layouts = await publicLayoutService.GetLayoutsAsync();
+        return Ok(layouts.Select(l => l.ToResponse()));
     }
 
     [HttpGet("user/{name}")]
@@ -36,6 +43,16 @@ public class LayoutController(
             }
 
             return Ok(layout.ToResponse());
+        });
+    }
+
+    [HttpGet("user")]
+    public async Task<IActionResult> GetUserLayouts()
+    {
+        return await userBasedActionService.ExecuteAsync<IActionResult>(async context =>
+        {
+            var layouts = await context.LayoutService.GetLayoutsAsync();
+            return Ok(layouts.Select(l => l.ToResponse()));
         });
     }
 }
