@@ -28,7 +28,7 @@ public class UserBasedLayoutService(
     {        
         var profile = await userContext.GetProfileAsync();
 
-        var result = await repository.ReadListByUserAsync(profile.Id);
+        var result = await repository.ReadListAsync(profile.Id);
         result.ThrowIfFailure($"Failed to retrieve layouts for user '{profile.Username}'");
 
         return result.Entities!.Select(l => l.ToResult());

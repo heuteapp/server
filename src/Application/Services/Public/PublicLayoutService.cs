@@ -14,4 +14,12 @@ public class PublicLayoutService(
 
         return result.Entity!.ToResult();
     }
+
+    public async Task<IEnumerable<LayoutResult>> GetLayoutsAsync()
+    {        
+        var result = await repository.ReadListAsync(null);
+        result.ThrowIfFailure($"Failed to retrieve public layouts");
+
+        return result.Entities!.Select(l => l.ToResult());
+    }
 }
