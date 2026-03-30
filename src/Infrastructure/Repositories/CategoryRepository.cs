@@ -32,43 +32,25 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
             };
     }
 
-    public async Task<CategoryPathResult> GetByPathAsync(Guid userId, CategoryPath path)
+    public async Task<CategoryGetResult> GetByKeyAsync(Guid userId, Guid? parentId, CategoryKey key)
     {
-        HeuteCategory? current = null;
-        Guid? parentId = null;
-        var segments = path.Segments;
-        
-        for (int i = 0; i < segments.Length; i++)
-        {
-            var segment = segments[i];
-            
-            current = await context.Categories
-                .FirstOrDefaultAsync(c => 
-                    c.UserId == userId && 
-                    c.ParentId == parentId && 
-                    c.Name == segment);
-            
-            if (current == null)
+        var category = await context.Categories
+            .FirstOrDefaultAsync(c => 
+                c.UserId == userId && 
+                (parentId == null ? c.ParentId == null : c.ParentId == parentId) && 
+                c.Name == key.Name);
+
+        return category == null
+            ? new CategoryGetResult
             {
-                return new CategoryPathResult
-                {
-                    Category = null,
-                    Status = CategoryPathStatus.SegmentMissing,
-                    MissingSegment = segment,
-                    MissingAtLevel = i + 1
-                };
+                Category = null,
+                Status = CategoryGetStatus.NotFound
             }
-            
-            parentId = current.Id;
-        }
-        
-        return new CategoryPathResult
-        {
-            Category = current,
-            Status = CategoryPathStatus.Success,
-            MissingSegment = null,
-            MissingAtLevel = null
-        };
+            : new CategoryGetResult
+            {
+                Category = category,
+                Status = CategoryGetStatus.Success
+            };
     }
 
     public async Task<CategoryCreateResult> CreateAsync(HeuteProfile profile, HeuteCategory? parent, CategoryDefinition definition)
