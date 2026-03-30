@@ -1,24 +1,6 @@
 namespace HeuteApp.Core.ValueObjects.Profile;
 
-public sealed record ProfileProps
+public sealed record ProfileProps(string Username, string Email)
 {
-    public static ProfileProps Empty => new();
-
-    //
-
-    public string Username { get; private set; } = string.Empty;
-
-    public string Email { get; private set; } = string.Empty;
-
-    //
-
-    private ProfileProps() { }
-
-    public ProfileProps(
-        string name, 
-        string email)
-    {
-        Username = name;
-        Email = email;
-    }
+    public static ProfileProps Empty => new(string.Empty, string.Empty);
 }

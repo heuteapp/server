@@ -1,44 +1,20 @@
-using System.Text.Json.Serialization;
-
 namespace HeuteApp.Core.ValueObjects.Profile;
 
 public sealed record ProfileDefinition
 {
-    public static ProfileDefinition Empty => new();
+    public Guid Id { get; init; }
 
-    //
+    public string Username { get; init; }
 
-    public Guid Id { get; private set; } = Guid.Empty;
+    public string Email { get; init; }
+    
 
-    public string Username { get; private set; } = string.Empty;
-
-    public string Email { get; private set; } = string.Empty;
-
-    //
-
-    private ProfileDefinition() { }
-
-    public ProfileDefinition(
-        Guid id, 
-        string username, 
-        string email)
+    public ProfileDefinition(Guid id, string username, string email)
     {
         Id = id;
         Username = username;
         Email = email;
     }
-
-    public ProfileDefinition(
-        Guid id,
-        ProfileProps props)
-    {
-        Id = id;
-        Username = props.Username;
-        Email = props.Email;
-    }
-
-    //
     
-    [JsonIgnore]
-    public ProfileProps Props => new(Username, Email);
+    public static ProfileDefinition Empty => new(Guid.Empty, string.Empty, string.Empty);
 }
