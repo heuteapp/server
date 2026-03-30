@@ -1,39 +1,49 @@
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Application.Interfaces.Repositories;
-using HeuteApp.Core.Aggregates.Profile;
+using HeuteApp.Application.Mappers;
+using HeuteApp.Application.Results.Profile;
 using HeuteApp.Core.ValueObjects.Profile;
 
 namespace HeuteApp.Application.Services.Public;
 
 public class PublicProfileService(IProfileRepository repository, IUnitOfWork unitOfWork)
 {
-    public async Task<HeuteProfile> GetProfileByIdentifierAsync(string identifier)
+    public async Task<ProfileResult> GetProfileByIdentifierAsync(string identifier)
     {
         var isEmail = identifier.Contains('@');
         
         var result = isEmail 
-            ? await repository.GetByEmailAsync(identifier) 
-            : await repository.GetByUsernameAsync(identifier);
+            ? await repository.ReadByEmailAsync(identifier) 
+            : await repository.ReadByUsernameAsync(identifier);
 
-        if (!result.IsSuccess || result.Profile == null)
-        {
-            throw new Exception($"Profile with {(isEmail ? "email" : "username")} '{identifier}' not found.");
-        }
+        result.ThrowIfFailure($"Failed to retrieve profile with identifier {identifier}");
 
-        return result.Profile;
+        return result.Entity!.ToResult();
     }
 
-    public async Task<HeuteProfile> CreateProfileAsync(ProfileDefinition definition)
+    public async Task<ProfileResult> CreateProfileAsync(ProfileDefinition definition)
     {
         var result = await repository.CreateAsync(definition);
-
-        if (!result.IsSuccess || result.Profile == null)
-        {
-            throw new Exception($"Failed to create profile: {result.Status}");
-        }
+        result.ThrowIfFailure("Failed to create profile");
 
         await unitOfWork.SaveChangesAsync();
 
-        return result.Profile;
+        return result.Entity!.ToResult();
+    }
+
+    public async Task<ProfileResult> GetProfileByEmailAsync(string email)
+    {
+        var result = await repository.ReadByEmailAsync(email);
+        result.ThrowIfFailure($"Failed to retrieve profile with email: {email}");
+        
+        return result.Entity!.ToResult();
+    }
+    
+    public async Task<ProfileResult> GetProfileByUsernameAsync(string username)
+    {
+        var result = await repository.ReadByUsernameAsync(username);
+        result.ThrowIfFailure($"Failed to retrieve profile with username: {username}");
+        
+        return result.Entity!.ToResult();
     }
 }
