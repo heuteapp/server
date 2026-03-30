@@ -17,7 +17,7 @@ public record RepoReadResult<T> : RepoResult
 
     public bool IsFailure => Status == RepoReadStatus.Failure;
     
-    private RepoReadResult() { }
+    protected RepoReadResult() { }
 
     //
     
