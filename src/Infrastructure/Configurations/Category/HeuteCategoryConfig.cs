@@ -18,6 +18,9 @@ public class HeuteCategoryConfig : IEntityTypeConfiguration<HeuteCategoryModel>
         builder.Property(c => c.UserId)
             .IsRequired();
 
+        builder.Property(c => c.ParentId)
+            .IsRequired(false);
+
         builder.Property(b => b.Name)
             .IsRequired();
 
