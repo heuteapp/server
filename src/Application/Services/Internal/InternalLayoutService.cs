@@ -9,7 +9,9 @@ public class InternalLayoutService(
 {
     public async Task<LayoutResult?> GetLayoutByIdAsync(Guid layoutId)
     {
-        var layout = await repository.GetByIdAsync(layoutId);
-        return layout?.ToResult();
+        var result = await repository.ReadByIdAsync(layoutId);
+        result.ThrowIfFailure($"Failed to retrieve layout with ID {layoutId}");
+
+        return result.Entity!.ToResult();
     }
 }
