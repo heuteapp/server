@@ -1,15 +1,16 @@
-using HeuteApp.Application.Results.Profile.Repository;
+using HeuteApp.Application.Results.Repository;
+using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Core.ValueObjects.Profile;
 
 namespace HeuteApp.Application.Interfaces.Repositories;
 
 public interface IProfileRepository
 {    
-    Task<ProfileGetResult> GetByIdAsync(Guid userId);
+    Task<ReadResult<HeuteProfile>> ReadByIdAsync(Guid userId);
 
-    Task<ProfileGetResult> GetByUsernameAsync(string username);
+    Task<ReadResult<HeuteProfile>> ReadByUsernameAsync(string username);
 
-    Task<ProfileGetResult> GetByEmailAsync(string email);
+    Task<ReadResult<HeuteProfile>> ReadByEmailAsync(string email);
 
-    Task<ProfileCreateResult> CreateAsync(ProfileDefinition definition);
+    Task<CreateResult<HeuteProfile>> CreateAsync(ProfileDefinition definition);
 }

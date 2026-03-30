@@ -3,80 +3,51 @@ using HeuteApp.Application.Interfaces.Repositories;
 using HeuteApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using HeuteApp.Infrastructure.Models.Profile;
-using HeuteApp.Application.Results.Profile.Repository;
-using HeuteApp.Application.Enums.Results.Profile.Repository;
+using HeuteApp.Application.Results.Repository;
+using HeuteApp.Core.Aggregates.Profile;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
 public class ProfileRepository(HeuteDbContext context) : IProfileRepository
 {
-    public async Task<ProfileGetResult> GetByIdAsync(Guid userId)
+    public async Task<ReadResult<HeuteProfile>> ReadByIdAsync(Guid userId)
     {
         var profile = await context.Profiles
             .FirstOrDefaultAsync(c => c.Id == userId);
 
         return profile == null
-            ? new ProfileGetResult
-            {
-                Profile = null,
-                Status = ProfileGetStatus.NotFound
-            }
-            : new ProfileGetResult
-            {
-                Profile = profile,
-                Status = ProfileGetStatus.Success
-            };
+            ? ReadResult<HeuteProfile>.NotFound()
+            : ReadResult<HeuteProfile>.Success(profile);
     }
 
-    public async Task<ProfileGetResult> GetByUsernameAsync(string username)
+    public async Task<ReadResult<HeuteProfile>> ReadByUsernameAsync(string username)
     {
         var profile = await context.Profiles
             .FirstOrDefaultAsync(c => c.Username == username);
 
         return profile == null
-            ? new ProfileGetResult
-            {
-                Profile = null,
-                Status = ProfileGetStatus.NotFound
-            }
-            : new ProfileGetResult
-            {
-                Profile = profile,
-                Status = ProfileGetStatus.Success
-            };
+            ? ReadResult<HeuteProfile>.NotFound()
+            : ReadResult<HeuteProfile>.Success(profile);
     }
 
-    public async Task<ProfileGetResult> GetByEmailAsync(string email)
+    public async Task<ReadResult<HeuteProfile>> ReadByEmailAsync(string email)
     {
         var profile = await context.Profiles
             .FirstOrDefaultAsync(c => c.Email == email);
 
         return profile == null
-            ? new ProfileGetResult
-            {
-                Profile = null,
-                Status = ProfileGetStatus.NotFound
-            }
-            : new ProfileGetResult
-            {
-                Profile = profile,
-                Status = ProfileGetStatus.Success
-            };
+            ? ReadResult<HeuteProfile>.NotFound()
+            : ReadResult<HeuteProfile>.Success(profile);
     }
 
-    public async Task<ProfileCreateResult> CreateAsync(ProfileDefinition definition)
+    public async Task<CreateResult<HeuteProfile>> CreateAsync(ProfileDefinition definition)
     {
         var usernameExists = await context.Profiles
             .AnyAsync(p => p.Username == definition.Username);
         
         if (usernameExists)
         {
-            return new ProfileCreateResult
-            {
-                Profile = null,
-                Status = ProfileCreateStatus.UsernameAlreadyExists,
-                ExistingIdentifier = definition.Username
-            };
+            return CreateResult<HeuteProfile>.AlreadyExists("profile", definition.Username);
         }
         
         var emailExists = await context.Profiles
@@ -84,22 +55,12 @@ public class ProfileRepository(HeuteDbContext context) : IProfileRepository
         
         if (emailExists)
         {
-            return new ProfileCreateResult
-            {
-                Profile = null,
-                Status = ProfileCreateStatus.EmailAlreadyExists,
-                ExistingIdentifier = definition.Email
-            };
+            return CreateResult<HeuteProfile>.AlreadyExists("profile", definition.Email);
         }
         
         var profile = HeuteProfileModel.Create(definition);
         await context.Profiles.AddAsync(profile);
         
-        return new ProfileCreateResult
-        {
-            Profile = profile,
-            Status = ProfileCreateStatus.Success,
-            ExistingIdentifier = null
-        };
+        return CreateResult<HeuteProfile>.Success(profile);
     }
 }
