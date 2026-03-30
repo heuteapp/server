@@ -79,4 +79,14 @@ public sealed record YYMMDDDate
     }
     
     public override string ToString() => ToShortString();
+
+    public DateTime ToDateTime()
+    {
+        return Value;
+    }
+    
+    public DateOnly ToDateOnly()
+    {
+        return DateOnly.FromDateTime(Value);
+    }
 }
