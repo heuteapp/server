@@ -27,5 +27,5 @@ public class DailyboardController(
             var result = await context.DailyboardService.GetDailyboardAsync(dailyboardPath);
             return Ok(result.ToResponse(layoutService));
         });
-    } 
+    }
 }
