@@ -42,7 +42,7 @@ public class HeuteDailyboardConfig : IEntityTypeConfiguration<HeuteDailyboardMod
             .HasForeignKey(b => b.LayoutId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasIndex(b => new { b.UserId, b.Date })
+        builder.HasIndex(b => new { b.UserId, b.CategoryId, b.Date })
             .IsUnique();
     }
 }
