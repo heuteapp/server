@@ -69,7 +69,7 @@ public record RepoReadResult<T> : RepoResult
         };
     }
     
-    public static RepoReadResult<T> Failure(string errorMessage, Exception? exception = null)
+    public static RepoReadResult<T> Failure(string errorMessage)
     {
         return new RepoReadResult<T>
         {
