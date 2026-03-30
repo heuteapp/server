@@ -157,16 +157,26 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         {
             return CreateListResult<HeuteCategory>.AlreadyExists("Category", definition.Key.Name, categories);
         }
-        
-        if (lastCategory is not HeuteCategoryModel parentModel)
+
+        HeuteCategoryModel newCategory;
+
+        if(lastCategory == null)
         {
-            return CreateListResult<HeuteCategory>.Error("Invalid parent category", categories);
+            if (lastCategory is not HeuteCategoryModel parentModel)
+            {
+                return CreateListResult<HeuteCategory>.Error("Invalid parent category", categories);
+            }
+
+            newCategory = HeuteCategoryModel.Create(profileModel, parentModel, definition);
         }
-        
-        var newCategory = HeuteCategoryModel.Create(profileModel, parentModel, definition);
+        else
+        {
+            newCategory = HeuteCategoryModel.Create(profileModel, null, definition);
+        }
+
         await context.Categories.AddAsync(newCategory);
         categories.Add(newCategory);
-        
+
         return CreateListResult<HeuteCategory>.Success(categories);
     }
 }
