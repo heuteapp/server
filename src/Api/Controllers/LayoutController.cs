@@ -2,10 +2,10 @@ using HeuteApp.Api.Mappers.Workspace;
 using HeuteApp.Application.Services.UserBased;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HeuteApp.Api.Controllers.Workspace;
+namespace HeuteApp.Api.Controllers;
 
 [ApiController]
-[Route("workspace/layout")]
+[Route("layout")]
 public class LayoutController(
     UserBasedLayoutService layoutService
 ) : ControllerBase

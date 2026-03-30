@@ -5,10 +5,10 @@ using HeuteApp.Api.Models.Requests.Auth;
 using HeuteApp.Application.Services.Public;
 using HeuteApp.Application.Services.Internal;
 
-namespace HeuteApp.Api.Controllers.Workspace;
+namespace HeuteApp.Api.Controllers;
 
 [ApiController]
-[Route("workspace")]
+[Route("auth")]
 public class AuthController(
     InternalProfileService internalProfileService,
     PublicProfileService publicProfileService, 

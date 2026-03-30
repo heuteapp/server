@@ -5,10 +5,10 @@ using HeuteApp.Application.Services.UserBased;
 using HeuteApp.Core.ValueObjects.Dailyboard.Path;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HeuteApp.Api.Controllers.Workspace;
+namespace HeuteApp.Api.Controllers;
 
 [ApiController]
-[Route("workspace/dailyboard")]
+[Route("dailyboard")]
 public class DailyboardController(
     InternalLayoutService layoutService,
     UserBasedActionService userBasedActionService
