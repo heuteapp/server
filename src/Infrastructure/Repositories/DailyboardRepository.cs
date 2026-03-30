@@ -9,14 +9,14 @@ using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Infrastructure.Models.Profile;
 using HeuteApp.Core.Aggregates.Category;
 using HeuteApp.Infrastructure.Models.Category;
-using HeuteApp.Application.Results.Dailyboard.Repository;
-using HeuteApp.Application.Enums.Results.Dailyboard.Repository;
+using HeuteApp.Application.Results.Repository;
+using HeuteApp.Core.Aggregates.Dailyboard;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
 public class DailyboardRepository(HeuteDbContext context) : IDailyboardRepository
 {
-    public async Task<DailyboardGetResult> GetByIdAsync(Guid dailyboardId)
+    public async Task<ReadResult<HeuteDailyboard>> ReadByIdAsync(Guid dailyboardId)
     {
         var entity = await context.Dailyboards
             .Include(b => b.Layout)
@@ -24,19 +24,11 @@ public class DailyboardRepository(HeuteDbContext context) : IDailyboardRepositor
             .FirstOrDefaultAsync(b => b.Id == dailyboardId);
 
         return entity == null
-            ? new DailyboardGetResult
-            {
-                Dailyboard = null,
-                Status = DailyboardGetStatus.NotFound
-            }
-            : new DailyboardGetResult
-            {
-                Dailyboard = entity,
-                Status = DailyboardGetStatus.Success
-            };
+            ? ReadResult<HeuteDailyboard>.NotFound("Dailyboard")
+            : ReadResult<HeuteDailyboard>.Success(entity);
     }
 
-    public async Task<DailyboardGetResult> GetByDateAsync(Guid userId, Guid categoryId, DateOnly date)
+    public async Task<ReadResult<HeuteDailyboard>> ReadByDateAsync(Guid userId, Guid categoryId, DateOnly date)
     {
         var entity = await context.Dailyboards
             .Include(b => b.Cards)
@@ -47,58 +39,31 @@ public class DailyboardRepository(HeuteDbContext context) : IDailyboardRepositor
                 b.Date == date);
 
         return entity == null
-            ? new DailyboardGetResult
-            {
-                Dailyboard = null,
-                Status = DailyboardGetStatus.NotFound
-            }
-            : new DailyboardGetResult
-            {
-                Dailyboard = entity,
-                Status = DailyboardGetStatus.Success
-            };
+            ? ReadResult<HeuteDailyboard>.NotFound($"Dailyboard for date {date} not found")
+            : ReadResult<HeuteDailyboard>.Success(entity);
     }
 
-    public async Task<DailyboardCreateResult> CreateAsync(
+    public async Task<CreateResult<HeuteDailyboard>> CreateAsync(
         HeuteProfile profile, 
         HeuteCategory category, 
         HeuteLayout layout, 
         DailyboardDefinition definition)
     {
-        // Profile validation
         if (profile is not HeuteProfileModel profileModel)
         {
-            return new DailyboardCreateResult
-            {
-                Dailyboard = null,
-                Status = DailyboardCreateStatus.InvalidProfile,
-                ErrorMessage = "Invalid profile model"
-            };
+            return CreateResult<HeuteDailyboard>.Failure("Invalid profile model");
         }
 
-        // Category validation
         if (category is not HeuteCategoryModel categoryModel)
         {
-            return new DailyboardCreateResult
-            {
-                Dailyboard = null,
-                Status = DailyboardCreateStatus.InvalidCategory,
-                ErrorMessage = "Invalid category model"
-            };
+            return CreateResult<HeuteDailyboard>.Failure("Invalid category model");
         }
 
-        // Layout validation
         if (layout is not HeuteLayoutModel layoutModel)
         {
-            return new DailyboardCreateResult
-            {
-                Dailyboard = null,
-                Status = DailyboardCreateStatus.InvalidLayout,
-                ErrorMessage = "Invalid layout model"
-            };
+            return CreateResult<HeuteDailyboard>.Failure("Invalid layout model");
         }
 
-        // Check if already exists
         var exists = await context.Dailyboards
             .AnyAsync(b => 
                 b.UserId == profile.Id && 
@@ -107,23 +72,12 @@ public class DailyboardRepository(HeuteDbContext context) : IDailyboardRepositor
 
         if (exists)
         {
-            return new DailyboardCreateResult
-            {
-                Dailyboard = null,
-                Status = DailyboardCreateStatus.AlreadyExists,
-                ErrorMessage = $"Dailyboard already exists for date {definition.Date}"
-            };
+            return CreateResult<HeuteDailyboard>.AlreadyExists("Dailyboard", $"date {definition.Date}");
         }
 
-        // Create
         var model = HeuteDailyboardModel.Create(profileModel, categoryModel, layoutModel, definition);
         await context.Dailyboards.AddAsync(model);
         
-        return new DailyboardCreateResult
-        {
-            Dailyboard = model,
-            Status = DailyboardCreateStatus.Success,
-            ErrorMessage = null
-        };
+        return CreateResult<HeuteDailyboard>.Success(model);
     }
 }
