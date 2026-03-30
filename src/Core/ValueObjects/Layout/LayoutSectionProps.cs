@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace HeuteApp.Core.ValueObjects.Layout;
 
 public sealed record LayoutSectionProps
@@ -16,7 +18,7 @@ public sealed record LayoutSectionProps
 
     //
 
-    private LayoutSectionProps() { }
+    public LayoutSectionProps() { }
 
     public LayoutSectionProps(int colIndex, int rowIndex, int colSpan, int rowSpan)
     {
@@ -36,5 +38,6 @@ public sealed record LayoutSectionProps
 
     //
 
+    [JsonIgnore]
     public GridRect Position => new(ColIndex, RowIndex, ColSpan, RowSpan);
 }

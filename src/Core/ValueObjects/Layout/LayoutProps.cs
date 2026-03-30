@@ -16,7 +16,7 @@ public sealed record LayoutProps
 
     //
 
-    private LayoutProps() { }
+    public LayoutProps() { }
 
     public LayoutProps(
         int ColCount, 
