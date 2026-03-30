@@ -18,7 +18,7 @@ public class LayoutController(
         var layout = await publicLayoutService.GetLayoutByNameAsync(name, version);
 
         if(layout == null){
-            return NotFound($"Layout with name '{name}' and version '{version}' not found for the current user.");
+            return NotFound($"Layout with name '{name}' and version '{version}' not found.");
         }
 
         return Ok(layout.ToResponse());
@@ -29,10 +29,10 @@ public class LayoutController(
     {
         return await userBasedActionService.ExecuteAsync<IActionResult>(async context =>
         {
-            var layout = await publicLayoutService.GetLayoutByNameAsync(name, version);
+            var layout = await context.LayoutService.GetLayoutAsync(name, version);
 
             if(layout == null){
-                return NotFound($"Layout with name '{name}' and version '{version}' not found for the current user.");
+                return NotFound($"User layout '{name}' version '{version}' not found.");
             }
 
             return Ok(layout.ToResponse());
