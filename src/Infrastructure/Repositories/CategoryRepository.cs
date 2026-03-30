@@ -32,13 +32,13 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
             };
     }
 
-    public async Task<CategoryGetResult> GetByKeyAsync(Guid userId, Guid? parentId, CategoryKey key)
+    public async Task<CategoryGetResult> GetByNameAsync(Guid userId, Guid? parentId, string name)
     {
         var category = await context.Categories
             .FirstOrDefaultAsync(c => 
                 c.UserId == userId && 
                 (parentId == null ? c.ParentId == null : c.ParentId == parentId) && 
-                c.Name == key.Name);
+                c.Name == name);
 
         return category == null
             ? new CategoryGetResult

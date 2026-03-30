@@ -9,7 +9,7 @@ public interface ICategoryRepository
 {    
     Task<CategoryGetResult> GetByIdAsync(Guid categoryId);
 
-    Task<CategoryGetResult> GetByKeyAsync(Guid userId, Guid? parentId, CategoryKey key);
+    Task<CategoryGetResult> GetByNameAsync(Guid userId, Guid? parentId, string name);
 
     Task<CategoryCreateResult> CreateAsync(HeuteProfile profile, HeuteCategory? parent, CategoryDefinition definition);
 }
