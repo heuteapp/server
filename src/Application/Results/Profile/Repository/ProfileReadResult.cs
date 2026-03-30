@@ -3,7 +3,7 @@ using HeuteApp.Core.Aggregates.Profile;
 
 namespace HeuteApp.Application.Results.Profile.Repository;
 
-public record ProfileReadResult : RepoReadResult<HeuteProfile>
+public record ProfileReadResult : ReadResult<HeuteProfile>
 {
     
 }

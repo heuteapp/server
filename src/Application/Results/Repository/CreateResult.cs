@@ -2,7 +2,7 @@ using HeuteApp.Application.Enums.Results.Repository;
 
 namespace HeuteApp.Application.Results.Repository;
 
-public record RepoCreateResult<T> : RepoResult
+public record CreateResult<T> : RepoResult
 {
     public T? Entity { get; init; }
 
@@ -21,13 +21,13 @@ public record RepoCreateResult<T> : RepoResult
 
     public bool IsFailure => Status == RepoCreateStatus.Failure;
     
-    protected RepoCreateResult() { }
+    protected CreateResult() { }
     
     //
     
-    public static RepoCreateResult<T> Success(T entity, int? id = null)
+    public static CreateResult<T> Success(T entity, int? id = null)
     {
-        return new RepoCreateResult<T>
+        return new CreateResult<T>
         {
             IsSuccess = true,
             Entity = entity,
@@ -37,9 +37,9 @@ public record RepoCreateResult<T> : RepoResult
         };
     }
     
-    public static RepoCreateResult<T> BadRequest(string errorMessage)
+    public static CreateResult<T> BadRequest(string errorMessage)
     {
-        return new RepoCreateResult<T>
+        return new CreateResult<T>
         {
             IsSuccess = false,
             ErrorMessage = errorMessage,
@@ -48,9 +48,9 @@ public record RepoCreateResult<T> : RepoResult
         };
     }
     
-    public static RepoCreateResult<T> Unauthorized(string? message = null)
+    public static CreateResult<T> Unauthorized(string? message = null)
     {
-        return new RepoCreateResult<T>
+        return new CreateResult<T>
         {
             IsSuccess = false,
             ErrorMessage = message ?? "You are not authenticated to create this resource",
@@ -59,9 +59,9 @@ public record RepoCreateResult<T> : RepoResult
         };
     }
     
-    public static RepoCreateResult<T> Forbidden(string? message = null)
+    public static CreateResult<T> Forbidden(string? message = null)
     {
-        return new RepoCreateResult<T>
+        return new CreateResult<T>
         {
             IsSuccess = false,
             ErrorMessage = message ?? "You do not have permission to create this resource",
@@ -70,9 +70,9 @@ public record RepoCreateResult<T> : RepoResult
         };
     }
     
-    public static RepoCreateResult<T> AlreadyExists(string entityName, string identifier)
+    public static CreateResult<T> AlreadyExists(string entityName, string identifier)
     {
-        return new RepoCreateResult<T>
+        return new CreateResult<T>
         {
             IsSuccess = false,
             ErrorMessage = $"{entityName} with {identifier} already exists",
@@ -81,9 +81,9 @@ public record RepoCreateResult<T> : RepoResult
         };
     }
     
-    public static RepoCreateResult<T> Failure(string errorMessage)
+    public static CreateResult<T> Failure(string errorMessage)
     {
-        return new RepoCreateResult<T>
+        return new CreateResult<T>
         {
             IsSuccess = false,
             ErrorMessage = errorMessage,
@@ -94,5 +94,5 @@ public record RepoCreateResult<T> : RepoResult
     
     //
     
-    public static implicit operator RepoCreateResult<T>(T entity) => Success(entity);
+    public static implicit operator CreateResult<T>(T entity) => Success(entity);
 }

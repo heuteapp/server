@@ -2,39 +2,46 @@ using HeuteApp.Application.Enums.Results.Repository;
 
 namespace HeuteApp.Application.Results.Repository;
 
-public record RepoReadResult<T> : RepoResult
+public record ReadListResult<T> : RepoResult
 {
-    public T? Entity { get; init; }
+    public IEnumerable<T>? Entities { get; init; }
+
+    public int? TotalCount { get; init; }
 
     public RepoReadStatus Status { get; init; }
-
     
+    
+    public bool IsEmpty => Status == RepoReadStatus.Success && (Entities == null || !Entities.Any());
+
     public bool IsNotFound => Status == RepoReadStatus.NotFound;
 
     public bool IsUnauthorized => Status == RepoReadStatus.Unauthorized;
 
     public bool IsForbidden => Status == RepoReadStatus.Forbidden;
-
+    
     public bool IsFailure => Status == RepoReadStatus.Failure;
     
-    protected RepoReadResult() { }
-
+    
+    private ReadListResult() { }
+    
     //
     
-    public static RepoReadResult<T> Success(T entity)
+    public static ReadListResult<T> Success(IEnumerable<T> entities, int? totalCount = null)
     {
-        return new RepoReadResult<T>
+        var entityList = entities?.ToList() ?? new List<T>();
+        return new ReadListResult<T>
         {
             IsSuccess = true,
-            Entity = entity,
+            Entities = entityList,
+            TotalCount = totalCount ?? entityList.Count,
             Status = RepoReadStatus.Success,
             StatusCode = (int)RepoReadStatus.Success
         };
     }
     
-    public static RepoReadResult<T> Unauthorized(string? message = null)
+    public static ReadListResult<T> Unauthorized(string? message = null)
     {
-        return new RepoReadResult<T>
+        return new ReadListResult<T>
         {
             IsSuccess = false,
             ErrorMessage = message ?? "You are not authenticated to access this resource",
@@ -43,9 +50,9 @@ public record RepoReadResult<T> : RepoResult
         };
     }
     
-    public static RepoReadResult<T> Forbidden(string? message = null)
+    public static ReadListResult<T> Forbidden(string? message = null)
     {
-        return new RepoReadResult<T>
+        return new ReadListResult<T>
         {
             IsSuccess = false,
             ErrorMessage = message ?? "You do not have permission to access this resource",
@@ -54,13 +61,13 @@ public record RepoReadResult<T> : RepoResult
         };
     }
     
-    public static RepoReadResult<T> NotFound(string? entityName = null)
+    public static ReadListResult<T> NotFound(string? entityName = null)
     {
         var message = string.IsNullOrEmpty(entityName) 
             ? "The requested resource was not found"
             : $"{entityName} was not found";
             
-        return new RepoReadResult<T>
+        return new ReadListResult<T>
         {
             IsSuccess = false,
             ErrorMessage = message,
@@ -69,9 +76,9 @@ public record RepoReadResult<T> : RepoResult
         };
     }
     
-    public static RepoReadResult<T> Failure(string errorMessage)
+    public static ReadListResult<T> Failure(string errorMessage)
     {
-        return new RepoReadResult<T>
+        return new ReadListResult<T>
         {
             IsSuccess = false,
             ErrorMessage = errorMessage,
@@ -79,8 +86,10 @@ public record RepoReadResult<T> : RepoResult
             StatusCode = (int)RepoReadStatus.Failure
         };
     }
-
+    
     //
     
-    public static implicit operator RepoReadResult<T>(T entity) => Success(entity);
+    public static implicit operator ReadListResult<T>(List<T> entities) => Success(entities);
+
+    public static implicit operator ReadListResult<T>(T[] entities) => Success(entities);
 }
