@@ -11,9 +11,12 @@ public sealed record DailyboardCardDefinition(
     int? ColSpan,
     int? RowSpan)
 {
-    public static DailyboardCardDefinition Empty => new("", null, null, null, null, null, null);
+    public static DailyboardCardDefinition Empty => new();
 
     //
+
+    public DailyboardCardDefinition()
+        : this(string.Empty, null, null, null, null, null, null) { }
 
     public DailyboardCardDefinition(DailyboardCardKey key, string? title, string? sectionName, int? colIndex, int? rowIndex, int? colSpan, int? rowSpan)
         : this(key.Name, title, sectionName, colIndex, rowIndex, colSpan, rowSpan)
@@ -42,12 +45,16 @@ public sealed record DailyboardCardDefinition(
 
     //
 
+    [JsonIgnore]
     public DailyboardCardKey Key => new(Name);
 
+    [JsonIgnore]
     public DailyboardCardProps Props => new(Content, Placement);
 
+    [JsonIgnore]
     public DailyboardCardContent Content => new(Title);
 
+    [JsonIgnore]
     public DailyboardCardPlacement? Placement => 
         SectionName is not null && ColIndex is not null && RowIndex is not null && ColSpan is not null && RowSpan is not null
         ? new DailyboardCardPlacement(SectionName, ColIndex.Value, RowIndex.Value, ColSpan.Value, RowSpan.Value)

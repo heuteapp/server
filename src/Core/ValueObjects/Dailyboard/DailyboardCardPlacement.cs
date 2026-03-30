@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using HeuteApp.Core.ValueObjects.Layout;
 
 namespace HeuteApp.Core.ValueObjects.Dailyboard;
@@ -9,9 +10,12 @@ public sealed record DailyboardCardPlacement(
     int ColSpan,
     int RowSpan)
 {
-    public static DailyboardCardPlacement Empty => new("", -1, -1, 0, 0);
+    public static DailyboardCardPlacement Empty => new();
 
     //
+
+    public DailyboardCardPlacement() 
+        : this(string.Empty, -1, -1, 0, 0) { }
 
     public DailyboardCardPlacement(LayoutSectionKey section, int colIndex, int rowIndex, int colSpan, int rowSpan)
         : this(section.Name, colIndex, rowIndex, colSpan, rowSpan)
@@ -30,7 +34,9 @@ public sealed record DailyboardCardPlacement(
 
     //
 
+    [JsonIgnore]
     public LayoutSectionKey Section => new(SectionName);
 
+    [JsonIgnore]
     public GridRect Position => new(ColIndex, RowIndex, ColSpan, RowSpan);
 }
