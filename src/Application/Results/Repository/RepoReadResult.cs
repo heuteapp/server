@@ -7,6 +7,7 @@ public record RepoReadResult<T> : RepoResult
     public T? Entity { get; init; }
 
     public RepoReadStatus Status { get; init; }
+
     
     public static RepoReadResult<T> Success(T entity)
     {
@@ -14,7 +15,8 @@ public record RepoReadResult<T> : RepoResult
         {
             IsSuccess = true,
             Entity = entity,
-            Status = RepoReadStatus.Success
+            Status = RepoReadStatus.Success,
+            StatusCode = 200
         };
     }
     
@@ -24,7 +26,8 @@ public record RepoReadResult<T> : RepoResult
         {
             IsSuccess = false,
             ErrorMessage = "Unauthorized access",
-            Status = RepoReadStatus.Unauthorized
+            Status = RepoReadStatus.Unauthorized,
+            StatusCode = 401
         };
     }
 
@@ -34,7 +37,8 @@ public record RepoReadResult<T> : RepoResult
         {
             IsSuccess = false,
             ErrorMessage = "Forbidden access",
-            Status = RepoReadStatus.Forbidden
+            Status = RepoReadStatus.Forbidden,
+            StatusCode = 403
         };
     }
 
@@ -44,7 +48,8 @@ public record RepoReadResult<T> : RepoResult
         {
             IsSuccess = false,
             ErrorMessage = $"{entityName} not found",
-            Status = RepoReadStatus.NotFound
+            Status = RepoReadStatus.NotFound,
+            StatusCode = 404
         };
     }
 
@@ -54,7 +59,8 @@ public record RepoReadResult<T> : RepoResult
         {
             IsSuccess = false,
             ErrorMessage = errorMessage,
-            Status = RepoReadStatus.Failure
+            Status = RepoReadStatus.Failure,
+            StatusCode = 500
         };
     }
 }
