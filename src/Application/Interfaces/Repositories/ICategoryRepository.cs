@@ -15,4 +15,6 @@ public interface ICategoryRepository
     Task<ReadListResult<HeuteCategory>> ReadListByPathAsync(Guid userId, CategoryPath path);
 
     Task<CreateResult<HeuteCategory>> CreateAsync(HeuteProfile profile, HeuteCategory? parent, CategoryDefinition definition);
+
+    Task<CreateListResult<HeuteCategory>> CreateListByPathAsync(HeuteProfile profile, CategoryPath path, CategoryDefinition definition);
 }

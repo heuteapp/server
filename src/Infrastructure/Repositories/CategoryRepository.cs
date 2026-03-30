@@ -102,11 +102,11 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         return CreateResult<HeuteCategory>.Success(category);
     }
 
-    public async Task<CreateResult<HeuteCategory>> CreateByPathAsync(HeuteProfile profile, CategoryPath path, CategoryDefinition definition)
+    public async Task<CreateListResult<HeuteCategory>> CreateListByPathAsync(HeuteProfile profile, CategoryPath path, CategoryDefinition definition)
     {
-        if (profile is not HeuteProfileModel ownerModel)
+        if (profile is not HeuteProfileModel profileModel)
         {
-            return CreateResult<HeuteCategory>.Error("Invalid profile owner");
+            return CreateListResult<HeuteCategory>.Error("Invalid profile owner");
         }
         
         var categories = new List<HeuteCategory>();
@@ -131,7 +131,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
                 
                 if (!createResult.IsSuccess)
                 {
-                    return CreateResult<HeuteCategory>.Error($"Failed to create parent category '{segment}': {createResult.ErrorMessage}");
+                    return CreateListResult<HeuteCategory>.Error($"Failed to create parent category '{segment}': {createResult.ErrorMessage}", categories);
                 }
                 
                 lastCategory = createResult.Entity!;
@@ -140,7 +140,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
             }
             else
             {
-                return CreateResult<HeuteCategory>.Error(readResult.ErrorMessage ?? "Failed to resolve category path");
+                return CreateListResult<HeuteCategory>.Error(readResult.ErrorMessage ?? "Failed to resolve category path", categories);
             }
         }
         
@@ -152,22 +152,18 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         
         if (exists)
         {
-            return CreateResult<HeuteCategory>.AlreadyExists("Category", definition.Key.Name);
+            return CreateListResult<HeuteCategory>.AlreadyExists("Category", definition.Key.Name, categories);
         }
         
-        HeuteCategoryModel? parentModel = null;
-        if (lastCategory != null)
+        if (lastCategory is not HeuteCategoryModel parentModel)
         {
-            if (lastCategory is not HeuteCategoryModel model)
-            {
-                return CreateResult<HeuteCategory>.Error("Invalid parent category");
-            }
-            parentModel = model;
+            return CreateListResult<HeuteCategory>.Error("Invalid parent category", categories);
         }
         
-        var newCategory = HeuteCategoryModel.Create(ownerModel, parentModel, definition);
+        var newCategory = HeuteCategoryModel.Create(profileModel, parentModel, definition);
         await context.Categories.AddAsync(newCategory);
+        categories.Add(newCategory);
         
-        return CreateResult<HeuteCategory>.Success(newCategory);
+        return CreateListResult<HeuteCategory>.Success(categories);
     }
 }
