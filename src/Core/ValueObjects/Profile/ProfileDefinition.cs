@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace HeuteApp.Core.ValueObjects.Profile;
 
 public sealed record ProfileDefinition
@@ -36,6 +38,7 @@ public sealed record ProfileDefinition
     }
 
     //
-
+    
+    [JsonIgnore]
     public ProfileProps Props => new(Username, Email);
 }
