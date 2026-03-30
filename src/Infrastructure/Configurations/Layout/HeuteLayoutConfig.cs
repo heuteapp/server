@@ -16,7 +16,7 @@ public class HeuteLayoutConfig : IEntityTypeConfiguration<HeuteLayoutModel>
               .ValueGeneratedNever();
 
        builder.Property(l => l.UserId)
-              .IsRequired();
+              .IsRequired(false);
 
        builder.Property(l => l.Name)
               .IsRequired();
