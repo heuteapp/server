@@ -1,38 +1,28 @@
+using Microsoft.EntityFrameworkCore;
 using HeuteApp.Core.Aggregates.Category;
 using HeuteApp.Core.ValueObjects.Category;
 using HeuteApp.Application.Interfaces.Repositories;
 using HeuteApp.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
 using HeuteApp.Infrastructure.Models.Category;
 using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Infrastructure.Models.Profile;
-using HeuteApp.Core.ValueObjects.Category.Path;
-using HeuteApp.Application.Results.Category.Repository;
-using HeuteApp.Application.Enums.Results.Category.Repository;
+using HeuteApp.Application.Results.Repository;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
 public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
 {
-    public async Task<CategoryGetResult> GetByIdAsync(Guid categoryId)
+    public async Task<ReadResult<HeuteCategory>> ReadByIdAsync(Guid categoryId)
     {
         var category = await context.Categories
             .FirstOrDefaultAsync(c => c.Id == categoryId);
 
         return category == null
-            ? new CategoryGetResult
-            {
-                Category = null,
-                Status = CategoryGetStatus.NotFound
-            }
-            : new CategoryGetResult
-            {
-                Category = category,
-                Status = CategoryGetStatus.Success
-            };
+            ? ReadResult<HeuteCategory>.NotFound("Category")
+            : ReadResult<HeuteCategory>.Success(category);
     }
 
-    public async Task<CategoryGetResult> GetByNameAsync(Guid userId, Guid? parentId, string name)
+    public async Task<ReadResult<HeuteCategory>> ReadByNameAsync(Guid userId, Guid? parentId, string name)
     {
         var category = await context.Categories
             .FirstOrDefaultAsync(c => 
@@ -41,28 +31,15 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
                 c.Name == name);
 
         return category == null
-            ? new CategoryGetResult
-            {
-                Category = null,
-                Status = CategoryGetStatus.NotFound
-            }
-            : new CategoryGetResult
-            {
-                Category = category,
-                Status = CategoryGetStatus.Success
-            };
+            ? ReadResult<HeuteCategory>.NotFound("Category")
+            : ReadResult<HeuteCategory>.Success(category);
     }
 
-    public async Task<CategoryCreateResult> CreateAsync(HeuteProfile profile, HeuteCategory? parent, CategoryDefinition definition)
+    public async Task<CreateResult<HeuteCategory>> CreateAsync(HeuteProfile profile, HeuteCategory? parent, CategoryDefinition definition)
     {
         if (profile is not HeuteProfileModel ownerModel)
         {
-            return new CategoryCreateResult
-            {
-                Category = null,
-                Status = CategoryCreateStatus.InvalidOwner,
-                ExistingName = null
-            };
+            return CreateResult<HeuteCategory>.Failure("Invalid profile owner");
         }
 
         var exists = await context.Categories
@@ -73,12 +50,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         
         if (exists)
         {
-            return new CategoryCreateResult
-            {
-                Category = null,
-                Status = CategoryCreateStatus.AlreadyExists,
-                ExistingName = definition.Key.Name
-            };
+            return CreateResult<HeuteCategory>.AlreadyExists("Category", definition.Key.Name);
         }
 
         HeuteCategoryModel? parentModel = null;
@@ -86,12 +58,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         {
             if (parent is not HeuteCategoryModel model)
             {
-                return new CategoryCreateResult
-                {
-                    Category = null,
-                    Status = CategoryCreateStatus.InvalidParent,
-                    ExistingName = null
-                };
+                return CreateResult<HeuteCategory>.Failure("Invalid parent category");
             }
             parentModel = model;
         }
@@ -99,11 +66,6 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         var category = HeuteCategoryModel.Create(ownerModel, parentModel, definition);
         await context.Categories.AddAsync(category);
         
-        return new CategoryCreateResult
-        {
-            Category = category,
-            Status = CategoryCreateStatus.Success,
-            ExistingName = null
-        };
+        return CreateResult<HeuteCategory>.Success(category);
     }
 }
