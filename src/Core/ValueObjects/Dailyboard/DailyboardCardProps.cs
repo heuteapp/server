@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace HeuteApp.Core.ValueObjects.Dailyboard;
 
 public sealed record DailyboardCardProps
@@ -44,8 +46,10 @@ public sealed record DailyboardCardProps
     
     //
 
+    [JsonIgnore]
     public DailyboardCardContent Content => new(Title);
-
+    
+    [JsonIgnore]
     public DailyboardCardPlacement? Placement => 
         SectionName is not null && ColIndex is not null && RowIndex is not null && ColSpan is not null && RowSpan is not null
         ? new DailyboardCardPlacement(SectionName, ColIndex.Value, RowIndex.Value, ColSpan.Value, RowSpan.Value)

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace HeuteApp.Core.ValueObjects.Layout;
 
 public sealed record LayoutProps
@@ -37,5 +39,7 @@ public sealed record LayoutProps
 
     //
 
+
+    [JsonIgnore]
     public GridDimensions Dimensions => new(ColCount, RowCount);
 }
