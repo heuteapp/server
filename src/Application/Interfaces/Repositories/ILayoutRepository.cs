@@ -1,4 +1,3 @@
-using HeuteApp.Application.Models.Layout.Contracts;
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Core.ValueObjects.Layout;
@@ -9,7 +8,7 @@ public interface ILayoutRepository
 {
     Task<HeuteLayout?> GetByIdAsync(Guid layoutId);
     
-    Task<HeuteLayout?> GetByKeyAsync(LayoutLookup key);
+    Task<HeuteLayout?> GetByNameAsync(Guid? userId, string name, int? version = null);
 
     Task<HeuteLayout?> GetLastestAsync(Guid? userId, string name);
 

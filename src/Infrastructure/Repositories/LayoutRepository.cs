@@ -21,17 +21,17 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return layout;
     }
 
-    public async Task<HeuteLayout?> GetByKeyAsync(LayoutLookup key)
+    public async Task<HeuteLayout?> GetByNameAsync(Guid? userId, string name, int? version = null)
     {
         var query = context.Layouts
             .Include(l => l.Sections)
             .Where(l =>
-                l.UserId == key.UserId &&
-                l.Name == key.Name);
+                l.UserId == userId &&
+                l.Name == name);
 
-        if (key.Version.HasValue)
+        if (version.HasValue)
         {
-            query = query.Where(l => l.Version == key.Version.Value);
+            query = query.Where(l => l.Version == version.Value);
         }
         else
         {
