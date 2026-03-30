@@ -59,7 +59,7 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
             : ReadResult<HeuteLayout>.Success(layout);
     }
 
-    public async Task<ReadListResult<HeuteLayout>> ReadListByUserAsync(Guid userId)
+    public async Task<ReadListResult<HeuteLayout>> ReadListAsync(Guid? userId)
     {
         var layouts = await context.Layouts
             .Include(l => l.Sections)

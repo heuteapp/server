@@ -13,7 +13,7 @@ public interface ILayoutRepository
 
     Task<ReadResult<HeuteLayout>> ReadLatestAsync(Guid? userId, string name);
 
-    Task<ReadListResult<HeuteLayout>> ReadListByUserAsync(Guid userId);
+    Task<ReadListResult<HeuteLayout>> ReadListAsync(Guid? userId);
 
     
     Task<CreateResult<HeuteLayout>> CreateAsync(HeuteProfile profile, LayoutDefinition definition);
