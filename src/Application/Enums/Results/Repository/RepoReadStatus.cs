@@ -1,10 +1,14 @@
 namespace HeuteApp.Application.Enums.Results.Repository;
 
-public enum RepoResultStatus
+public enum RepoReadStatus
 {
-    Success,
+    Success = 200,
 
-    NotFound,
+    Unauthorized = 401,
 
-    Unauthorized
+    Forbidden = 403,
+
+    NotFound = 404,
+
+    Failure = 500
 }
