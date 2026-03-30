@@ -1,19 +1,6 @@
 namespace HeuteApp.Core.ValueObjects.Category;
 
-public sealed record CategoryKey
+public sealed record CategoryKey(string Name)
 {
-    public static CategoryKey Empty => new();
-
-    //
-
-    public string Name { get; private set; } = null!;
-
-    //
-
-    private CategoryKey() { }
-
-    public CategoryKey(string name)
-    {
-        Name = name;
-    }
+    public static CategoryKey Empty => new("");
 }

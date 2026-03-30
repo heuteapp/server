@@ -1,37 +1,15 @@
-using System.Text.Json.Serialization;
-
 namespace HeuteApp.Core.ValueObjects.Category;
 
-public sealed record CategoryDefinition
+public sealed record CategoryDefinition(string Name)
 {
-    public static CategoryDefinition Empty => new();
+    public static CategoryDefinition Empty => new("");
 
     //
 
-    public string Name { get; private set; } = null!;
+    public CategoryDefinition(CategoryKey key)
+        : this(key.Name) { }
 
     //
 
-    private CategoryDefinition() { }
-
-    public CategoryDefinition(
-        string name)
-    {
-        Name = name;
-    }
-
-    public CategoryDefinition(
-        CategoryKey key,
-        CategoryProps props)
-    {
-        Name = key.Name;
-    }
-
-    //
-    
-    [JsonIgnore]
     public CategoryKey Key => new(Name);
-    
-    [JsonIgnore]
-    public CategoryProps Props => CategoryProps.Empty;
 }
