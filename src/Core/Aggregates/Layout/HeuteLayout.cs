@@ -15,9 +15,9 @@ public class HeuteLayout
         UserId = userId;
         Name = definition.Key.Name;
         Version = definition.Key.Version;
-        Dimensions = definition.Props.Dimensions;
+        Dimensions = definition.Dimensions;
 
-        foreach (var sectionDef in definition.Props.Sections)
+        foreach (var sectionDef in definition.Sections)
         {
             var section = Internal_CreateSection(sectionDef);
 

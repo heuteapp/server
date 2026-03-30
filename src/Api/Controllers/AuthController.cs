@@ -60,10 +60,8 @@ public class AuthController(
         var profile = await publicProfileService.CreateProfileAsync(
             new ProfileDefinition(
                 Guid.Parse(userId),
-                new ProfileProps(
-                    request.Username,
-                    request.Email
-                )
+                request.Username,
+                request.Email
             )
         );
 

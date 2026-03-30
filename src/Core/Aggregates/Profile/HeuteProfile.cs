@@ -9,8 +9,8 @@ public class HeuteProfile
     protected HeuteProfile(ProfileDefinition definition)
     {
         Id = definition.Id;
-        Username = definition.Props.Username;
-        Email = definition.Props.Email;
+        Username = definition.Username;
+        Email = definition.Email;
     }
 
     public static HeuteProfile Create(ProfileDefinition definition)
