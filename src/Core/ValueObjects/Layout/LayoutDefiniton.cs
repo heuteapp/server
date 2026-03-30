@@ -1,109 +1,28 @@
-using System.Text.Json.Serialization;
-
 namespace HeuteApp.Core.ValueObjects.Layout;
 
-public sealed record LayoutDefinition
+public sealed record LayoutDefinition(
+    string Name,
+    int Version,
+    int ColCount,
+    int RowCount,
+    IReadOnlyCollection<LayoutSectionDefinition> Sections)
 {
-    public static LayoutDefinition Empty => new();
-
-    //
-
-    public string Name { get; } = null!;
-    
-    public int Version { get; } = 0;
-
-    public int ColCount { get; private set; } = 0;
-
-    public int RowCount { get; private set; } = 0;
-
-    public IReadOnlyCollection<LayoutSectionDefinition> Sections { get; private set; } = [];
-
-    //
-
-    private LayoutDefinition() { }
-
-    public LayoutDefinition(
-        string name, 
-        int version, 
-        int colCount, 
-        int rowCount, 
-        IReadOnlyCollection<LayoutSectionDefinition> sections)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name);
-
-        Name = name.Trim().ToLowerInvariant();
-        Version = version;
-        ColCount = colCount;
-        RowCount = rowCount;
-        Sections = sections;
-    }
-
-    public LayoutDefinition(
-        LayoutKey key,
-        int colCount,
-        int rowCount,
-        IReadOnlyCollection<LayoutSectionDefinition> sections)
-    {
-        ArgumentNullException.ThrowIfNull(key);
-
-        Name = key.Name;
-        Version = key.Version;
-        ColCount = colCount;
-        RowCount = rowCount;
-        Sections = sections;
-    }
-
-    public LayoutDefinition(
-        string name,
-        int version,
-        GridDimensions dimensions,
-        IReadOnlyCollection<LayoutSectionDefinition> sections)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name);
-
-        Name = name.Trim().ToLowerInvariant();
-        Version = version;
-        ColCount = dimensions.ColCount;
-        RowCount = dimensions.RowCount;
-        Sections = sections;
-    }
-
-    public LayoutDefinition(
-        LayoutKey key,
-        GridDimensions dimensions,
-        IReadOnlyCollection<LayoutSectionDefinition> sections)
-    {
-        ArgumentNullException.ThrowIfNull(key);
-
-        Name = key.Name;
-        Version = key.Version;
-        ColCount = dimensions.ColCount;
-        RowCount = dimensions.RowCount;
-        Sections = sections;
-    }
-
-    public LayoutDefinition(
-        LayoutKey key,
-        LayoutProps props)
-    {
-        ArgumentNullException.ThrowIfNull(key);
-        ArgumentNullException.ThrowIfNull(props);
-
-        Name = key.Name;
-        Version = key.Version;
-        ColCount = props.ColCount;
-        RowCount = props.RowCount;
-        Sections = props.Sections;
-    }
-
-    //
-    
-    [JsonIgnore]
     public LayoutKey Key => new(Name, Version);
 
-    [JsonIgnore]
     public LayoutProps Props => new(ColCount, RowCount, Sections);
-    
-    [JsonIgnore]
+
     public GridDimensions Dimensions => new(ColCount, RowCount);
+
+    public static LayoutDefinition Empty => new("", 0, 0, 0, []);
+
+    //
+
+    public LayoutDefinition(string name, int version, LayoutProps props)
+        : this(name, version, props.ColCount, props.RowCount, props.Sections) { }
+
+    public LayoutDefinition(LayoutKey key, int colCount, int rowCount, IReadOnlyCollection<LayoutSectionDefinition> sections)
+        : this(key.Name, key.Version, colCount, rowCount, sections) { }
+        
+    public LayoutDefinition(LayoutKey key, LayoutProps props)
+        : this(key.Name, key.Version, props.ColCount, props.RowCount, props.Sections) { }
 }
