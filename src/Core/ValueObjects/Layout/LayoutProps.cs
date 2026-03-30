@@ -8,7 +8,8 @@ public sealed record LayoutProps(
     public GridDimensions Dimensions => new(ColCount, RowCount);
 
     public static LayoutProps Empty => new(0, 0, []);
-    
+
+    //
     
     public LayoutProps(GridDimensions dimensions, IReadOnlyCollection<LayoutSectionDefinition> sections)
         : this(dimensions.ColCount, dimensions.RowCount, sections) { }
