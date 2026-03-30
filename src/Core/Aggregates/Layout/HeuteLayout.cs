@@ -9,7 +9,7 @@ public class HeuteLayout
 
     protected HeuteLayout() { }
 
-    protected HeuteLayout(Guid userId, LayoutDefinition definition)
+    protected HeuteLayout(Guid? userId, LayoutDefinition definition)
     {
         Id = Guid.NewGuid();
         UserId = userId;
@@ -40,7 +40,7 @@ public class HeuteLayout
 
     public Guid Id { get; private set; } = Guid.Empty;
 
-    public Guid UserId { get; private set; } = Guid.Empty;
+    public Guid? UserId { get; private set; } = Guid.Empty;
 
     public string Name { get; private set; } = string.Empty;
 
