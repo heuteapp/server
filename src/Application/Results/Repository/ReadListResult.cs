@@ -39,29 +39,31 @@ public record ReadListResult<T> : RepoResult
         };
     }
     
-    public static ReadListResult<T> Unauthorized(string? message = null)
+    public static ReadListResult<T> Unauthorized(string? message = null, IEnumerable<T>? entities = null)
     {
         return new ReadListResult<T>
         {
             IsSuccess = false,
+            Entities = entities,
             ErrorMessage = message ?? "You are not authenticated to access this resource",
             Status = RepoReadStatus.Unauthorized,
             StatusCode = (int)RepoReadStatus.Unauthorized
         };
     }
     
-    public static ReadListResult<T> Forbidden(string? message = null)
+    public static ReadListResult<T> Forbidden(string? message = null, IEnumerable<T>? entities = null)
     {
         return new ReadListResult<T>
         {
             IsSuccess = false,
+            Entities = entities,
             ErrorMessage = message ?? "You do not have permission to access this resource",
             Status = RepoReadStatus.Forbidden,
             StatusCode = (int)RepoReadStatus.Forbidden
         };
     }
     
-    public static ReadListResult<T> NotFound(string? entityName = null)
+    public static ReadListResult<T> NotFound(string? entityName = null, IEnumerable<T>? entities = null)
     {
         var message = string.IsNullOrEmpty(entityName) 
             ? "The requested resource was not found"
@@ -70,17 +72,19 @@ public record ReadListResult<T> : RepoResult
         return new ReadListResult<T>
         {
             IsSuccess = false,
+            Entities = entities,
             ErrorMessage = message,
             Status = RepoReadStatus.NotFound,
             StatusCode = (int)RepoReadStatus.NotFound
         };
     }
     
-    public static ReadListResult<T> Error(string errorMessage)
+    public static ReadListResult<T> Error(string errorMessage, IEnumerable<T>? entities = null)
     {
         return new ReadListResult<T>
         {
             IsSuccess = false,
+            Entities = entities,
             ErrorMessage = errorMessage,
             Status = RepoReadStatus.Error,
             StatusCode = (int)RepoReadStatus.Error
