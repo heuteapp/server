@@ -2,7 +2,7 @@ using HeuteApp.Api.Mappers.Workspace;
 using HeuteApp.Application.Results.Dailyboard;
 using HeuteApp.Application.Services.Internal;
 using HeuteApp.Application.Services.UserBased;
-using HeuteApp.Core.ValueObjects.Dailyboard.Path;
+using HeuteApp.Core.ValueObjects.Dailyboard;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeuteApp.Api.Controllers;

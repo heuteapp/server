@@ -4,9 +4,9 @@ using HeuteApp.Application.Interfaces.UserBased;
 using HeuteApp.Application.Mappers;
 using HeuteApp.Application.Results.Dailyboard;
 using HeuteApp.Core.Commands.Dispatchers;
-using HeuteApp.Core.ValueObjects.Dailyboard.Path;
+using HeuteApp.Core.ValueObjects.Dailyboard;
 using HeuteApp.Core.ValueObjects;
-using HeuteApp.Core.ValueObjects.Category.Path;
+using HeuteApp.Core.ValueObjects.Category;
 
 namespace HeuteApp.Application.Services.UserBased;
 

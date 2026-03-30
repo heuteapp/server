@@ -4,7 +4,6 @@ using HeuteApp.Application.Interfaces.UserBased;
 using HeuteApp.Application.Mappers;
 using HeuteApp.Application.Results.Category;
 using HeuteApp.Core.ValueObjects.Category;
-using HeuteApp.Core.ValueObjects.Category.Path;
 
 namespace HeuteApp.Application.Services.UserBased;
 

@@ -7,7 +7,6 @@ using HeuteApp.Infrastructure.Models.Category;
 using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Infrastructure.Models.Profile;
 using HeuteApp.Application.Results.Repository;
-using HeuteApp.Core.ValueObjects.Category.Path;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
