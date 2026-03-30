@@ -51,17 +51,17 @@ public class DailyboardRepository(HeuteDbContext context) : IDailyboardRepositor
     {
         if (profile is not HeuteProfileModel profileModel)
         {
-            return CreateResult<HeuteDailyboard>.Failure("Invalid profile model");
+            return CreateResult<HeuteDailyboard>.Error("Invalid profile model");
         }
 
         if (category is not HeuteCategoryModel categoryModel)
         {
-            return CreateResult<HeuteDailyboard>.Failure("Invalid category model");
+            return CreateResult<HeuteDailyboard>.Error("Invalid category model");
         }
 
         if (layout is not HeuteLayoutModel layoutModel)
         {
-            return CreateResult<HeuteDailyboard>.Failure("Invalid layout model");
+            return CreateResult<HeuteDailyboard>.Error("Invalid layout model");
         }
 
         var exists = await context.Dailyboards

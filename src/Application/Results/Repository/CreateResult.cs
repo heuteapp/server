@@ -19,7 +19,7 @@ public record CreateResult<T> : RepoResult
 
     public bool IsAlreadyExists => Status == RepoCreateStatus.AlreadyExists;
 
-    public bool IsFailure => Status == RepoCreateStatus.Failure;
+    public bool IsError => Status == RepoCreateStatus.Error;
     
     protected CreateResult() { }
     
@@ -81,14 +81,14 @@ public record CreateResult<T> : RepoResult
         };
     }
     
-    public static CreateResult<T> Failure(string errorMessage)
+    public static CreateResult<T> Error(string errorMessage)
     {
         return new CreateResult<T>
         {
             IsSuccess = false,
             ErrorMessage = errorMessage,
-            Status = RepoCreateStatus.Failure,
-            StatusCode = (int)RepoCreateStatus.Failure
+            Status = RepoCreateStatus.Error,
+            StatusCode = (int)RepoCreateStatus.Error
         };
     }
     

@@ -12,5 +12,5 @@ public enum RepoCreateStatus
     
     AlreadyExists = 409,
 
-    Failure = 500
+    Error = 500
 }

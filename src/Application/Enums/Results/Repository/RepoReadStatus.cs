@@ -10,5 +10,5 @@ public enum RepoReadStatus
 
     NotFound = 404,
 
-    Failure = 500
+    Error = 500
 }

@@ -19,7 +19,7 @@ public record ReadListResult<T> : RepoResult
 
     public bool IsForbidden => Status == RepoReadStatus.Forbidden;
     
-    public bool IsFailure => Status == RepoReadStatus.Failure;
+    public bool IsError => Status == RepoReadStatus.Error;
     
     
     private ReadListResult() { }
@@ -76,14 +76,14 @@ public record ReadListResult<T> : RepoResult
         };
     }
     
-    public static ReadListResult<T> Failure(string errorMessage)
+    public static ReadListResult<T> Error(string errorMessage)
     {
         return new ReadListResult<T>
         {
             IsSuccess = false,
             ErrorMessage = errorMessage,
-            Status = RepoReadStatus.Failure,
-            StatusCode = (int)RepoReadStatus.Failure
+            Status = RepoReadStatus.Error,
+            StatusCode = (int)RepoReadStatus.Error
         };
     }
     

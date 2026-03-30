@@ -39,7 +39,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
     {
         if (profile is not HeuteProfileModel ownerModel)
         {
-            return CreateResult<HeuteCategory>.Failure("Invalid profile owner");
+            return CreateResult<HeuteCategory>.Error("Invalid profile owner");
         }
 
         var exists = await context.Categories
@@ -58,7 +58,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         {
             if (parent is not HeuteCategoryModel model)
             {
-                return CreateResult<HeuteCategory>.Failure("Invalid parent category");
+                return CreateResult<HeuteCategory>.Error("Invalid parent category");
             }
             parentModel = model;
         }

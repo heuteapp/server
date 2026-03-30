@@ -77,7 +77,7 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         {
             if(profile is not HeuteProfileModel model)
             {
-                return CreateResult<HeuteLayout>.Failure("Invalid profile type");
+                return CreateResult<HeuteLayout>.Error("Invalid profile type");
             }
 
             profileModel = model;
