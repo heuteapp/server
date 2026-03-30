@@ -1,27 +1,11 @@
 namespace HeuteApp.Core.ValueObjects.Dailyboard;
 
-public record DailyboardDefinition
-{   
-    public static DailyboardDefinition Empty => new();
+public sealed record DailyboardDefinition(DateOnly Date)
+{
+    public static DailyboardDefinition Empty => new(DateOnly.MinValue);
 
     //
 
-    public DateOnly Date { get; private set; } = DateOnly.MinValue;
-
-    //
-
-    public DailyboardDefinition() { }
-
-    public DailyboardDefinition(
-        DateOnly date)
-    {
-        Date = date;
-    }
-
-    public DailyboardDefinition(
-        DailyboardKey Key,
-        DailyboardProps Props)
-    {
-        Date = Key.Date;
-    }
+    public DailyboardDefinition(DailyboardKey key)
+        : this(key.Date) { }
 }
