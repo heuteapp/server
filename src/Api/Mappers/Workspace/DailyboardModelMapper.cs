@@ -6,6 +6,7 @@ using HeuteApp.Core.Commands.Abstractions;
 using HeuteApp.Core.Commands.Domain.Dailyboard;
 using HeuteApp.Core.Mappers.Commands.Payloads;
 using HeuteApp.Application.Services.Internal;
+using HeuteApp.Application.Mappers;
 
 namespace HeuteApp.Api.Mappers.Workspace;
 
@@ -45,7 +46,7 @@ public static class DailyboardModelMapper
 
         return new DailyboardResponse(
             Date: dailyboard.Date,
-            Layout: layout.ToResponse(),
+            Layout: layout.ToResult().ToResponse(),
             Cards: [.. dailyboard.Cards.Select(ToResponse)]
         );
     }
