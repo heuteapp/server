@@ -114,8 +114,11 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         Guid? currentParentId = null;
         HeuteCategory? lastCategory = null;
         
-        foreach (var segment in path.Segments)
+        for (int i = 0; i < path.Segments.Length - 1; i++)
         {
+            var segment = path.Segments[i];
+            var isLastSegment = i == path.Segments.Length - 1;
+
             var readResult = await ReadByNameAsync(profile.Id, currentParentId, segment);
             
             if (readResult.IsSuccess)
