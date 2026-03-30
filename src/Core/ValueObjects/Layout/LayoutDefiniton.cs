@@ -7,12 +7,6 @@ public sealed record LayoutDefinition(
     int RowCount,
     IReadOnlyCollection<LayoutSectionDefinition> Sections)
 {
-    public LayoutKey Key => new(Name, Version);
-
-    public LayoutProps Props => new(ColCount, RowCount, Sections);
-
-    public GridDimensions Dimensions => new(ColCount, RowCount);
-
     public static LayoutDefinition Empty => new("", 0, 0, 0, []);
 
     //
@@ -22,7 +16,15 @@ public sealed record LayoutDefinition(
 
     public LayoutDefinition(LayoutKey key, int colCount, int rowCount, IReadOnlyCollection<LayoutSectionDefinition> sections)
         : this(key.Name, key.Version, colCount, rowCount, sections) { }
-        
+
     public LayoutDefinition(LayoutKey key, LayoutProps props)
         : this(key.Name, key.Version, props.ColCount, props.RowCount, props.Sections) { }
+
+    //
+
+    public LayoutKey Key => new(Name, Version);
+
+    public LayoutProps Props => new(ColCount, RowCount, Sections);
+
+    public GridDimensions Dimensions => new(ColCount, RowCount);
 }
