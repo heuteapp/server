@@ -38,19 +38,7 @@ public class UserBasedLayoutService(
     {   
         var profile = await userContext.GetProfileAsync();
 
-        var lastResult = await repository.ReadLatestAsync(profile.Id, name);
-
-        var last = lastResult.Entity;
-
-        if(lastResult.IsSuccess)
-        {
-            if(options?.VersionedBehavior == VersionedCreateBehavior.ReturnLatest)
-            {
-                return last!.ToResult();
-            }
-        }
-
-        var layoutResult = await repository.CreateAsync(profile, new LayoutDefinition(new (name, last?.Version ?? 1), props));
+        var layoutResult = await repository.CreateAsync(profile, name, props);
         layoutResult.ThrowIfFailure($"Failed to create layout with name '{name}'");
 
         await unitOfWork.SaveChangesAsync();

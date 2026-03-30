@@ -16,5 +16,5 @@ public interface ILayoutRepository
     Task<ReadListResult<HeuteLayout>> ReadListAsync(Guid? userId);
 
     
-    Task<CreateResult<HeuteLayout>> CreateAsync(HeuteProfile profile, LayoutDefinition definition);
+    Task<CreateResult<HeuteLayout>> CreateAsync(HeuteProfile profile, string name, LayoutProps props);
 }

@@ -69,7 +69,7 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
         return ReadListResult<HeuteLayout>.Success(layouts);
     }
 
-    public async Task<CreateResult<HeuteLayout>> CreateAsync(HeuteProfile? profile, LayoutDefinition definition)
+    public async Task<CreateResult<HeuteLayout>> CreateAsync(HeuteProfile? profile, string name, LayoutProps props)
     {
         HeuteProfileModel? profileModel = null;
 
@@ -85,15 +85,22 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
 
         var userId = profile?.Id;
 
+        var lastResult = await ReadLatestAsync(userId, name);
+        var last = lastResult.Entity;
+
+        var version = last?.Version + 1 ?? 1;
+
         var exists = await context.Layouts.AnyAsync(l =>
             l.UserId == userId &&
-            l.Name == definition.Name &&
-            l.Version == definition.Version);
+            l.Name == name &&
+            l.Version == version);
         
         if (exists)
         {
-            return CreateResult<HeuteLayout>.AlreadyExists("Layout", $"{definition.Name} v{definition.Version}");
+            return CreateResult<HeuteLayout>.AlreadyExists("Layout", $"{name} v{version}");
         }
+
+        var definition = new LayoutDefinition(new(name, version), props);
 
         var layout = HeuteLayoutModel.Create(profileModel, definition);
         await context.Layouts.AddAsync(layout);
