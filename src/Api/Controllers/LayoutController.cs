@@ -59,6 +59,13 @@ public class LayoutController(
 
     //
 
+    [HttpPost("global")]
+    public async Task<IActionResult> CreateGlobalLayout([FromQuery] string name, [FromBody] LayoutProps props)
+    {
+        var layout = await publicLayoutService.CreateLayoutAsync(name, props);
+        return Ok(layout.ToResponse());
+    }
+
     [HttpPost("user")]
     public async Task<IActionResult> CreateUserLayout([FromQuery] string name, [FromBody] LayoutProps props)
     {
