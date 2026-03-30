@@ -10,7 +10,7 @@ public interface IDailyboardRepository
 {
     Task<DailyboardGetResult> GetByIdAsync(Guid dailyboardId);
 
-    Task<DailyboardGetResult> GetByKeyAsync(Guid userId, Guid categoryId, DailyboardKey key);
+    Task<DailyboardGetResult> GetByDateAsync(Guid userId, Guid categoryId, DateOnly date);
 
     Task<DailyboardCreateResult> CreateAsync(HeuteProfile profile, HeuteCategory category, HeuteLayout layout, DailyboardDefinition definition);
 }

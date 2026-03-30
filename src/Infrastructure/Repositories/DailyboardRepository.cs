@@ -36,7 +36,7 @@ public class DailyboardRepository(HeuteDbContext context) : IDailyboardRepositor
             };
     }
 
-    public async Task<DailyboardGetResult> GetByKeyAsync(Guid userId, Guid categoryId, DailyboardKey key)
+    public async Task<DailyboardGetResult> GetByDateAsync(Guid userId, Guid categoryId, DateOnly date)
     {
         var entity = await context.Dailyboards
             .Include(b => b.Cards)
@@ -44,7 +44,7 @@ public class DailyboardRepository(HeuteDbContext context) : IDailyboardRepositor
             .FirstOrDefaultAsync(b => 
                 b.UserId == userId && 
                 b.CategoryId == categoryId && 
-                b.Date == key.Date);
+                b.Date == date);
 
         return entity == null
             ? new DailyboardGetResult
