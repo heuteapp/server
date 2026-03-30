@@ -15,7 +15,7 @@ public sealed partial record CategoryPath
         Value = value;
     }
     
-    public static CategoryPath Create(string path)
+    public static CategoryPath Parse(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
             throw new ArgumentException("Category path cannot be empty", nameof(path));
@@ -82,7 +82,7 @@ public sealed partial record CategoryPath
             throw new ArgumentException("At least one valid segment is required", nameof(segments));
         
         var path = string.Join("/", cleanedSegments);
-        return Create(path);
+        return Parse(path);
     }
     
     public string[] Segments => _segments ??= Value.Split('/');
@@ -150,7 +150,7 @@ public sealed partial record CategoryPath
             throw new ArgumentException("Child segment cannot be empty", nameof(child));
         
         var combinedPath = $"{parent.Trim().TrimEnd('/')}/{child.Trim()}";
-        return Create(combinedPath);
+        return Parse(combinedPath);
     }
     
     public CategoryPath Append(string child)
