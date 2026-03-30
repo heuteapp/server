@@ -3,25 +3,27 @@ using HeuteApp.Application.Interfaces.Repositories;
 using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Infrastructure.Models.Layout;
-using HeuteApp.Application.Models.Layout.Contracts;
 using HeuteApp.Core.ValueObjects.Layout;
 using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Infrastructure.Models.Profile;
+using HeuteApp.Application.Results.Repository;
 
 namespace HeuteApp.Infrastructure.Repositories;
 
 public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
 {
-    public async Task<HeuteLayout?> GetByIdAsync(Guid layoutId)
+    public async Task<ReadResult<HeuteLayout>> ReadByIdAsync(Guid layoutId)
     {
         var layout = await context.Layouts
             .Include(l => l.Sections)
             .FirstOrDefaultAsync(l => l.Id == layoutId);
 
-        return layout;
+        return layout == null
+            ? ReadResult<HeuteLayout>.NotFound("Layout")
+            : ReadResult<HeuteLayout>.Success(layout);
     }
 
-    public async Task<HeuteLayout?> GetByNameAsync(Guid? userId, string name, int? version = null)
+    public async Task<ReadResult<HeuteLayout>> ReadByNameAsync(Guid? userId, string name, int? version = null)
     {
         var query = context.Layouts
             .Include(l => l.Sections)
@@ -38,37 +40,64 @@ public class LayoutRepository(HeuteDbContext context) : ILayoutRepository
             query = query.OrderByDescending(l => l.Version);
         }
 
-        return await query.FirstOrDefaultAsync();
+        var layout = await query.FirstOrDefaultAsync();
+
+        return layout == null
+            ? ReadResult<HeuteLayout>.NotFound($"Layout with name '{name}' not found")
+            : ReadResult<HeuteLayout>.Success(layout);
     }
 
-    public async Task<HeuteLayout?> GetLastestAsync(Guid? userId, string name)
+    public async Task<ReadResult<HeuteLayout>> ReadLatestAsync(Guid? userId, string name)
     {
         var layout = await context.Layouts
             .Where(l => l.UserId == userId && l.Name == name)
             .OrderByDescending(l => l.Version)
             .FirstOrDefaultAsync();
 
-        return layout;
+        return layout == null
+            ? ReadResult<HeuteLayout>.NotFound($"Latest version of layout '{name}' not found")
+            : ReadResult<HeuteLayout>.Success(layout);
     }
 
-    public async Task<IEnumerable<HeuteLayout>> GetByOwnerAsync(Guid userId)
+    public async Task<ReadListResult<HeuteLayout>> ReadListByUserAsync(Guid userId)
     {
-        var layout = await context.Layouts
+        var layouts = await context.Layouts
             .Include(l => l.Sections)
             .Where(l => l.UserId == userId)
             .ToListAsync();
 
-        return layout;
+        return ReadListResult<HeuteLayout>.Success(layouts);
     }
 
-    public async Task<HeuteLayout> CreateAsync(HeuteProfile profile, LayoutDefinition definition)
+    public async Task<CreateResult<HeuteLayout>> CreateAsync(HeuteProfile? profile, LayoutDefinition definition)
     {
-        if(profile is not HeuteProfileModel ownerModel)
-            throw new ArgumentException("Expected HeuteProfileModel", nameof(profile));
+        HeuteProfileModel? profileModel = null;
 
-        var layout = HeuteLayoutModel.Create(ownerModel, definition);
+        if (profile is not null)
+        {
+            if(profile is not HeuteProfileModel model)
+            {
+                return CreateResult<HeuteLayout>.Failure("Invalid profile type");
+            }
 
-        context.Layouts.Add(layout);
-        return layout;
+            profileModel = model;
+        }
+
+        var userId = profile?.Id;
+
+        var exists = await context.Layouts.AnyAsync(l =>
+            l.UserId == userId &&
+            l.Name == definition.Name &&
+            l.Version == definition.Version);
+        
+        if (exists)
+        {
+            return CreateResult<HeuteLayout>.AlreadyExists("Layout", $"{definition.Name} v{definition.Version}");
+        }
+
+        var layout = HeuteLayoutModel.Create(profileModel, definition);
+        await context.Layouts.AddAsync(layout);
+        
+        return CreateResult<HeuteLayout>.Success(layout);
     }
 }

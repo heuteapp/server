@@ -1,3 +1,4 @@
+using HeuteApp.Application.Results.Repository;
 using HeuteApp.Core.Aggregates.Layout;
 using HeuteApp.Core.Aggregates.Profile;
 using HeuteApp.Core.ValueObjects.Layout;
@@ -6,13 +7,14 @@ namespace HeuteApp.Application.Interfaces.Repositories;
 
 public interface ILayoutRepository
 {
-    Task<HeuteLayout?> GetByIdAsync(Guid layoutId);
+    Task<ReadResult<HeuteLayout>> ReadByIdAsync(Guid layoutId);
+
+    Task<ReadResult<HeuteLayout>> ReadByNameAsync(Guid? userId, string name, int? version = null);
+
+    Task<ReadResult<HeuteLayout>> ReadLatestAsync(Guid? userId, string name);
+
+    Task<ReadListResult<HeuteLayout>> ReadListByUserAsync(Guid userId);
+
     
-    Task<HeuteLayout?> GetByNameAsync(Guid? userId, string name, int? version = null);
-
-    Task<HeuteLayout?> GetLastestAsync(Guid? userId, string name);
-
-    Task<IEnumerable<HeuteLayout>> GetByOwnerAsync(Guid userId);
-
-    Task<HeuteLayout> CreateAsync(HeuteProfile user, LayoutDefinition definition);
+    Task<CreateResult<HeuteLayout>> CreateAsync(HeuteProfile profile, LayoutDefinition definition);
 }
