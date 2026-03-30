@@ -8,13 +8,9 @@ public class InternalProfileService(
 {
     public async Task<HeuteProfile> GetProfileByIdAsync(Guid profileId)
     {
-        var result = await repository.GetByIdAsync(profileId);
+        var result = await repository.ReadByIdAsync(profileId);
+        result.ThrowIfFailure($"Failed to retrieve profile with ID {profileId}");
 
-        if (!result.IsSuccess || result.Profile == null)
-        {
-            throw new Exception($"Profile with ID '{profileId}' not found.");
-        }
-
-        return result.Profile;
+        return result.Entity!;
     }
 }
