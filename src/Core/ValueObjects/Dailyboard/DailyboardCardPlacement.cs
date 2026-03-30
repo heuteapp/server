@@ -2,42 +2,30 @@ using HeuteApp.Core.ValueObjects.Layout;
 
 namespace HeuteApp.Core.ValueObjects.Dailyboard;
 
-public sealed record DailyboardCardPlacement
-{        
-    public static DailyboardCardPlacement Empty => new();
+public sealed record DailyboardCardPlacement(
+    string SectionName,
+    int ColIndex,
+    int RowIndex,
+    int ColSpan,
+    int RowSpan)
+{
+    public static DailyboardCardPlacement Empty => new("", -1, -1, 0, 0);
 
     //
 
-    public string SectionName { get; private set; } = string.Empty;
-
-    public int ColIndex { get; private set; } = -1;
-
-    public int RowIndex { get; private set; } = -1;
-
-    public int ColSpan { get; private set; } = 0;
-
-    public int RowSpan { get; private set; } = 0;
-
-    //
-
-    public DailyboardCardPlacement() { }
-
-    public DailyboardCardPlacement(string sectionName, int colIndex, int rowIndex, int colSpan, int rowSpan)
+    public DailyboardCardPlacement(LayoutSectionKey section, int colIndex, int rowIndex, int colSpan, int rowSpan)
+        : this(section.Name, colIndex, rowIndex, colSpan, rowSpan)
     {
-        SectionName = sectionName;
-        ColIndex = colIndex;
-        RowIndex = rowIndex;
-        ColSpan = colSpan;
-        RowSpan = rowSpan;
+    }
+
+    public DailyboardCardPlacement(string sectionName, GridRect position)
+        : this(sectionName, position.ColIndex, position.RowIndex, position.ColSpan, position.RowSpan)
+    {
     }
 
     public DailyboardCardPlacement(LayoutSectionKey section, GridRect position)
+        : this(section.Name, position.ColIndex, position.RowIndex, position.ColSpan, position.RowSpan)
     {
-        SectionName = section.Name;
-        ColIndex = position.ColIndex;
-        RowIndex = position.RowIndex;
-        ColSpan = position.ColSpan;
-        RowSpan = position.RowSpan;
     }
 
     //
@@ -45,5 +33,4 @@ public sealed record DailyboardCardPlacement
     public LayoutSectionKey Section => new(SectionName);
 
     public GridRect Position => new(ColIndex, RowIndex, ColSpan, RowSpan);
-
 }
