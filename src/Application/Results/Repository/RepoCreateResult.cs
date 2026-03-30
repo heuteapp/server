@@ -5,11 +5,25 @@ namespace HeuteApp.Application.Results.Repository;
 public record RepoCreateResult<T> : RepoResult
 {
     public T? Entity { get; init; }
-
+    
     public int? Id { get; init; }
 
     public RepoCreateStatus Status { get; init; }
+    
 
+    public bool IsBadRequest => Status == RepoCreateStatus.BadRequest;
+
+    public bool IsUnauthorized => Status == RepoCreateStatus.Unauthorized;
+
+    public bool IsForbidden => Status == RepoCreateStatus.Forbidden;
+
+    public bool IsAlreadyExists => Status == RepoCreateStatus.AlreadyExists;
+
+    public bool IsFailure => Status == RepoCreateStatus.Failure;
+    
+    private RepoCreateResult() { }
+    
+    //
     
     public static RepoCreateResult<T> Success(T entity, int? id = null)
     {
@@ -19,7 +33,7 @@ public record RepoCreateResult<T> : RepoResult
             Entity = entity,
             Id = id,
             Status = RepoCreateStatus.Success,
-            StatusCode = 201
+            StatusCode = (int)RepoCreateStatus.Success
         };
     }
     
@@ -30,7 +44,7 @@ public record RepoCreateResult<T> : RepoResult
             IsSuccess = false,
             ErrorMessage = errorMessage,
             Status = RepoCreateStatus.BadRequest,
-            StatusCode = 400
+            StatusCode = (int)RepoCreateStatus.BadRequest
         };
     }
     
@@ -39,9 +53,9 @@ public record RepoCreateResult<T> : RepoResult
         return new RepoCreateResult<T>
         {
             IsSuccess = false,
-            ErrorMessage = message ?? "Unauthorized access",
+            ErrorMessage = message ?? "You are not authenticated to create this resource",
             Status = RepoCreateStatus.Unauthorized,
-            StatusCode = 401
+            StatusCode = (int)RepoCreateStatus.Unauthorized
         };
     }
     
@@ -50,9 +64,9 @@ public record RepoCreateResult<T> : RepoResult
         return new RepoCreateResult<T>
         {
             IsSuccess = false,
-            ErrorMessage = message ?? "Forbidden access",
+            ErrorMessage = message ?? "You do not have permission to create this resource",
             Status = RepoCreateStatus.Forbidden,
-            StatusCode = 403
+            StatusCode = (int)RepoCreateStatus.Forbidden
         };
     }
     
@@ -63,7 +77,7 @@ public record RepoCreateResult<T> : RepoResult
             IsSuccess = false,
             ErrorMessage = $"{entityName} with {identifier} already exists",
             Status = RepoCreateStatus.AlreadyExists,
-            StatusCode = 409
+            StatusCode = (int)RepoCreateStatus.AlreadyExists
         };
     }
     
@@ -74,7 +88,11 @@ public record RepoCreateResult<T> : RepoResult
             IsSuccess = false,
             ErrorMessage = errorMessage,
             Status = RepoCreateStatus.Failure,
-            StatusCode = 500
+            StatusCode = (int)RepoCreateStatus.Failure
         };
     }
+    
+    //
+    
+    public static implicit operator RepoCreateResult<T>(T entity) => Success(entity);
 }
