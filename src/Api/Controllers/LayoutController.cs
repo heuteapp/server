@@ -1,6 +1,7 @@
 using HeuteApp.Api.Mappers.Workspace;
 using HeuteApp.Application.Services.Public;
 using HeuteApp.Application.Services.UserBased;
+using HeuteApp.Core.ValueObjects.Layout;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeuteApp.Api.Controllers;
@@ -53,6 +54,18 @@ public class LayoutController(
         {
             var layouts = await context.LayoutService.GetLayoutsAsync();
             return Ok(layouts.Select(l => l.ToResponse()));
+        });
+    }
+
+    //
+
+    [HttpPost("user")]
+    public async Task<IActionResult> CreateUserLayout([FromQuery] string name, [FromBody] LayoutProps props)
+    {
+        return await userBasedActionService.ExecuteAsync<IActionResult>(async context =>
+        {
+            var layout = await context.LayoutService.CreateLayoutAsync(name, props);
+            return Ok(layout.ToResponse());
         });
     }
 }
