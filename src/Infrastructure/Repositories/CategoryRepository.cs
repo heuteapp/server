@@ -160,7 +160,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
 
         HeuteCategoryModel newCategory;
 
-        if(lastCategory == null)
+        if(lastCategory != null)
         {
             if (lastCategory is not HeuteCategoryModel parentModel)
             {
