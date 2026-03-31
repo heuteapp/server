@@ -93,16 +93,6 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         return ReadResult<Tree<HeuteCategory>>.Success(tree);
     }
 
-    private Tree<HeuteCategory> BuildTree(HeuteCategory root, List<HeuteCategoryModel> allCategories)
-    {
-        var children = allCategories
-            .Where(c => c.ParentId == root.Id)
-            .Select(child => BuildTree(child, allCategories))
-            .ToList();
-
-        return new Tree<HeuteCategory>(root, children.Count == 0 ? null : children);
-    }
-
     public async Task<CreateResult<HeuteCategory>> CreateAsync(HeuteProfile profile, HeuteCategory? parent, CategoryDefinition definition)
     {
         if (profile is not HeuteProfileModel profileModel)
@@ -184,4 +174,17 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
 
         return CreateResult<Chain<HeuteCategory>>.Success(chain!);
     }
+
+    //
+
+    private static Tree<HeuteCategory> BuildTree(HeuteCategory root, List<HeuteCategoryModel> allCategories)
+    {
+        var children = allCategories
+            .Where(c => c.ParentId == root.Id)
+            .Select(child => BuildTree(child, allCategories))
+            .ToList();
+
+        return new Tree<HeuteCategory>(root, children.Count == 0 ? null : children);
+    }
+
 }
