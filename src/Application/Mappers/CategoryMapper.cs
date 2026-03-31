@@ -29,6 +29,22 @@ public static class CategoryMapper
         );
     }
 
+    public static CategoryResult ToLastResult(this Chain<HeuteCategory> category)
+    {
+        ArgumentNullException.ThrowIfNull(category);
+        Chain<HeuteCategory>? current = category;
+
+        while (current.Child != null)
+            current = current.Child;
+
+        return new CategoryResult(
+            current.Current.Id,
+            current.Current.UserId,
+            current.Current.ParentId,
+            current.Current.Name
+        );
+    }
+
     public static CategoryResult ToLastResult(this CategoryChainResult chain)
     {
         ArgumentNullException.ThrowIfNull(chain);
