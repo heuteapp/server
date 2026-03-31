@@ -93,13 +93,13 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         return ReadResult<Tree<HeuteCategory>>.Success(tree);
     }
 
-    public async Task<ReadListResult<Tree<HeuteCategory>>> ReadListAllTreesAsync(Guid userId)
+    public async Task<ReadResult<Hierarchy<HeuteCategory>>> ReadHierarchyAsync(Guid userId)
     {
         var allCategories = await context.Categories.Where(c => c.UserId == userId).ToListAsync();
         var rootCategories = allCategories.Where(c => c.ParentId == null).ToList();
 
-        var trees = rootCategories.Select(root => BuildTree(root, allCategories)).ToList();
-        return ReadListResult<Tree<HeuteCategory>>.Success(trees);
+        var roots = rootCategories.Select(root => BuildTree(root, allCategories)).ToList();
+        return ReadResult<Hierarchy<HeuteCategory>>.Success(new Hierarchy<HeuteCategory>(roots));
     }
 
     public async Task<CreateResult<HeuteCategory>> CreateAsync(HeuteProfile profile, HeuteCategory? parent, CategoryDefinition definition)

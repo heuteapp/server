@@ -16,7 +16,7 @@ public interface ICategoryRepository
 
     Task<ReadResult<Tree<HeuteCategory>>> ReadTreeByPathAsync(Guid userId, CategoryPath path);
 
-    Task<ReadListResult<Tree<HeuteCategory>>> ReadListAllTreesAsync(Guid userId);
+    Task<ReadResult<Hierarchy<HeuteCategory>>> ReadHierarchyAsync(Guid userId);
 
     Task<CreateResult<HeuteCategory>> CreateAsync(HeuteProfile profile, HeuteCategory? parent, CategoryDefinition definition);
 

@@ -32,14 +32,14 @@ public class UserBasedCategoryService(
         return result.Entity!.ToTreeResult();
     }
 
-    public async Task<List<CategoryTreeResult>> GetAllCategoryTreesAsync()
+    public async Task<List<CategoryTreeResult>> GetCategoryHierarchyAsync()
     {
         var userId = userContext.GetUserIdOrThrow();
-        var result = await repository.ReadListAllTreesAsync(userId);
+        var result = await repository.ReadHierarchyAsync(userId);
 
-        result.ThrowIfFailure("Failed to retrieve category trees");
+        result.ThrowIfFailure("Failed to retrieve category hierarchy");
 
-        return [.. result.Entities!.Select(tree => tree.ToTreeResult())];
+        return [.. result.Entity!.Roots.Select(tree => tree.ToTreeResult())];
     }
 
     public async Task<CategoryChainResult> CreateCategoryAsync(CategoryPath path, CategoryDefinition definition)
