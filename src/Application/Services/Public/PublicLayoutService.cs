@@ -1,3 +1,4 @@
+using HeuteApp.Application.Interfaces;
 using HeuteApp.Application.Interfaces.Repositories;
 using HeuteApp.Application.Mappers;
 using HeuteApp.Application.Results.Layout;
@@ -6,6 +7,7 @@ using HeuteApp.Core.ValueObjects.Layout;
 namespace HeuteApp.Application.Services.Public;
 
 public class PublicLayoutService(
+    IUnitOfWork unitOfWork,
     ILayoutRepository repository)
 {
     public async Task<LayoutResult> GetLayoutByNameAsync(string name, int? version)
@@ -29,6 +31,7 @@ public class PublicLayoutService(
         var result = await repository.CreateAsync(null, name, props);
         result.ThrowIfFailure($"Failed to create layout");
 
+        await unitOfWork.SaveChangesAsync();
         return result.Entity!.ToResult();
     }
 }

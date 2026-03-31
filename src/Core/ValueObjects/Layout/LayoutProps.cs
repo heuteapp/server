@@ -2,43 +2,22 @@ using System.Text.Json.Serialization;
 
 namespace HeuteApp.Core.ValueObjects.Layout;
 
-public sealed record LayoutProps
+public sealed record LayoutProps(
+    int ColCount, 
+    int RowCount, 
+    IReadOnlyCollection<LayoutSectionDefinition> Sections)
 {
     public static LayoutProps Empty => new();
 
     //
 
-    public int ColCount { get; private set; } = 0;
-
-    public int RowCount { get; private set; } = 0;
-
-    public IReadOnlyCollection<LayoutSectionDefinition> Sections { get; private set; } = [];
-
-    //
-
-    public LayoutProps() { }
-
-    public LayoutProps(
-        int ColCount, 
-        int RowCount, 
-        IReadOnlyCollection<LayoutSectionDefinition> Sections)
-    {
-        this.ColCount = ColCount;
-        this.RowCount = RowCount;
-        this.Sections = Sections;
-    }
-
-    public LayoutProps(
-        GridDimensions dimensions,
-        IReadOnlyCollection<LayoutSectionDefinition> sections)
-    {
-        ColCount = dimensions.ColCount;
-        RowCount = dimensions.RowCount;
-        Sections = sections;
-    }
+    public LayoutProps() 
+        : this(0, 0, []) { }
+    
+    public LayoutProps(GridDimensions dimensions, IReadOnlyCollection<LayoutSectionDefinition> sections)
+        : this(dimensions.ColCount, dimensions.RowCount, sections) { }
 
     //
-
 
     [JsonIgnore]
     public GridDimensions Dimensions => new(ColCount, RowCount);

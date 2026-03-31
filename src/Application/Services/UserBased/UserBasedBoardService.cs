@@ -4,9 +4,10 @@ using HeuteApp.Application.Interfaces.UserBased;
 using HeuteApp.Application.Mappers;
 using HeuteApp.Application.Results.Dailyboard;
 using HeuteApp.Core.Commands.Dispatchers;
-using HeuteApp.Core.ValueObjects.Dailyboard.Path;
+using HeuteApp.Core.ValueObjects.Dailyboard;
 using HeuteApp.Core.ValueObjects;
-using HeuteApp.Core.ValueObjects.Category.Path;
+using HeuteApp.Core.ValueObjects.Category;
+using HeuteApp.Core.Mappers;
 
 namespace HeuteApp.Application.Services.UserBased;
 
@@ -22,10 +23,10 @@ public class UserBasedDailyboardService(
     {
         var userId = userContext.GetUserIdOrThrow();
 
-        var categoryResult = await categoryRepository.ReadListByPathAsync(userId, path.CategoryPath);
+        var categoryResult = await categoryRepository.ReadChainByPathAsync(userId, path.CategoryPath);
         categoryResult.ThrowIfFailure($"Failed to retrieve category for dailyboard at path: {path}");
 
-        var category = categoryResult.Entities!.LastOrDefault()!;
+        var category = categoryResult.Entity!.ToLast();
 
         var date = path.Date ?? YYMMDDDate.Today();
         var isToday = date.Equals(YYMMDDDate.Today());
@@ -63,10 +64,10 @@ public class UserBasedDailyboardService(
 
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var categoryResult = await categoryRepository.ReadListByPathAsync(profile.Id, path);
+        var categoryResult = await categoryRepository.ReadChainByPathAsync(profile.Id, path);
         categoryResult.ThrowIfFailure($"Failed to retrieve category for dailyboard at path: {path}");
 
-        var category = categoryResult.Entities!.LastOrDefault()!;
+        var category = categoryResult.Entity!.ToLast();
 
         // !!
         var layoutResult = await layoutRepository.ReadByNameAsync(null, "default");

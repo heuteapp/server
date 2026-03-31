@@ -4,7 +4,6 @@ using HeuteApp.Application.Interfaces.UserBased;
 using HeuteApp.Application.Mappers;
 using HeuteApp.Application.Results.Category;
 using HeuteApp.Core.ValueObjects.Category;
-using HeuteApp.Core.ValueObjects.Category.Path;
 
 namespace HeuteApp.Application.Services.UserBased;
 
@@ -13,23 +12,43 @@ public class UserBasedCategoryService(
     ICategoryRepository repository, 
     IUnitOfWork unitOfWork)
 {
-    public async Task<IEnumerable<CategoryResult>> GetCategoriesAsync(CategoryPath path)
+    public async Task<CategoryChainResult> GetCategoryChainAsync(CategoryPath path)
     {
         var userId = userContext.GetUserIdOrThrow();
-        var result = await repository.ReadListByPathAsync(userId, path);
+        var result = await repository.ReadChainByPathAsync(userId, path);
 
         result.ThrowIfFailure($"Failed to retrieve category at path: {path}");
 
-        return result.Entities?.Select(e => e.ToResult()) ?? [];
+        return result.Entity!.ToResult();
     }
 
-    public async Task<IEnumerable<CategoryResult>> CreateCategoryAsync(CategoryPath path, CategoryDefinition definition)
+    public async Task<CategoryTreeResult> GetCategoryTreeAsync(CategoryPath path)
+    {
+        var userId = userContext.GetUserIdOrThrow();
+        var result = await repository.ReadTreeByPathAsync(userId, path);
+
+        result.ThrowIfFailure($"Failed to retrieve category at path: {path}");
+
+        return result.Entity!.ToResult();
+    }
+
+    public async Task<CategoryHierarchyResult> GetCategoryHierarchyAsync()
+    {
+        var userId = userContext.GetUserIdOrThrow();
+        var result = await repository.ReadHierarchyAsync(userId);
+
+        result.ThrowIfFailure("Failed to retrieve category hierarchy");
+
+        return result.Entity!.ToResult();
+    }
+
+    public async Task<CategoryChainResult> CreateCategoryAsync(CategoryPath path, CategoryDefinition definition)
     {
         var profile = await userContext.GetProfileAsync();
-        var result = await repository.CreateListByPathAsync(profile, path, definition);
+        var result = await repository.CreateChainByPathAsync(profile, path, definition);
         result.ThrowIfFailure($"Failed to create category at path: {path}");
 
         await unitOfWork.SaveChangesAsync();
-        return result.Entities?.Select(e => e.ToResult()) ?? [];
+        return result.Entity!.ToResult();
     }
 }

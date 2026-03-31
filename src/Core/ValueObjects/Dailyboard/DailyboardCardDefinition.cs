@@ -2,50 +2,45 @@ using System.Text.Json.Serialization;
 
 namespace HeuteApp.Core.ValueObjects.Dailyboard;
 
-public record DailyboardCardDefinition
+public sealed record DailyboardCardDefinition(
+    string Name,
+    string? Title,
+    string? SectionName,
+    int? ColIndex,
+    int? RowIndex,
+    int? ColSpan,
+    int? RowSpan)
 {
     public static DailyboardCardDefinition Empty => new();
 
     //
 
-    public string Name { get; private set; } = null!;
+    public DailyboardCardDefinition()
+        : this(string.Empty, null, null, null, null, null, null) { }
 
-    public string? Title { get; private set; } = null!;
-
-    public string? SectionName { get; private set; } = null;
-
-    public int? ColIndex { get; private set; } = null;
-
-    public int? RowIndex { get; private set; } = null;
-
-    public int? ColSpan { get; private set; } = null;
-
-    public int? RowSpan { get; private set; } = null;
-
-    //
-
-    public DailyboardCardDefinition() { }
-
-    public DailyboardCardDefinition(string name, string? title, string? sectionName, int? colIndex, int? rowIndex, int? colSpan, int? rowSpan)
+    public DailyboardCardDefinition(DailyboardCardKey key, string? title, string? sectionName, int? colIndex, int? rowIndex, int? colSpan, int? rowSpan)
+        : this(key.Name, title, sectionName, colIndex, rowIndex, colSpan, rowSpan)
     {
-        Name = name;
-        Title = title;
-        SectionName = sectionName;
-        ColIndex = colIndex;
-        RowIndex = rowIndex;
-        ColSpan = colSpan;
-        RowSpan = rowSpan;
     }
-    
-    public DailyboardCardDefinition(DailyboardCardKey key, DailyboardCardProps props)
+
+    public DailyboardCardDefinition(string name, DailyboardCardProps props)
+        : this(name, props.Title, props.SectionName, props.ColIndex, props.RowIndex, props.ColSpan, props.RowSpan)
     {
-        Name = key.Name;
-        Title = props.Title;
-        SectionName = props.SectionName;
-        ColIndex = props.ColIndex;
-        RowIndex = props.RowIndex;
-        ColSpan = props.ColSpan;
-        RowSpan = props.RowSpan;
+    }
+
+    public DailyboardCardDefinition(DailyboardCardKey key, DailyboardCardProps props)
+        : this(key.Name, props.Title, props.SectionName, props.ColIndex, props.RowIndex, props.ColSpan, props.RowSpan)
+    {
+    }
+
+    public DailyboardCardDefinition(string name, DailyboardCardContent content, DailyboardCardPlacement? placement)
+        : this(name, content.Title, placement?.SectionName, placement?.ColIndex, placement?.RowIndex, placement?.ColSpan, placement?.RowSpan)
+    {
+    }
+
+    public DailyboardCardDefinition(DailyboardCardKey key, DailyboardCardContent content, DailyboardCardPlacement? placement)
+        : this(key.Name, content.Title, placement?.SectionName, placement?.ColIndex, placement?.RowIndex, placement?.ColSpan, placement?.RowSpan)
+    {
     }
 
     //
@@ -55,10 +50,10 @@ public record DailyboardCardDefinition
 
     [JsonIgnore]
     public DailyboardCardProps Props => new(Content, Placement);
-    
+
     [JsonIgnore]
     public DailyboardCardContent Content => new(Title);
-    
+
     [JsonIgnore]
     public DailyboardCardPlacement? Placement => 
         SectionName is not null && ColIndex is not null && RowIndex is not null && ColSpan is not null && RowSpan is not null

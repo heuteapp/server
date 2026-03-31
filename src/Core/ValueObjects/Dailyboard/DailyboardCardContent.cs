@@ -1,19 +1,9 @@
 namespace HeuteApp.Core.ValueObjects.Dailyboard;
 
-public record DailyboardCardContent
+public sealed record DailyboardCardContent(string? Title)
 {
     public static DailyboardCardContent Empty => new();
 
-    //
-
-    public string? Title { get; private set; } = null;
-
-    //
-
-    public DailyboardCardContent() { }
-
-    public DailyboardCardContent(string? title)
-    {
-        Title = title;
-    }
+    public DailyboardCardContent() 
+        : this(Title:null) { }
 }
