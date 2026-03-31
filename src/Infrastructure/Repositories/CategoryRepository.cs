@@ -191,6 +191,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         var children = allCategories
             .Where(c => c.ParentId == root.Id)
             .Select(child => BuildTree(child, allCategories))
+            .OrderBy(c => c.Current.Name, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         return new Tree<HeuteCategory>(root, children.Count == 0 ? null : children);
