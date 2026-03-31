@@ -28,6 +28,16 @@ public class CategoryController(
         });
     }
 
+    [HttpGet("hierarchy")]
+    public async Task<ActionResult<CategoryHierarchyResponse>> GetCategoryHierarchy()
+    {
+        return await userBasedActionService.ExecuteAsync(async context =>
+        {
+            var result = await context.CategoryService.GetCategoryHierarchyAsync();
+            return Ok(result.ToResponse());
+        });
+    }
+
     [HttpPost("{*path}")]
     public async Task<ActionResult<DailyboardResult>> CreateCategory([FromRoute] string? path)
     {

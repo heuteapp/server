@@ -26,4 +26,12 @@ public static class CategoryModelMapper
             result.Children?.Select(c => c.ToResponse()!)
         );
     }
+
+    public static CategoryHierarchyResponse ToResponse(this CategoryHierarchyResult result)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        return new CategoryHierarchyResponse(
+            [.. result.Roots.Select(r => r.ToResponse()!)]
+        );
+    }
 }
