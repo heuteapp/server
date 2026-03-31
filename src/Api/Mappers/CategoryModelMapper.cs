@@ -5,16 +5,14 @@ namespace HeuteApp.Api.Mappers;
 
 public static class CategoryModelMapper
 {
-    public static CategoryChainResponse? ToResponseChain(this IEnumerable<CategoryResult> results)
+    public static CategoryChainResponse? ToResponse(this CategoryChainResult result)
     {
-        if (!results.Any())
+        if (result == null)
             return null;
 
-        var first = results.First();
-        
         return new CategoryChainResponse(
-            first.Name,
-            results.Skip(1).ToResponseChain()
+            result.Name,
+            result.Child?.ToResponse()
         );
     }
 }

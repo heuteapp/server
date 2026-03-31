@@ -23,7 +23,7 @@ public class CategoryController(
         return await userBasedActionService.ExecuteAsync(async context =>
         {
             var result = await context.CategoryService.CreateCategoryAsync(categoryPath, new(categoryPath.Name));
-            return Ok(result.ToResponseChain());
+            return Ok(result.ToResponse());
         });
     }
 }
