@@ -28,4 +28,24 @@ public static class CategoryMapper
             category.Child?.ToChainResult()
         );
     }
+
+    public static CategoryResult ToLastResult(this CategoryChainResult chain)
+    {
+        ArgumentNullException.ThrowIfNull(chain);
+        CategoryChainResult? parent = null;
+        CategoryChainResult? current = chain;
+
+        while (current != null)
+        {
+            parent = current;
+            current = current.Child;
+        }
+
+        return new CategoryResult(
+            current!.Id,
+            current.UserId,
+            parent?.Id,
+            current.Name
+        );
+    }
 }
