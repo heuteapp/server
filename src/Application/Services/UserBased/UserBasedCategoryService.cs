@@ -22,6 +22,16 @@ public class UserBasedCategoryService(
         return result.Entity!.ToChainResult();
     }
 
+    public async Task<CategoryTreeResult> GetCategoryTreeAsync(CategoryPath path)
+    {
+        var userId = userContext.GetUserIdOrThrow();
+        var result = await repository.ReadTreeByPathAsync(userId, path);
+
+        result.ThrowIfFailure($"Failed to retrieve category at path: {path}");
+
+        return result.Entity!.ToTreeResult();
+    }
+
     public async Task<CategoryChainResult> CreateCategoryAsync(CategoryPath path, CategoryDefinition definition)
     {
         var profile = await userContext.GetProfileAsync();
