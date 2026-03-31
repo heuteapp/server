@@ -15,4 +15,15 @@ public static class CategoryModelMapper
             result.Child?.ToResponse()
         );
     }
+
+    public static CategoryTreeResponse? ToResponse(this CategoryTreeResult result)
+    {
+        if (result == null)
+            return null;
+
+        return new CategoryTreeResponse(
+            result.Name,
+            result.Children?.Select(c => c.ToResponse()!)
+        );
+    }
 }

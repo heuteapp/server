@@ -14,11 +14,16 @@ public class CategoryController(
 ) : ControllerBase
 {
     [HttpGet("tree/{*path}")]
-    public async Task<ActionResult<CategoryChainResponse>> GetCategoryTree(CategoryPath path)
+    public async Task<ActionResult<CategoryChainResponse>> GetCategoryTree([FromRoute] string? path)
     {
+        if (string.IsNullOrWhiteSpace(path))
+            return BadRequest("Path cannot be empty");
+
+        var categoryPath = CategoryPath.Parse(Uri.UnescapeDataString(path));
+
         return await userBasedActionService.ExecuteAsync(async context =>
         {
-            var result = await context.CategoryService.GetCategoryChainAsync(path);
+            var result = await context.CategoryService.GetCategoryTreeAsync(categoryPath);
             return Ok(result.ToResponse());
         });
     }
