@@ -4,4 +4,4 @@ public record CategoryTreeResult(
     Guid Id,
     Guid UserId,
     string Name,
-    IEnumerable<CategoryTreeResult> Children);
+    IEnumerable<CategoryTreeResult>? Children);
