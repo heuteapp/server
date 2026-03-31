@@ -1,4 +1,5 @@
 using HeuteApp.Api.Mappers;
+using HeuteApp.Api.Models.Responses.Category;
 using HeuteApp.Application.Results.Dailyboard;
 using HeuteApp.Application.Services.UserBased;
 using HeuteApp.Core.ValueObjects.Category;
@@ -12,6 +13,16 @@ public class CategoryController(
     UserBasedActionService userBasedActionService
 ) : ControllerBase
 {
+    [HttpGet("tree/{*path}")]
+    public async Task<ActionResult<CategoryChainResponse>> GetCategoryTree(CategoryPath path)
+    {
+        return await userBasedActionService.ExecuteAsync(async context =>
+        {
+            var result = await context.CategoryService.GetCategoryChainAsync(path);
+            return Ok(result.ToResponse());
+        });
+    }
+
     [HttpPost("{*path}")]
     public async Task<ActionResult<DailyboardResult>> CreateCategory([FromRoute] string? path)
     {
