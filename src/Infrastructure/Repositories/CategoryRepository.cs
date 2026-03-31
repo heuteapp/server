@@ -15,9 +15,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
 {
     public async Task<ReadResult<HeuteCategory>> ReadByIdAsync(Guid categoryId)
     {
-        var category = await context.Categories
-            .FirstOrDefaultAsync(c => c.Id == categoryId);
-
+        var category = await context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
         return category == null
             ? ReadResult<HeuteCategory>.NotFound("Category")
             : ReadResult<HeuteCategory>.Success(category);
@@ -25,11 +23,10 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
 
     public async Task<ReadResult<HeuteCategory>> ReadByNameAsync(Guid userId, Guid? parentId, string name)
     {
-        var category = await context.Categories
-            .FirstOrDefaultAsync(c => 
-                c.UserId == userId && 
-                (parentId == null ? c.ParentId == null : c.ParentId == parentId) && 
-                c.Name == name);
+        var category = await context.Categories.FirstOrDefaultAsync(c =>
+            c.UserId == userId &&
+            (parentId == null ? c.ParentId == null : c.ParentId == parentId) &&
+            c.Name == name);
 
         return category == null
             ? ReadResult<HeuteCategory>.NotFound("Category")
@@ -40,37 +37,30 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
     {
         if (path == null || path.Segments.Length == 0)
             return ReadResult<Chain<HeuteCategory>>.Error("Invalid category path");
-        
+
         var categories = new List<HeuteCategory>();
-        Guid? currentParentId = null;
-        
+        Guid? parentId = null;
+
         foreach (var segment in path.Segments)
         {
-            var result = await ReadByNameAsync(userId, currentParentId, segment);
-            
+            var result = await ReadByNameAsync(userId, parentId, segment);
             if (!result.IsSuccess)
             {
                 var errorPath = string.Join("/", path.Segments.Take(categories.Count + 1));
-                var message = result.IsNotFound
-                    ? $"Category '{segment}' not found at path: {errorPath}"
-                    : result.ErrorMessage ?? "Failed to resolve category path";
-                    
                 return result.IsNotFound
-                    ? ReadResult<Chain<HeuteCategory>>.NotFound(message)
-                    : ReadResult<Chain<HeuteCategory>>.Error(message);
+                    ? ReadResult<Chain<HeuteCategory>>.NotFound($"Category '{segment}' not found at path: {errorPath}")
+                    : ReadResult<Chain<HeuteCategory>>.Error(result.ErrorMessage ?? "Failed to resolve category path");
             }
-            
+
             var category = result.Entity!;
             categories.Add(category);
-            currentParentId = category.Id;
+            parentId = category.Id;
         }
-        
+
         Chain<HeuteCategory>? chain = null;
         for (int i = categories.Count - 1; i >= 0; i--)
-        {
             chain = new Chain<HeuteCategory>(categories[i], chain);
-        }
-        
+
         return ReadResult<Chain<HeuteCategory>>.Success(chain!);
     }
 
@@ -78,31 +68,27 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
     {
         if (path == null || path.Segments.Length == 0)
             return ReadResult<Tree<HeuteCategory>>.Error("Invalid category path");
-        
-        Guid? currentParentId = null;
-        HeuteCategory? rootCategory = null!;
-        
+
+        HeuteCategory? root = null;
+        Guid? parentId = null;
+
         foreach (var segment in path.Segments)
         {
-            var result = await ReadByNameAsync(userId, currentParentId, segment);
-            
+            var result = await ReadByNameAsync(userId, parentId, segment);
             if (!result.IsSuccess)
             {
-                var errorPath = string.Join("/", path.Segments.TakeWhile(s => s != segment).Concat(new[] { segment }));
+                var errorPath = string.Join("/", path.Segments.TakeWhile(s => s != segment).Concat([segment]));
                 return result.IsNotFound
                     ? ReadResult<Tree<HeuteCategory>>.NotFound($"Category '{segment}' not found at path: {errorPath}")
                     : ReadResult<Tree<HeuteCategory>>.Error(result.ErrorMessage ?? "Failed to resolve category path");
             }
-            
-            rootCategory = result.Entity!;
-            currentParentId = rootCategory.Id;
+
+            root = result.Entity!;
+            parentId = root.Id;
         }
-        
-        var allCategories = await context.Categories
-            .Where(c => c.UserId == userId)
-            .ToListAsync();
-        
-        var tree = BuildTree(rootCategory, allCategories);
+
+        var allCategories = await context.Categories.Where(c => c.UserId == userId).ToListAsync();
+        var tree = BuildTree(root!, allCategories);
         
         return ReadResult<Tree<HeuteCategory>>.Success(tree);
     }
@@ -113,126 +99,88 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
             .Where(c => c.ParentId == root.Id)
             .Select(child => BuildTree(child, allCategories))
             .ToList();
-        
+
         return new Tree<HeuteCategory>(root, children.Count == 0 ? null : children);
     }
 
-
-
     public async Task<CreateResult<HeuteCategory>> CreateAsync(HeuteProfile profile, HeuteCategory? parent, CategoryDefinition definition)
     {
-        if (profile is not HeuteProfileModel ownerModel)
-        {
+        if (profile is not HeuteProfileModel profileModel)
             return CreateResult<HeuteCategory>.Error("Invalid profile owner");
-        }
 
-        var exists = await context.Categories
-            .AnyAsync(c => 
-                c.UserId == profile.Id && 
-                (parent == null ? c.ParentId == null : c.ParentId == parent.Id) && 
-                c.Name == definition.Key.Name);
-        
+        var exists = await context.Categories.AnyAsync(c =>
+            c.UserId == profile.Id &&
+            (parent == null ? c.ParentId == null : c.ParentId == parent.Id) &&
+            c.Name == definition.Key.Name);
+
         if (exists)
-        {
             return CreateResult<HeuteCategory>.AlreadyExists("Category", definition.Key.Name);
-        }
 
-        HeuteCategoryModel? parentModel = null;
-        if (parent != null)
-        {
-            if (parent is not HeuteCategoryModel model)
-            {
-                return CreateResult<HeuteCategory>.Error("Invalid parent category");
-            }
-            parentModel = model;
-        }
+        var parentModel = parent as HeuteCategoryModel;
+        var category = HeuteCategoryModel.Create(profileModel, parentModel, definition);
 
-        var category = HeuteCategoryModel.Create(ownerModel, parentModel, definition);
         await context.Categories.AddAsync(category);
-        
         return CreateResult<HeuteCategory>.Success(category);
     }
 
     public async Task<CreateResult<Chain<HeuteCategory>>> CreateChainByPathAsync(HeuteProfile profile, CategoryPath path, CategoryDefinition definition)
     {
         if (profile is not HeuteProfileModel profileModel)
-        {
             return CreateResult<Chain<HeuteCategory>>.Error("Invalid profile owner");
-        }
         
-        var categories = new List<HeuteCategory>();
+        if (path == null || path.Segments.Length == 0)
+            return CreateResult<Chain<HeuteCategory>>.Error("Invalid category path");
 
-        Guid? currentParentId = null;
+        var categories = new List<HeuteCategory>();
         HeuteCategory? lastCategory = null;
-        
+        Guid? parentId = null;
+
         for (int i = 0; i < path.Segments.Length - 1; i++)
         {
             var segment = path.Segments[i];
+            var result = await ReadByNameAsync(profile.Id, parentId, segment);
 
-            var readResult = await ReadByNameAsync(profile.Id, currentParentId, segment);
-            
-            if (readResult.IsSuccess)
+            if (result.IsSuccess)
             {
-                lastCategory = readResult.Entity!;
-                categories.Add(lastCategory);
-                currentParentId = lastCategory.Id;
+                lastCategory = result.Entity!;
             }
-            else if (readResult.IsNotFound)
+            else if (result.IsNotFound)
             {
-                var parentDefinition = new CategoryDefinition(segment);
-                var createResult = await CreateAsync(profile, lastCategory, parentDefinition);
-                
+                var createResult = await CreateAsync(profile, lastCategory, new CategoryDefinition(segment));
                 if (!createResult.IsSuccess)
-                {
-                    return CreateResult<Chain<HeuteCategory>>.Error($"Failed to create parent category '{segment}': {createResult.ErrorMessage}");
-                }
-                
+                    return CreateResult<Chain<HeuteCategory>>.Error($"Failed to create category '{segment}': {createResult.ErrorMessage}");
+
                 lastCategory = createResult.Entity!;
-                categories.Add(lastCategory);
-                currentParentId = lastCategory.Id;
             }
             else
             {
-                return CreateResult<Chain<HeuteCategory>>.Error(readResult.ErrorMessage ?? "Failed to resolve category path");
+                return CreateResult<Chain<HeuteCategory>>.Error(result.ErrorMessage ?? "Failed to resolve category path");
             }
+
+            categories.Add(lastCategory);
+            parentId = lastCategory.Id;
         }
-        
-        var exists = await context.Categories
-            .AnyAsync(c => 
-                c.UserId == profile.Id && 
-                (lastCategory == null ? c.ParentId == null : c.ParentId == lastCategory.Id) && 
-                c.Name == definition.Key.Name);
-        
+
+        var exists = await context.Categories.AnyAsync(c =>
+            c.UserId == profile.Id &&
+            (lastCategory == null ? c.ParentId == null : c.ParentId == lastCategory.Id) &&
+            c.Name == definition.Key.Name);
+
         if (exists)
-        {
             return CreateResult<Chain<HeuteCategory>>.AlreadyExists("Category", definition.Key.Name);
-        }
 
-        HeuteCategoryModel newCategory;
+        if (lastCategory is not null && lastCategory is not HeuteCategoryModel)
+            return CreateResult<Chain<HeuteCategory>>.Error("Invalid parent category");
 
-        if(lastCategory != null)
-        {
-            if (lastCategory is not HeuteCategoryModel parentModel)
-            {
-                return CreateResult<Chain<HeuteCategory>>.Error("Invalid parent category");
-            }
-
-            newCategory = HeuteCategoryModel.Create(profileModel, parentModel, definition);
-        }
-        else
-        {
-            newCategory = HeuteCategoryModel.Create(profileModel, null, definition);
-        }
+        var parentModel = lastCategory as HeuteCategoryModel;
+        var newCategory = HeuteCategoryModel.Create(profileModel, parentModel, definition);
 
         await context.Categories.AddAsync(newCategory);
         categories.Add(newCategory);
-        await context.SaveChangesAsync();
 
         Chain<HeuteCategory>? chain = null;
         for (int i = categories.Count - 1; i >= 0; i--)
-        {
             chain = new Chain<HeuteCategory>(categories[i], chain);
-        }
 
         return CreateResult<Chain<HeuteCategory>>.Success(chain!);
     }
