@@ -18,45 +18,37 @@ public static class CategoryMapper
         );
     }
 
-    public static CategoryChainResult ToChainResult(this Chain<HeuteCategory> category)
+    public static CategoryChainResult ToResult(this Chain<HeuteCategory> category)
     {
         ArgumentNullException.ThrowIfNull(category);
         return new CategoryChainResult(
             category.Current.Id,
             category.Current.UserId,
             category.Current.Name,
-            category.Child?.ToChainResult()
+            category.Child?.ToResult()
         );
     }
 
-    public static CategoryTreeResult ToTreeResult(this Tree<HeuteCategory> category)
+    public static CategoryTreeResult ToResult(this Tree<HeuteCategory> category)
     {
         ArgumentNullException.ThrowIfNull(category);
         return new CategoryTreeResult(
             category.Current.Id,
             category.Current.UserId,
             category.Current.Name,
-            category.Children?.Select(c => c.ToTreeResult())
+            category.Children?.Select(c => c.ToResult())
+        );
+    }
+
+    public static CategoryHierarchyResult ToResult(this Hierarchy<HeuteCategory> hierarchy)
+    {
+        ArgumentNullException.ThrowIfNull(hierarchy);
+        return new CategoryHierarchyResult(
+            hierarchy.Roots.Select(tree => tree.ToResult())
         );
     }
 
     //
-
-    public static CategoryResult ToLastResult(this Chain<HeuteCategory> category)
-    {
-        ArgumentNullException.ThrowIfNull(category);
-        Chain<HeuteCategory>? current = category;
-
-        while (current.Child != null)
-            current = current.Child;
-
-        return new CategoryResult(
-            current.Current.Id,
-            current.Current.UserId,
-            current.Current.ParentId,
-            current.Current.Name
-        );
-    }
 
     public static CategoryResult ToLastResult(this CategoryChainResult chain)
     {

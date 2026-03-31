@@ -19,7 +19,7 @@ public class UserBasedCategoryService(
 
         result.ThrowIfFailure($"Failed to retrieve category at path: {path}");
 
-        return result.Entity!.ToChainResult();
+        return result.Entity!.ToResult();
     }
 
     public async Task<CategoryTreeResult> GetCategoryTreeAsync(CategoryPath path)
@@ -29,17 +29,17 @@ public class UserBasedCategoryService(
 
         result.ThrowIfFailure($"Failed to retrieve category at path: {path}");
 
-        return result.Entity!.ToTreeResult();
+        return result.Entity!.ToResult();
     }
 
-    public async Task<List<CategoryTreeResult>> GetCategoryHierarchyAsync()
+    public async Task<CategoryHierarchyResult> GetCategoryHierarchyAsync()
     {
         var userId = userContext.GetUserIdOrThrow();
         var result = await repository.ReadHierarchyAsync(userId);
 
         result.ThrowIfFailure("Failed to retrieve category hierarchy");
 
-        return [.. result.Entity!.Roots.Select(tree => tree.ToTreeResult())];
+        return result.Entity!.ToResult();
     }
 
     public async Task<CategoryChainResult> CreateCategoryAsync(CategoryPath path, CategoryDefinition definition)
@@ -49,6 +49,6 @@ public class UserBasedCategoryService(
         result.ThrowIfFailure($"Failed to create category at path: {path}");
 
         await unitOfWork.SaveChangesAsync();
-        return result.Entity!.ToChainResult();
+        return result.Entity!.ToResult();
     }
 }
