@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Api.Models.Requests.Auth;
 using HeuteApp.Application.Services.Public;
-using Microsoft.Extensions.Options;
 
 namespace HeuteApp.Api.Controllers;
 

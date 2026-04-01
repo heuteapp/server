@@ -25,7 +25,7 @@ public class MeController(
             var user = await supabaseProvider.Client.Auth.GetUser(accessToken);
             
             if (user == null)
-                return Unauthorized();
+                return Unauthorized(new { message = "Invalid token" });
 
             var profile = await internalProfileService.GetProfileByIdAsync(
                 Guid.Parse(user.Id!)
@@ -52,22 +52,19 @@ public class MeController(
 
         try
         {
-            var session = await supabaseProvider.Client.Auth.SetSession("", refreshToken);
+            var session = await supabaseProvider.Client.Auth.RefreshSession();
             
             if (session?.User == null)
                 return Unauthorized();
 
-            if (!string.IsNullOrEmpty(session.RefreshToken))
+            Response.Cookies.Append("refreshToken", session.RefreshToken ?? refreshToken, new CookieOptions
             {
-                Response.Cookies.Append("refreshToken", session.RefreshToken, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTimeOffset.UtcNow.AddDays(30),
-                    Path = "/"
-                });
-            }
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddDays(30),
+                Path = "/"
+            });
 
             var profile = await internalProfileService.GetProfileByIdAsync(
                 Guid.Parse(session.User.Id!)
@@ -76,13 +73,13 @@ public class MeController(
             return Ok(new
             {
                 profile,
-                accessToken = session.AccessToken,
-                expiresIn = session.ExpiresIn
+                accessToken = session.AccessToken
             });
         }
-        catch
+        catch (Exception ex)
         {
-            return Unauthorized();
+            Response.Cookies.Delete("refreshToken", new CookieOptions { Path = "/" });
+            return Unauthorized(new { message = ex.Message });
         }
     }
 }
