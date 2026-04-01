@@ -10,15 +10,21 @@ public class AuthMiddleware(RequestDelegate next, SupabaseProvider supabaseProvi
         var userContext = context.RequestServices.GetRequiredService<IUserContext>();
 
         var accessToken = context.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
-        var refreshToken = context.Request.Cookies["refreshToken"];
 
-        if(!string.IsNullOrEmpty(accessToken) && !string.IsNullOrEmpty(refreshToken))
+        if (!string.IsNullOrEmpty(accessToken))
         {
-            await supabaseProvider.Client.Auth.SetSession(accessToken, refreshToken, true);
-            var user = supabaseProvider.Client.Auth.CurrentUser;
-            if(user != null && user.Id != null)
+            try
             {
-                userContext.SetUser(Guid.Parse(user.Id));
+                var user = await supabaseProvider.Client.Auth.GetUser(accessToken);
+                
+                if (user?.Id != null)
+                {
+                    userContext.SetUser(Guid.Parse(user.Id));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Auth error: {ex.Message}");
             }
         }
 
