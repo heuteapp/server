@@ -8,7 +8,7 @@ namespace HeuteApp.Api.Controllers.Me;
 
 [ApiController]
 [Route("me/categories")]
-public class MeCategoryController(
+public class MeCategoriesController(
     UserBasedActionService userBasedActionService
 ) : ControllerBase
 {

@@ -9,7 +9,7 @@ namespace HeuteApp.Api.Controllers.Me;
 
 [ApiController]
 [Route("me/dailyboards")]
-public class MeDailyboardController(
+public class MeDailyboardsController(
     InternalLayoutService layoutService,
     UserBasedActionService userBasedActionService
 ) : ControllerBase
