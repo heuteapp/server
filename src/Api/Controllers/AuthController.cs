@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Api.Models.Requests.Auth;
 using HeuteApp.Application.Services.Public;
-using HeuteApp.Application.Services.Internal;
 
 namespace HeuteApp.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
 public class AuthController(
-    InternalProfileService internalProfileService,
     PublicProfileService publicProfileService, 
     SupabaseProvider supabaseProvider) : ControllerBase
 {
@@ -69,50 +67,5 @@ public class AuthController(
         {
             profile
         });
-    }
-
-    [HttpPost("refresh-token")]
-    public async Task<IActionResult> RefreshToken()
-    {
-        var refreshToken = Request.Cookies["refreshToken"];
-        var accessToken = Request.Headers["Authorization"]
-            .FirstOrDefault()?
-            .Split(" ")
-            .Last();
-
-        if (string.IsNullOrEmpty(refreshToken)) return BadRequest();
-        var session = await supabaseProvider.Client.Auth.SetSession(accessToken!, refreshToken, true);
-
-        if (session?.AccessToken == null) return Unauthorized();
-
-        return Ok(new
-        {
-            accessToken = session.AccessToken,
-            profile = await internalProfileService.GetProfileByIdAsync(Guid.Parse(session.User!.Id!))
-        });
-    }
-
-    [HttpGet("me")]
-    public async Task<IActionResult> Me()
-    {
-        var refreshToken = Request.Cookies["refreshToken"];
-        var accessToken = Request.Headers.Authorization
-            .FirstOrDefault()?
-            .Split(" ")
-            .Last();
-
-        if (string.IsNullOrEmpty(refreshToken) || string.IsNullOrEmpty(accessToken))
-            return Unauthorized();
-
-        var session = await supabaseProvider.Client.Auth.SetSession(accessToken, refreshToken, false);
-
-        if (session?.User == null)
-            return Unauthorized();
-
-        var profile = await internalProfileService.GetProfileByIdAsync(
-            Guid.Parse(session.User.Id!)
-        );
-
-        return Ok(profile);
     }
 }
