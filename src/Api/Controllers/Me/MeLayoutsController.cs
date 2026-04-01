@@ -7,7 +7,7 @@ namespace HeuteApp.Api.Controllers.Me;
 
 [ApiController]
 [Route("me/layouts")]
-public class MeLayoutController(
+public class MeLayoutsController(
     UserBasedActionService userBasedActionService
 ) : ControllerBase
 {
