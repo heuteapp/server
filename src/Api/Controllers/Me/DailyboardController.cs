@@ -5,11 +5,11 @@ using HeuteApp.Application.Services.UserBased;
 using HeuteApp.Core.ValueObjects.Dailyboard;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HeuteApp.Api.Controllers;
+namespace HeuteApp.Api.Controllers.Me;
 
 [ApiController]
-[Route("dailyboard")]
-public class DailyboardController(
+[Route("me/dailyboards")]
+public class MeDailyboardController(
     InternalLayoutService layoutService,
     UserBasedActionService userBasedActionService
 ) : ControllerBase

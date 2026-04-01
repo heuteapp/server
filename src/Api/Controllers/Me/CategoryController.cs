@@ -1,15 +1,14 @@
 using HeuteApp.Api.Mappers;
 using HeuteApp.Api.Models.Responses.Category;
-using HeuteApp.Application.Results.Dailyboard;
 using HeuteApp.Application.Services.UserBased;
 using HeuteApp.Core.ValueObjects.Category;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HeuteApp.Api.Controllers;
+namespace HeuteApp.Api.Controllers.Me;
 
 [ApiController]
-[Route("category")]
-public class CategoryController(
+[Route("me/categories")]
+public class MeCategoryController(
     UserBasedActionService userBasedActionService
 ) : ControllerBase
 {
