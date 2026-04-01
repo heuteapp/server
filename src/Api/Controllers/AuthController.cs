@@ -1,14 +1,16 @@
-using HeuteApp.Core.ValueObjects.Profile;
 using Microsoft.AspNetCore.Mvc;
+using HeuteApp.Core.ValueObjects.Profile;
 using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Api.Models.Requests.Auth;
 using HeuteApp.Application.Services.Public;
+using HeuteApp.Application.Services.Internal;
 
 namespace HeuteApp.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
 public class AuthController(
+    InternalProfileService internalProfileService,
     PublicProfileService publicProfileService, 
     SupabaseProvider supabaseProvider,
     IConfiguration configuration) : ControllerBase
@@ -77,6 +79,42 @@ public class AuthController(
         catch (Exception)
         {
             return BadRequest(new { message = "Registration failed" });
+        }
+    }
+
+
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh()
+    {
+        var refreshToken = Request.Cookies["refreshToken"];
+        
+        if (string.IsNullOrEmpty(refreshToken))
+            return BadRequest(new { message = "Refresh token required" });
+
+        try
+        {
+            var session = await supabaseProvider.Client.Auth.RefreshSession();
+            
+            if (session?.User == null)
+                return Unauthorized();
+
+            SetRefreshTokenCookie(session.RefreshToken!);
+
+            var profile = await internalProfileService.GetProfileByIdAsync(
+                Guid.Parse(session.User.Id!)
+            );
+
+            return Ok(new
+            {
+                profile,
+                accessToken = session.AccessToken
+            });
+        }
+        catch (Exception ex)
+        {
+            Response.Cookies.Delete("refreshToken", new CookieOptions { Path = "/" });
+            return Unauthorized(new { message = ex.Message });
         }
     }
 
