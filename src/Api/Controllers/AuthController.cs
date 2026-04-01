@@ -51,7 +51,7 @@ public class AuthController(
                 request.Password, 
                 new()
                 {
-                    RedirectTo = configuration["AppSettings:VerificationRedirectUrl"]
+                    RedirectTo = configuration["RedirectTo:Verification"]
                 }
             );
 
