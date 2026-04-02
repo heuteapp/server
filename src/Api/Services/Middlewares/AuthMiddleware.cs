@@ -1,4 +1,4 @@
-using HeuteApp.Api.Services.Scopes;
+using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Application.Interfaces.UserBased;
 
 namespace HeuteApp.Api.Services.Middlewares;

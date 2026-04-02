@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using HeuteApp.Api.Services.Scopes;
+using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Application.Services.Internal;
 
 namespace HeuteApp.Api.Controllers;

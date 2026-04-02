@@ -2,7 +2,7 @@ using HeuteApp.Infrastructure.Persistence;
 using HeuteApp.Application.Interfaces;
 using HeuteApp.Application.Interfaces.Repositories;
 using HeuteApp.Infrastructure.Repositories;
-using HeuteApp.Api.Services.Scopes;
+using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Api.Services.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -30,9 +30,10 @@ public static class ServiceExtensions
             options.UseNpgsql(dataSource);
         });
 
+        // Singleton
+        builder.Services.AddSingleton<SupabaseProvider>();
+        
         // Scoped
-        builder.Services.AddScoped<SupabaseProvider>();
-
         builder.Services.AddScoped<IUserContext, UserContext>();
         builder.Services.AddScoped<HttpClient>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

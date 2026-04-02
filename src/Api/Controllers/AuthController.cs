@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using HeuteApp.Core.ValueObjects.Profile;
-using HeuteApp.Api.Services.Scopes;
+using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Api.Models.Requests.Auth;
 using HeuteApp.Application.Services.Public;
 using HeuteApp.Application.Services.Internal;
