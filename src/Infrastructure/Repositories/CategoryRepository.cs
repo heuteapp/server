@@ -189,7 +189,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
     private static IOrderedEnumerable<Tree<HeuteCategory>> SortNodes(IEnumerable<Tree<HeuteCategory>> nodes)
     {
         return nodes
-            .OrderBy(n => n.Children == null || !n.Children.Any())
+            .OrderBy(n => n.Children != null && n.Children.Count > 0)
             .ThenBy(n => n.Current.Name, StringComparer.OrdinalIgnoreCase);
     }
 
