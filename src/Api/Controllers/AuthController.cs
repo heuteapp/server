@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using HeuteApp.Core.ValueObjects.Profile;
-using HeuteApp.Api.Services.Singletons;
+using HeuteApp.Api.Services.Scopes;
 using HeuteApp.Api.Models.Requests.Auth;
 using HeuteApp.Application.Services.Public;
 using HeuteApp.Application.Services.Internal;
@@ -16,70 +16,59 @@ public class AuthController(
     IConfiguration configuration) : ControllerBase
 {
     [HttpPost("sign-in")]
-    public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
-    {        
+    public async Task<IActionResult> SignIn(SignInRequest request)
+    {
         var profile = await publicProfileService.GetProfileByIdentifierAsync(request.Identifier);
+
         if (profile == null)
-            return NotFound(new { message = "User not found" });
+            return NotFound();
 
-        try
+        var session = await supabaseProvider.Client.Auth.SignIn(
+            profile.Email,
+            request.Password
+        );
+
+        if (session?.User == null)
+            return Unauthorized();
+
+        SetRefreshTokenCookie(session.RefreshToken!);
+
+        return Ok(new
         {
-            var session = await supabaseProvider.Client.Auth.SignIn(profile.Email, request.Password);
-            if (session?.User == null)
-                return Unauthorized(new { message = "Invalid credentials" });
-
-            SetRefreshTokenCookie(session.RefreshToken!);
-
-            return Ok(new
-            {
-                profile,
-                accessToken = session.AccessToken,
-                expiresIn = session.ExpiresIn
-            });
-        }
-        catch (Exception)
-        {
-            return Unauthorized(new { message = "Authentication failed" });
-        }
+            profile,
+            accessToken = session.AccessToken,
+            expiresIn = session.ExpiresIn
+        });
     }
 
     [HttpPost("sign-up")]
-    public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
+    public async Task<IActionResult> SignUp(SignUpRequest request)
     {
-        try
-        {
-            var session = await supabaseProvider.Client.Auth.SignUp(
-                request.Email,
-                request.Password, 
-                new()
-                {
-                    RedirectTo = configuration["RedirectTo:Verification"]
-                }
-            );
-
-            if (session?.User == null)
-                return BadRequest(new { message = "Sign up failed" });
-
-            string userId = session.User.Id!;
-
-            var profile = await publicProfileService.CreateProfileAsync(
-                new ProfileDefinition(
-                    Guid.Parse(userId),
-                    request.Username,
-                    request.Email
-                )
-            );
-
-            return Ok(new
+        var session = await supabaseProvider.Client.Auth.SignUp(
+            request.Email,
+            request.Password,
+            new()
             {
-                profile,
-                message = "User created successfully. Please verify your email."
-            });
-        }
-        catch (Exception)
+                RedirectTo = configuration["RedirectTo:Verification"]
+            }
+        );
+
+        if (session?.User == null)
+            return BadRequest();
+
+        var profile = await publicProfileService.CreateProfileAsync(
+            new ProfileDefinition(
+                Guid.Parse(session.User.Id!),
+                request.Username,
+                request.Email
+            )
+        );
+
+        return Ok(new
         {
-            return BadRequest(new { message = "Registration failed" });
-        }
+            profile,
+            message = "User created successfully"
+        });
     }
 
 
@@ -94,7 +83,11 @@ public class AuthController(
 
         try
         {
-            var session = await supabaseProvider.Client.Auth.RefreshSession();
+            var session = await supabaseProvider.Client.Auth.SetSession(
+                accessToken: "",
+                refreshToken: refreshToken,
+                forceAccessTokenRefresh: true
+            );
             
             if (session?.User == null)
                 return Unauthorized();
@@ -108,7 +101,8 @@ public class AuthController(
             return Ok(new
             {
                 profile,
-                accessToken = session.AccessToken
+                accessToken = session.AccessToken,
+                expiresIn = session.ExpiresIn
             });
         }
         catch (Exception ex)
