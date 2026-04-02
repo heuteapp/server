@@ -98,7 +98,7 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
         var allCategories = await context.Categories.Where(c => c.UserId == userId).ToListAsync();
         var rootCategories = allCategories.Where(c => c.ParentId == null).ToList();
 
-        var roots = rootCategories.Select(root => BuildTree(root, allCategories)).ToList();
+        var roots = SortNodes(rootCategories.Select(root => BuildTree(root, allCategories))).ToList();
         return ReadResult<Hierarchy<HeuteCategory>>.Success(new Hierarchy<HeuteCategory>(roots));
     }
 
@@ -186,16 +186,20 @@ public class CategoryRepository(HeuteDbContext context) : ICategoryRepository
 
     //
 
+    private static IOrderedEnumerable<Tree<HeuteCategory>> SortNodes(IEnumerable<Tree<HeuteCategory>> nodes)
+    {
+        return nodes
+            .OrderBy(n => n.Children == null || !n.Children.Any())
+            .ThenBy(n => n.Current.Name, StringComparer.OrdinalIgnoreCase);
+    }
+
     private static Tree<HeuteCategory> BuildTree(HeuteCategory root, List<HeuteCategoryModel> allCategories)
     {
-        var children = allCategories
+        var children = SortNodes(allCategories
             .Where(c => c.ParentId == root.Id)
-            .Select(child => BuildTree(child, allCategories))
-            .OrderBy(c => c.Children == null || !c.Children.Any())
-            .ThenBy(c => c.Current.Name, StringComparer.OrdinalIgnoreCase)
+            .Select(child => BuildTree(child, allCategories)))
             .ToList();
 
         return new Tree<HeuteCategory>(root, children.Count == 0 ? null : children);
     }
-
 }
