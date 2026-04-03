@@ -36,7 +36,7 @@ public static class DailyboardModelMapper
 
     //
 
-    public static async Task<DailyboardResponse> ToResponse(this DailyboardResult dailyboard, InternalLayoutService layoutService)
+    public static async Task<DailyboardResponse> ToResponse(this DailyboardResult dailyboard, string categoryPath, InternalLayoutService layoutService)
     {
         ArgumentNullException.ThrowIfNull(dailyboard);
         ArgumentNullException.ThrowIfNull(layoutService);
@@ -45,6 +45,7 @@ public static class DailyboardModelMapper
             ?? throw new Exception("Layout not found.");
 
         return new DailyboardResponse(
+            CategoryPath: categoryPath,
             Date: dailyboard.Date,
             Layout: layout.ToResult().ToResponse(),
             Cards: [.. dailyboard.Cards.Select(ToResponse)]

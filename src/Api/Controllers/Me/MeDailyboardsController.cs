@@ -25,7 +25,7 @@ public class MeDailyboardsController(
         return await userBasedActionService.ExecuteAsync(async context =>
         {
             var result = await context.DailyboardService.GetDailyboardAsync(dailyboardPath);
-            return Ok(await result.ToResponse(layoutService));
+            return Ok(await result.ToResponse(dailyboardPath.CategoryPath.Value, layoutService));
         });
     }
 }
