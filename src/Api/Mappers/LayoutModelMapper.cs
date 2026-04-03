@@ -1,7 +1,7 @@
-using HeuteApp.Api.Models.Responses.Workspace.Layout;
+using HeuteApp.Api.Models.Responses.Layout;
 using HeuteApp.Application.Results.Layout;
 
-namespace HeuteApp.Api.Mappers.Workspace;
+namespace HeuteApp.Api.Mappers;
 
 public static class LayoutMapper
 {

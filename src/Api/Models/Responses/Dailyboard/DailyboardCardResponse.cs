@@ -1,4 +1,4 @@
-namespace HeuteApp.Api.Models.Responses.Workspace.Dailyboard;
+namespace HeuteApp.Api.Models.Responses.Dailyboard;
 
 public record DailyboardCardResponse(
     string Name,

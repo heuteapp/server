@@ -1,7 +1,7 @@
 using System.Text.Json;
 using HeuteApp.Core.Enums.Commands;
 
-namespace HeuteApp.Api.Models.Requests.Workspace.Dailyboard;
+namespace HeuteApp.Api.Models.Requests.Dailyboard;
 
 public record DailyboardCommandRequest(
     string OccurredAt,

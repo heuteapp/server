@@ -1,4 +1,4 @@
-namespace HeuteApp.Api.Models.Responses.Workspace.Layout;
+namespace HeuteApp.Api.Models.Responses.Layout;
 
 using System.Collections.Generic;
 

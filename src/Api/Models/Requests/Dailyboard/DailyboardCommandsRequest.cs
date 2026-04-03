@@ -1,4 +1,4 @@
-namespace HeuteApp.Api.Models.Requests.Workspace.Dailyboard;
+namespace HeuteApp.Api.Models.Requests.Dailyboard;
 
 public record DailyboardCommandsRequest(
     IEnumerable<DailyboardCommandRequest> Commands

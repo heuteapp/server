@@ -1,5 +1,5 @@
-using HeuteApp.Api.Models.Requests.Workspace.Dailyboard;
-using HeuteApp.Api.Models.Responses.Workspace.Dailyboard;
+using HeuteApp.Api.Models.Requests.Dailyboard;
+using HeuteApp.Api.Models.Responses.Dailyboard;
 using HeuteApp.Application.Results.Dailyboard;
 using HeuteApp.Core.Enums.Commands;
 using HeuteApp.Core.Commands.Abstractions;
@@ -8,7 +8,7 @@ using HeuteApp.Core.Mappers.Commands.Payloads;
 using HeuteApp.Application.Services.Internal;
 using HeuteApp.Application.Mappers;
 
-namespace HeuteApp.Api.Mappers.Workspace;
+namespace HeuteApp.Api.Mappers;
 
 public static class DailyboardModelMapper
 {

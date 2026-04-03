@@ -1,4 +1,4 @@
-using HeuteApp.Api.Mappers.Workspace;
+using HeuteApp.Api.Mappers;
 using HeuteApp.Application.Services.UserBased;
 using HeuteApp.Core.ValueObjects.Layout;
 using Microsoft.AspNetCore.Mvc;

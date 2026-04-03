@@ -1,5 +1,5 @@
-using HeuteApp.Api.Mappers.Workspace;
-using HeuteApp.Application.Results.Dailyboard;
+using HeuteApp.Api.Mappers;
+using HeuteApp.Api.Models.Responses.Dailyboard;
 using HeuteApp.Application.Services.Internal;
 using HeuteApp.Application.Services.UserBased;
 using HeuteApp.Core.ValueObjects.Dailyboard;
@@ -15,7 +15,7 @@ public class MeDailyboardsController(
 ) : ControllerBase
 {
     [HttpGet("{*path}")]
-    public async Task<ActionResult<DailyboardResult>> GetDailyboardAsync([FromRoute] string? path)
+    public async Task<ActionResult<DailyboardResponse>> GetDailyboardAsync([FromRoute] string? path)
     {
         if (string.IsNullOrWhiteSpace(path))
             return BadRequest("Path cannot be empty");
