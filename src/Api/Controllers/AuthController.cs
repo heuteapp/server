@@ -76,6 +76,7 @@ public class AuthController(
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh()
     {
+        var accessToken = Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last()!;
         var refreshToken = Request.Cookies["refreshToken"];
         
         if (string.IsNullOrEmpty(refreshToken))
@@ -84,7 +85,7 @@ public class AuthController(
         try
         {
             var session = await supabaseProvider.Client.Auth.SetSession(
-                accessToken: "",
+                accessToken: accessToken,
                 refreshToken: refreshToken,
                 forceAccessTokenRefresh: true
             );
