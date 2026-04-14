@@ -1,9 +1,14 @@
 using HeuteApp.Api.Services.Singletons;
 using HeuteApp.Application.Interfaces.UserBased;
+using HeuteApp.Application.Services.Internal;
+using System.Text.Json;
 
 namespace HeuteApp.Api.Services.Middlewares;
 
-public class AuthMiddleware(RequestDelegate next, SupabaseProvider supabaseProvider)
+public class AuthMiddleware(
+    RequestDelegate next,
+    SupabaseProvider supabaseProvider,
+    InternalProfileService internalProfileService)
 {
     public async Task InvokeAsync(HttpContext context)
     {
@@ -65,9 +70,26 @@ public class AuthMiddleware(RequestDelegate next, SupabaseProvider supabaseProvi
             if (session?.User == null)
                 return false;
             
-            userContext.SetUser(Guid.Parse(session.User.Id!));
+            var userId = Guid.Parse(session.User.Id!);
+            var profile = await internalProfileService.GetProfileByIdAsync(userId);
             
-            context.Response.Headers.Append("X-New-Access-Token", session.AccessToken);
+            if (profile == null)
+                return false;
+            
+            userContext.SetUser(userId);
+            
+            var newSession = new
+            {
+                accessToken = session.AccessToken,
+                profile = new
+                {
+                    profile.Username,
+                    profile.Email
+                }
+            };
+            
+            var sessionJson = JsonSerializer.Serialize(newSession);
+            context.Response.Headers.Append("X-New-Auth-Session", sessionJson);
             
             if (!string.IsNullOrEmpty(session.RefreshToken) && session.RefreshToken != refreshToken)
             {
