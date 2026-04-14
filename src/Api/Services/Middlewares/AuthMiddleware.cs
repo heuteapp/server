@@ -62,7 +62,7 @@ public class AuthMiddleware(
         try
         {
             var session = await supabaseProvider.Client.Auth.SetSession(
-                accessToken: "", 
+                accessToken: Guid.NewGuid().ToString(), 
                 refreshToken: refreshToken,
                 forceAccessTokenRefresh: true
             );
