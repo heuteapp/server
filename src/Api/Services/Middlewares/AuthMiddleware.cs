@@ -48,11 +48,11 @@ public class AuthMiddleware(
         }
         catch
         {
-            return await TryRefreshToken(context, userContext);
+            return await TryRefreshToken(context, accessToken, userContext);
         }
     }
     
-    private async Task<bool> TryRefreshToken(HttpContext context, IUserContext userContext)
+    private async Task<bool> TryRefreshToken(HttpContext context, string accessToken, IUserContext userContext)
     {
         var refreshToken = context.Request.Cookies["refreshToken"];
         
@@ -62,7 +62,7 @@ public class AuthMiddleware(
         try
         {
             var session = await supabaseProvider.Client.Auth.SetSession(
-                accessToken: Guid.NewGuid().ToString(), 
+                accessToken: accessToken, 
                 refreshToken: refreshToken,
                 forceAccessTokenRefresh: true
             );
