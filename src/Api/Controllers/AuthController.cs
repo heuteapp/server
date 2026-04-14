@@ -71,29 +71,32 @@ public class AuthController(
         });
     }
 
-
-
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh()
     {
-        var accessToken = Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last()!;
         var refreshToken = Request.Cookies["refreshToken"];
         
         if (string.IsNullOrEmpty(refreshToken))
-            return BadRequest(new { message = "Refresh token required" });
+            return Unauthorized(new { message = "Refresh token required" });
 
         try
         {
             var session = await supabaseProvider.Client.Auth.SetSession(
-                accessToken: accessToken,
+                accessToken: "",
                 refreshToken: refreshToken,
                 forceAccessTokenRefresh: true
             );
             
             if (session?.User == null)
-                return Unauthorized();
+            {
+                Response.Cookies.Delete("refreshToken");
+                return Unauthorized(new { message = "Invalid refresh token" });
+            }
 
-            SetRefreshTokenCookie(session.RefreshToken!);
+            if (!string.IsNullOrEmpty(session.RefreshToken) && session.RefreshToken != refreshToken)
+            {
+                SetRefreshTokenCookie(session.RefreshToken);
+            }
 
             var profile = await internalProfileService.GetProfileByIdAsync(
                 Guid.Parse(session.User.Id!)
@@ -108,7 +111,7 @@ public class AuthController(
         }
         catch (Exception ex)
         {
-            Response.Cookies.Delete("refreshToken", new CookieOptions { Path = "/" });
+            Response.Cookies.Delete("refreshToken");
             return Unauthorized(new { message = ex.Message });
         }
     }
